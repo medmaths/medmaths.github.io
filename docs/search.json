@@ -7,11 +7,11 @@
     "text": "I’m a maths graduate who’s very interested in the many applications of mathematics and statistics to medicine, and I decided to start this blog as a way of challenging myself to keep learning new things (as well as deepening my understanding of areas I already have some knowledge of). It’s a place where I can practise writing expository articles that explore various topics in ‘medical maths’ using diagrams and R code. Thank you for reading – I hope you find my explanations interesting and/or useful!\n(If you notice an error or have any other feedback, please feel free to contact me at: medmaths@protonmail.com)\nThis site is built with Quarto and hosted via Github Pages."
   },
   {
-    "objectID": "about.html#biostatsepidemiologymaths-adjacent-blogs-i-enjoy",
-    "href": "about.html#biostatsepidemiologymaths-adjacent-blogs-i-enjoy",
+    "objectID": "about.html#blogroll",
+    "href": "about.html#blogroll",
     "title": "About",
-    "section": "Biostats/Epidemiology/Maths Adjacent Blogs I Enjoy",
-    "text": "Biostats/Epidemiology/Maths Adjacent Blogs I Enjoy\n\nLive Free or Dichotomize by Lucy D’Agostino McGowan and Nick Strayer\nPosting completely at random by Cameron Patrick\nProbably Overthinking It by Allen Downey\nTechnical Fridays by Harshit Kumar\nVariance Explained by David Robinson"
+    "section": "Blogroll",
+    "text": "Blogroll\n\nLive Free or Dichotomize by Lucy D’Agostino McGowan and Nick Strayer\nThe Pleasure of Finding Things Out by James Triveri\nPosting completely at random by Cameron Patrick\nProbably Overthinking It by Allen Downey\nTechnical Fridays by Harshit Kumar\nVariance Explained by David Robinson"
   },
   {
     "objectID": "posts/diagnostic-testing-and-bayes-theorem/index.html",
