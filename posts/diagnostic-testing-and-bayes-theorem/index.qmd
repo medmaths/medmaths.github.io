@@ -161,7 +161,7 @@ for (n in 1:num_sims) {
   }  
 }
 # Now let's see how the average proportion of positive test results that are false changes as the number of simulations we've done increases:
-props_for_avg <- false_pos_props[!is.na(false_pos_props)] # we remove the undefined values from our vector of empirical false positive proportions
+props_for_avg <- false_pos_props[!is.na(false_pos_props)] # we remove the undefined values from our vector of empirical false positive probabilities
 cum_avg <- cumsum(props_for_avg) / seq_along(props_for_avg) # we calculate a cumulative average as the number of simulations increases
 # 
 par(mar=c(bottom=4.2, left=5.1, top=1.8, right=0.9), family="Roboto Slab")

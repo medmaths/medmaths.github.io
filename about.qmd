@@ -8,12 +8,3 @@ I'm a maths graduate who's very interested in the many applications of mathemati
 (If you notice an error or have any other feedback, please feel free to contact me at: [medmaths@protonmail.com](mailto:medmaths@protonmail.com))
 
 This site is built with [Quarto](https://quarto.org) and hosted via [Github Pages](https://pages.github.com).
-
-## Blogroll
-
-- [**Live Free or Dichotomize** by Lucy D'Agostino McGowan and Nick Strayer](https://livefreeordichotomize.com)
-- [**The Pleasure of Finding Things Out** by James Triveri](https://www.jtrive.com)
-- [**Posting completely at random** by Cameron Patrick](https://cameronpatrick.com/blog)
-- [**Probably Overthinking It** by Allen Downey](https://www.allendowney.com/blog/)
-- [**Technical Fridays** by Harshit Kumar](https://kharshit.github.io/blog/)
-- [**Variance Explained** by David Robinson](http://varianceexplained.org/posts/)
