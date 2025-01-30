@@ -13,7 +13,8 @@ website:
     pinned: true
     right:
       - about.qmd
-    draft-mode: unlinked
+      - text: Home
+        href: index.qmd
     
 date-format: long
 language: 
