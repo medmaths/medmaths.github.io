@@ -4,12 +4,12 @@ project:
 
 website:
   title: "Medical Maths"
+  favicon: favicon.png
   search: false
   navbar:
     background: "#007ba8"
     foreground: "#ffffff"
     logo: logo.png
-    favicon: favicon.png
     pinned: true
     right:
       - about.qmd
