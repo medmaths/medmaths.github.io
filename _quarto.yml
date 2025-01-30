@@ -15,6 +15,10 @@ website:
       - about.qmd
       - text: Home
         href: index.qmd
+      - icon: bi-envelope
+        href: mailto:medmaths@protonmail.com
+      - icon: github
+        href: https://github.com/medmaths
     
 date-format: long
 language: 
