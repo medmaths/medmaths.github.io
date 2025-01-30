@@ -1,0 +1,7 @@
+/.quarto/
+/_site/
+/fonts/
+/.Rproj.user/
+.Rhistory
+.DS_store
+medmaths.github.io.Rproj

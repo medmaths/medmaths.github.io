@@ -1,0 +1,18 @@
+---
+title: "About"
+---
+I'm a maths graduate who's very interested in the many applications of mathematics and statistics to medicine, and I decided to start this blog as a way of challenging myself to keep learning new things (as well as deepening my understanding of areas I already have some knowledge of). It’s a place where I can practise writing expository articles that explore various topics in 'medical maths’ using diagrams and R code. Thank you for reading – I hope you find my explanations interesting and/or useful! 
+
+![](venn-diagram.png)
+
+(If you notice an error or have any other feedback, please feel free to contact me at: [medmaths@protonmail.com](mailto:medmaths@protonmail.com))
+
+This site is built with [Quarto](https://quarto.org) and hosted via [Github Pages](https://pages.github.com).
+
+## Biostats/Epidemiology/Maths Adjacent Blogs I Enjoy
+
+- [**Live Free or Dichotomize** by Lucy D'Agostino McGowan and Nick Strayer](https://livefreeordichotomize.com)
+- [**Posting completely at random** by Cameron Patrick](https://cameronpatrick.com/blog)
+- [**Probably Overthinking It** by Allen Downey](https://www.allendowney.com/blog/)
+- [**Technical Fridays** by Harshit Kumar](https://kharshit.github.io/blog/)
+- [**Variance Explained** by David Robinson](http://varianceexplained.org/posts/)

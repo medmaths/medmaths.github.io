@@ -1,0 +1,13 @@
+---
+title: "Posts"
+listing:
+  type: table
+  contents: posts
+  fields: [date, title]
+  sort: "date desc"
+  categories: false
+  sort-ui: false
+  filter-ui: false
+page-layout: article
+title-block-banner: false
+---

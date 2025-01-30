@@ -1,0 +1,36 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Medical Maths"
+  search: false
+  navbar:
+    background: "#007ba8"
+    foreground: "#ffffff"
+    logo: logo.png
+    favicon: favicon.png
+    pinned: true
+    right:
+      - about.qmd
+    draft-mode: unlinked
+    
+date-format: long
+language: 
+  section-title-footnotes: "References" 
+appendix-style: plain
+tbl-cap-location: bottom
+    
+format:
+  html:
+    css: medmaths-custom-styling.css
+    theme:
+      - default
+      - medmaths-custom-theme.scss
+    html-math-method:
+      method: mathjax
+      # url: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+      # method: katex
+    code-overflow: scroll
+    code-copy: false
+    highlight-style: pygments

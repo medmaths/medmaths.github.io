@@ -1,0 +1,35 @@
+/*-- scss:defaults --*/
+$font-family-base: 'Roboto Slab' !default;
+$h1-font-size: 1.8em !default;
+$h2-font-size: 1.6em !default;
+$h3-font-size: 1.4em !default;
+$h4-font-size: 1.2em !default;
+$navbar-hl: #ffffff !default;
+$navbar-hover-color: #ffffff !default;
+$font-family-code: 'Courier Prime' !default;
+$code-font-size: 1em !default;
+$code-block-font-size: 1em !default;
+$callout-color-warning: #ffc000 !default;
+$callout-color-note: #a6a6a6 !default;
+$link-color: #008dc0 !default;
+$link-hover-color: #006a90 !default;
+quarto-appendix-heading {
+  font-size: 1.6em !important;
+}
+/*-- scss:rules --*/
+.math.display .MathJax {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+} 
+/*-- .math.inline .MathJax  {
+  font-size: 99% !important;
+} --*/
+/*-- .math.display .katex {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+} --*/
+/*-- .math.inline .katex {
+  font-size: 99% !important;
+} --*/
