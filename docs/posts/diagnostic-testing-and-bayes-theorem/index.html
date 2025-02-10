@@ -177,6 +177,12 @@ window.Quarto = {
     </div>
   </div>
   
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">February 10, 2025</p>
+    </div>
+  </div>
     
   </div>
   
@@ -195,10 +201,10 @@ Disclaimer
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This blog post was written solely for informational and educational purposes, and does not constitute medical advice. If you have any health concerns, please consult a qualified medical professional.</p>
+<p>This article was written solely for informational and educational purposes, and does not constitute medical advice. If you have any health concerns, please consult a qualified medical professional.</p>
 </div>
 </div>
-<p>If I am screened for a disease and receive a positive test result, how worried should I be? What are the chances it was a false positive? In this post I’ll discuss why medical test results aren’t always as straightforward as they might seem, and how an equation first discovered over 200 years ago can help us to understand them better.</p>
+<p>If I am screened for a disease and receive a positive test result, how worried should I be? What are the chances it was a false positive? In this article I’ll discuss why medical test results aren’t always as straightforward as they might seem, and how an equation first discovered over 200 years ago can help us to understand them better.</p>
 <section id="sensitivity-and-specificity" class="level2">
 <h2 class="anchored" data-anchor-id="sensitivity-and-specificity">Sensitivity and Specificity</h2>
 <p>When interpreting a diagnostic test result, two of most important pieces of information we need to know are the <strong>sensitivity</strong> and <strong>specificity</strong> of the test. Coined in 1947 by Jacob Yerushalmy<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, these terms refer respectively to the probability that a diagnostic test will correctly identify someone with a disease, and the probability that it will accurately distinguish those without the condition.</p>
@@ -316,7 +322,7 @@ Notation
 <p>To check our answer, we can use R to simulate repeatedly sampling 20 people from a population of 1 million people with a 5% prevalence of Bayesitis.</p>
 <div class="cell">
 <details class="code-fold">
-<summary>R Code</summary>
+<summary>Simulating Bayesitis Screening in R</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Because we will be using randomly generated numbers, we first set a seed to ensure our results are reproducible:</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">31415926</span>) </span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># We now set up some variables:</span></span>
@@ -355,9 +361,9 @@ Notation
 <span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  }  </span>
 <span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Now let's see how the average proportion of positive test results that are false changes as the number of simulations we've done increases:</span></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>props_for_avg <span class="ot">&lt;-</span> false_pos_props[<span class="sc">!</span><span class="fu">is.na</span>(false_pos_props)] <span class="co"># we remove the undefined values from our vector of empirical false positive proportions</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>props_for_avg <span class="ot">&lt;-</span> false_pos_props[<span class="sc">!</span><span class="fu">is.na</span>(false_pos_props)] <span class="co"># we remove the undefined values from our vector of empirical false positive probabilities</span></span>
 <span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>cum_avg <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(props_for_avg) <span class="sc">/</span> <span class="fu">seq_along</span>(props_for_avg) <span class="co"># we calculate a cumulative average as the number of simulations increases</span></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="co"># We plot the cumulative average against the number of simulations:</span></span>
 <span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="at">bottom=</span><span class="fl">4.2</span>, <span class="at">left=</span><span class="fl">5.1</span>, <span class="at">top=</span><span class="fl">1.8</span>, <span class="at">right=</span><span class="fl">0.9</span>), <span class="at">family=</span><span class="st">"Roboto Slab"</span>)</span>
 <span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cum_avg, <span class="at">ylim=</span><span class="fu">c</span>(<span class="fl">0.5</span>,<span class="dv">1</span>), <span class="at">xlab=</span><span class="st">"Number of Simulations"</span>, <span class="at">ylab=</span><span class="st">"Average False Positive Proportion"</span>, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">col=</span><span class="st">"#808080"</span>, <span class="at">lwd=</span><span class="fl">4.2</span>, <span class="at">cex.lab=</span><span class="fl">1.5</span>, <span class="at">cex.axis=</span><span class="fl">1.5</span>)</span>
 <span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="fl">0.7421875</span>, <span class="at">col=</span><span class="st">"#009ed8"</span>, <span class="at">lty=</span><span class="dv">1</span>, <span class="at">lwd=</span><span class="fl">4.2</span>)</span>
@@ -387,7 +393,7 @@ Notation
 <div id="quarto-appendix"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">References</h2>
 
 <ol>
-<li id="fn1"><p>Jacob Yerushalmy, <a href="https://doi.org/10.2307%2F4586294">“Statistical problems in assessing methods of medical diagnosis with special reference to x-ray techniques,”</a> <em>Public Health Reports</em> 62, no. 2 (1947): 1432–1439.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Jacob Yerushalmy, <a href="https://doi.org/10.2307%2F4586294">“Statistical problems in assessing methods of medical diagnosis with special reference to x-ray techniques,”</a> <em>Public Health Reports</em> 62, no. 2 (October 1947): 1432–1439.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Steven McGee, <em>Evidence-Based Physical Diagnosis.</em> Philadelphia: Saunders, 2012.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>Sharon Bertsch McGrayne, <em>The Theory That Would Not Die.</em> New Haven: Yale University Press, 2011.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>

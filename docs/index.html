@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Posts – Medical Maths</title>
+<title>Articles – Medical Maths</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -61,9 +61,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
+      valueNames: ['listing-image','listing-title',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author"],
+      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -158,7 +158,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Posts</h1>
+<h1 class="title">Articles</h1>
 </div>
 
 
@@ -179,29 +179,37 @@ window.Quarto = {
 
 
 
-<div class="quarto-listing quarto-listing-container-table" id="listing-listing">
-<table class="quarto-listing-table table">
-<thead>
-<tr>
-<th>
-Date
-</th>
-<th>
-Title
-</th>
-</tr>
-</thead>
-<tbody class="list">
-<tr data-index="0" data-listing-date-sort="1738195200000" data-listing-file-modified-sort="1738257440587" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1992" data-listing-title-sort="Diagnostic Testing and Bayes' Theorem" data-listing-filename-sort="index.qmd">
-<td>
-<span class="listing-date">January 30, 2025</span>
-</td>
-<td>
-<a href="./posts/diagnostic-testing-and-bayes-theorem/index.html" class="title listing-title">Diagnostic Testing and Bayes’ Theorem</a>
-</td>
-</tr>
-</tbody>
-</table>
+<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
+<div class="list grid quarto-listing-cols-3">
+<div class="g-col-1" data-index="0" data-listing-date-sort="1739145600000" data-listing-file-modified-sort="1739204387828" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="96" data-listing-word-count-sort="19051">
+<a href="./posts/censored-data-and-kaplan-meier-curves/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./posts/censored-data-and-kaplan-meier-curves/thumbnail.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Censored Data and Kaplan-Meier Curves
+</h5>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="1" data-listing-date-sort="1738195200000" data-listing-file-modified-sort="1739204337743" data-listing-date-modified-sort="1739145600000" data-listing-reading-time-sort="11" data-listing-word-count-sort="2004">
+<a href="./posts/diagnostic-testing-and-bayes-theorem/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./posts/diagnostic-testing-and-bayes-theorem/thumbnail.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Diagnostic Testing and Bayes’ Theorem
+</h5>
+</div>
+</div>
+</a>
+</div>
+</div>
 <div class="listing-no-matching d-none">
 No matching items
 </div>

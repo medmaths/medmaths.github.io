@@ -1,17 +1,20 @@
 ---
 title: "Diagnostic Testing and Bayes' Theorem"
 date: "2025-01-30"
+date-modified: "2025-02-10"
+image: thumbnail.png
 ---
 ::: {.callout-warning}
 ## Disclaimer
-This blog post was written solely for informational and educational purposes, and does not constitute medical advice. If you have any health concerns, please consult a qualified medical professional.
+This article was written solely for informational and educational purposes, and does not constitute medical advice. If you have any health concerns, please consult a qualified medical professional.
 :::
-If I am screened for a disease and receive a positive test result, how worried should I be? What are the chances it was a false positive? In this post I'll discuss why medical test results aren’t always as straightforward as they might seem, and how an equation first discovered over 200 years ago can help us to understand them better.
+If I am screened for a disease and receive a positive test result, how worried should I be? What are the chances it was a false positive? In this article I'll discuss why medical test results aren’t always as straightforward as they might seem, and how an equation first discovered over 200 years ago can help us to understand them better.
 
 ## Sensitivity and Specificity
 When interpreting a diagnostic test result, two of most important pieces of information we need to know are the **sensitivity** and **specificity** of the test. Coined in 1947 by Jacob Yerushalmy[^1], these terms refer respectively to the probability that a diagnostic test will correctly identify someone with a disease, and the probability that it will accurately distinguish those without the condition. 
 
 Steven McGee gives a helpful illustration of these concepts in his book Evidence-Based Physical Diagnosis[^2], using a hypothetical experiment. He asks us to imagine that a specific physical examination finding -- a holosystolic heart murmur -- is assessed in a group of 42 people with a particular type of valvular heart disease and a group of 58 people without the condition, producing the following results.
+
 ```{=html}
 <div style="overflow-x:auto;">
   <table class="table table-bordered table-sm">
@@ -121,7 +124,7 @@ To check our answer, we can use R to simulate repeatedly sampling 20 people from
 
 ```{r fig.height=6, fig.width=12}
 #| code-fold: true
-#| code-summary: "R Code"
+#| code-summary: "Simulating Bayesitis Screening in R"
 #| label: simulated-screenings
 # Because we will be using randomly generated numbers, we first set a seed to ensure our results are reproducible:
 set.seed(31415926) 
@@ -163,7 +166,7 @@ for (n in 1:num_sims) {
 # Now let's see how the average proportion of positive test results that are false changes as the number of simulations we've done increases:
 props_for_avg <- false_pos_props[!is.na(false_pos_props)] # we remove the undefined values from our vector of empirical false positive probabilities
 cum_avg <- cumsum(props_for_avg) / seq_along(props_for_avg) # we calculate a cumulative average as the number of simulations increases
-# 
+# We plot the cumulative average against the number of simulations:
 par(mar=c(bottom=4.2, left=5.1, top=1.8, right=0.9), family="Roboto Slab")
 plot(cum_avg, ylim=c(0.5,1), xlab="Number of Simulations", ylab="Average False Positive Proportion", type="l", col="#808080", lwd=4.2, cex.lab=1.5, cex.axis=1.5)
 abline(h=0.7421875, col="#009ed8", lty=1, lwd=4.2)
@@ -175,6 +178,6 @@ Reassuringly, as we do more simulations, the average proportion of positive test
 - [**Bayes theorem and likelihood ratios for diagnostic tests** -- a blog post by Stathis Kamperis about likelihood ratios](https://ekamperi.github.io/mathematics/2020/01/19/bayes-theorem-likelihood-ratios.html)
 - [**An Interactive Fagan Nomogram** -- a blog post by Carlos Scheidegger about the Fagan nomogram](https://cscheid.net/v2/hacks/fagan-nomogram.html) 
 
-[^1]: Jacob Yerushalmy, ["Statistical problems in assessing methods of medical diagnosis with special reference to x-ray techniques,"](https://doi.org/10.2307%2F4586294) *Public Health Reports* 62, no. 2 (1947): 1432--1439.
+[^1]: Jacob Yerushalmy, ["Statistical problems in assessing methods of medical diagnosis with special reference to x-ray techniques,"](https://doi.org/10.2307%2F4586294) *Public Health Reports* 62, no. 2 (October 1947): 1432--1439.
 [^2]: Steven McGee, *Evidence-Based Physical Diagnosis.* Philadelphia: Saunders, 2012.
 [^3]: Sharon Bertsch McGrayne, *The Theory That Would Not Die.* New Haven: Yale University Press, 2011.

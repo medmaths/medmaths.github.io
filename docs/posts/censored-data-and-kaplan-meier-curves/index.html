@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2025-02-10">
+
+<title>Censored Data and Kaplan-Meier Curves – Medical Maths</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<link href="../../favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../medmaths-custom-styling.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../logo.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Medical Maths</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Censored Data and Kaplan-Meier Curves</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 10, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Disclaimer
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This article was written solely for informational and educational purposes, and does not constitute medical advice. If you have any health concerns, please consult a qualified medical professional.</p>
+</div>
+</div>
+<p>Patients and medical professionals are often interested in the probability that an event will or will not have occurred after a certain amount of time. For example, what is the probability that a burn will have healed after a month? What is the probability that someone’s cancer will not have returned five years after they have gone into remission? To estimate these probabilities, researchers use a branch of statistics known as <strong>survival analysis</strong>.</p>
+<section id="time-to-event-data" class="level2">
+<h2 class="anchored" data-anchor-id="time-to-event-data">Time to Event Data</h2>
+<p>Survival analysis is the study of <strong>time to event data</strong>. These are data that for each subject measure the time that elapses from a defined starting point – for example, the diagnosis of a disease – until a particular event happens – for example, death. Despite the name, survival analysis does not presume that this event is death – indeed, it could be a positive event, such as discharge from hospital. Though commonly used in medical statistics, survival analysis is not exclusive to epidemiology; it is also employed in fields as diverse as engineering and sociology, meaning it is sometimes known by other names, such as ‘reliability analysis’<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>One of the central tasks of survival analysis is to estimate the <strong>survival function</strong>, <span class="math inline">\(S(t)\)</span>, for the event of interest. This is a function of time equal to the probability that the event takes longer than the input time, <span class="math inline">\(t\)</span>, to occur</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><span class="math inline">\(T\)</span> denotes a random variable representing the time until the event occurs.</li>
+<li><span class="math inline">\(t\)</span> denotes a specific time duration.</li>
+<li><span class="math inline">\(S(t)=\mathbb{P}(T&gt;t)\)</span> denotes the survival function.</li>
+</ul>
+</div>
+</div>
+<p>Let’s consider a very simple scenario in which we might estimate a survival function. Suppose an electrical manufacturing company has a batch of faulty light bulbs, and they decide to pick ten of them at random to leave on and monitor for a week. They observe that:</p>
+<ul>
+<li>On the first day, three light bulbs fail.</li>
+<li>On the second day, four light bulbs fail.</li>
+<li>On the third day, no light bulbs fail</li>
+<li>On the fourth day, two light bulbs fail.</li>
+<li>On the fifth day, the final light bulb fails.</li>
+</ul>
+<p><img src="light-bulbs.png" class="img-fluid"></p>
+<p>Putting aside the fact that this is a very small sample, it is relatively straightforward to estimate the survival function for these faulty light bulbs from this experiment. For example, to estimate <span class="math inline">\(S(1)\)</span>, we just look at the proportion of light bulbs that last longer than one day – seven tenths. By the <a href="https://en.wikipedia.org/wiki/Law_of_large_numbers">law of large numbers</a>, as we increase the number of light bulbs in the sample this proportion will eventually converge to the true probability of a faulty light bulb lasting longer than one day. We can do this calculation for each time marker, including the start point of the experiment – we call this Day 0.</p>
+<div style="overflow-x:auto;">
+  
+<table class="table table-bordered table-sm" data-quarto-postprocess="true">
+<caption>Estimated Faulty Light Bulb Survival Function</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white; width: 50%;">Day</td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Survival Function Estimate</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{7}{10}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{3}{10}\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{3}{10}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">4</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{1}{10}\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">5</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(0\)</span></td>
+</tr>
+</tbody>
+</table>
+
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Plotting the Estimated Survival Function in R</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>days <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">5</span> <span class="co"># creating a vector of time markers</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>survival_function <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">7</span><span class="sc">/</span><span class="dv">10</span>, <span class="dv">3</span><span class="sc">/</span><span class="dv">10</span>, <span class="dv">3</span><span class="sc">/</span><span class="dv">10</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">10</span>, <span class="dv">0</span>) <span class="co"># creating a vector of estimated probabilities</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="at">bottom=</span><span class="fl">4.2</span>, <span class="at">left=</span><span class="fl">5.1</span>, <span class="at">top=</span><span class="fl">1.8</span>, <span class="at">right=</span><span class="fl">0.9</span>), <span class="at">family=</span><span class="st">"Roboto Slab"</span>) <span class="co"># setting the plot options</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(days, survival_function, <span class="at">type=</span><span class="st">"s"</span>, <span class="at">xlab=</span><span class="st">"Day"</span>, <span class="at">ylab=</span><span class="st">"Estimated Survival Function"</span>, <span class="at">col=</span><span class="st">"#006a90"</span>, <span class="at">lwd=</span><span class="fl">4.8</span>, <span class="at">cex.lab=</span><span class="fl">1.8</span>, <span class="at">cex.axis=</span><span class="fl">1.8</span>)</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/estimated-light-bulb-survival-function-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Easy, right? Unfortunately, the time to event data we find in medical applications are rarely this straightforward to work with.</p>
+</section>
+<section id="censoring" class="level2">
+<h2 class="anchored" data-anchor-id="censoring">Censoring</h2>
+<p>In many medical studies producing time to event data, patients are recruited over a period of some time and then followed until a defined end date, at which point the investigators will want to analyse their outcomes. As a result of this, the event of interest may not have happened for all the subjects of the study. In survival analysis, these ‘incomplete’ data points are known as <strong>censored data</strong>. They do give us some information – we know the event we are studying had not yet happened at the point at which censoring occurred. However, we cannot tell when, or indeed if, it would have gone on to happen.</p>
+<p>Censoring can also come about in other ways, including patients being lost to follow up, or experiencing a ‘competing event’<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. For example, in a study of times from catheter placement to complication in acute peritoneal dialysis, observations were considered censored when a catheter was removed before a complication arose<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
+<p>Censored data make estimating a survival function considerably more complicated. Imagine, for example, that three of the light bulbs in our previous thought experiment accidentally got smashed at the end of the first day.</p>
+<p><img src="light-bulbs-censored.png" class="img-fluid"></p>
+<p>We could still approximate <span class="math inline">\(S(1)\)</span> to be seven tenths, since <span class="math display">\[\mathbb{P}(T&gt;1)=1-\mathbb{P}(T\leq1),\]</span> which, since three light bulbs fail on the first day, we can estimate to be <span class="math display">\[1-\frac{3}{10}=\frac{7}{10},\]</span> as in the original case. But what about <span class="math inline">\(S(2)\)</span> onwards? We don’t know on which days the smashed light bulbs would have failed, so we can’t estimate <span class="math inline">\(S(t)\)</span> for these values of <span class="math inline">\(t\)</span> in the same way.</p>
+</section>
+<section id="the-kaplan-meier-method" class="level2">
+<h2 class="anchored" data-anchor-id="the-kaplan-meier-method">The Kaplan-Meier Method</h2>
+<p>In 1958, Edward Kaplan and Paul Meier proposed an ingenious solution to the censoring problem<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. Their paper has gone on to become the most cited publication in the history of statistics<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, and is seen as a seminal contribution to the field of survival analysis. Kaplan and Meier’s central insight was that while censoring may stop us from directly estimating <span class="math inline">\(\mathbb{P}(T&gt;t_i)\)</span> for a particular value of time, <span class="math inline">\(t_i\)</span>, it does not stop us from estimating <span class="math display">\[\mathbb{P}(T&gt;t_i\,|\,T&gt;t_{i-1}),\]</span> This is the conditional probability of an event taking longer than <span class="math inline">\(t_i\)</span> days, months, or years to occur, given that it has not already happened in <span class="math inline">\(t_{i-1}\)</span> days, months, or years.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><span class="math inline">\(t_1,t_2,t_3\ldots\)</span> denote the times to the event of interest in ascending order.</li>
+<li><span class="math inline">\(t_{i-1}\)</span> denotes the next lowest time to the event of interest to <span class="math inline">\(t_i\)</span>.</li>
+<li><span class="math inline">\(t_0\)</span> denotes a time of <span class="math inline">\(0\)</span>.</li>
+</ul>
+</div>
+</div>
+<p>These conditional probabilities are quite easy to find, since</p>
+<p><span class="math display">\[\begin{split}
+\mathbb{P}(T&gt;t_i\,|\,T&gt;t_{i-1})&amp;=1-\mathbb{P}(T\leq t_i\,|\,T&gt;t_{i-1})\\&amp;=1-\mathbb{P}(T=t_i\,|\,T&gt;t_{i-1}).
+\end{split}\]</span></p>
+<p>which we can estimate by calculating the proportion of subjects remaining in the study (those who have not experienced censoring or the event of interest) after <span class="math inline">\(t_{i-1}\)</span> that do not have a time to event of <span class="math inline">\(t_i\)</span>.</p>
+<p>In our smashed light blub thought experiment, for example, we could estimate <span class="math inline">\(\mathbb{P}(T&gt;2\,|\,T&gt;1)\)</span> to be two quarters (or one half). This is because on the first day three light bulbs fail and three light bulbs are censored, so four remain in the experiment on the second day, two of which survive</p>
+<p>Kaplan and Meier realised that we can get from these conditional probabilities to the survival function using the <a href="https://en.wikipedia.org/wiki/Chain_rule_(probability)">chain rule of conditional probabilities</a>. For any <span class="math inline">\(t_i\)</span>, we have that</p>
+<p><span class="math display">\[
+\begin{split}
+\mathbb{P}(T&gt;t_i)
+&amp;=\mathbb{P}(T&gt; t_i\,|\,T&gt;t_{i-1})\mathbb{P}(T&gt;t_{i-1})\\
+&amp;=\mathbb{P}(T&gt; t_i\,|\,T&gt;t_{i-1})\mathbb{P}(T&gt;t_{i-1}\,|\,T&gt;t_{i-2})\mathbb{P}(T&gt;t_{i-2})\\
+&amp;=\mathbb{P}(T&gt; t_i\,|\,T&gt;t_{i-1})\mathbb{P}(T&gt;t_{i-1}\,|\,T&gt;t_{i-2})\mathbb{P}(T&gt;t_{i-2}\,|\,T&gt;t_{i-3})\mathbb{P}(T&gt;t_{i-3})\cdots\\
+&amp;\cdots\mathbb{P}(T&gt;t_2\,|\,T&gt;t_1)\mathbb{P}(T&gt;t_2\,|\,T&gt;t_1)\mathbb{P}(T&gt;t_1\,|\,T&gt;t_0)\mathbb{P}(T&gt;t_0).
+\end{split}
+\]</span> We know that <span class="math inline">\(\mathbb{P}(T&gt;t_0)\)</span>, the probability of the time to the event of interest being more than zero, is one, since the event has not happened to any of our subjects at the start of the study. So by the expression above, we can recursively estimate the survival function <span class="math inline">\(S(t_{i})\)</span> for each <span class="math inline">\(t_1,t_2,t_3,\ldots\)</span>, using the cumulative product of the conditional probabilities <span class="math inline">\(\mathbb{P}(T&gt; t_i\,|\,T&gt;t_{i-1})\)</span>.</p>
+</section>
+<section id="an-example-with-real-data" class="level2">
+<h2 class="anchored" data-anchor-id="an-example-with-real-data">An Example With Real Data</h2>
+<p>To get an idea of how the Kaplan-Meier method of estimating a survival function works, let’s try it out on some data from a real observational study from the 1980s<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. Over two years, a group of obstetricians in London recorded the time it took for a group of 38 women who had been experiencing fertility issues to conceive after a surgical intervention. The times to conception or censoring for each woman can be obtained from a 1998 article on the Kaplan-Meier method in the BMJ<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Inputting the Results of the Study into a Data Frame in R</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>women <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">38</span> <span class="co"># creating identifiers for each woman in the study</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>event_times <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">11</span>, <span class="dv">7</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">4</span>, <span class="dv">24</span>, <span class="dv">6</span>, <span class="dv">9</span>, <span class="dv">2</span>, <span class="dv">6</span>, <span class="dv">16</span>, <span class="dv">9</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">8</span>, <span class="dv">8</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">2</span>, <span class="dv">9</span>, <span class="dv">24</span>, </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                 <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">9</span>, <span class="dv">13</span>, <span class="dv">10</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">2</span>) <span class="co"># inputting the number of months after their surgical intervention at which they conceived or were censored</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>conception_or_censoring <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'Conceived'</span>, <span class="st">'Conceived'</span>, <span class="st">'Censored'</span>, <span class="st">'Censored'</span>, <span class="st">'Conceived'</span>, <span class="st">'Conceived'</span>, <span class="st">'Censored'</span>, <span class="st">'Conceived'</span>, <span class="st">'Censored'</span>, <span class="st">'Conceived'</span>, <span class="st">'Censored'</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                             <span class="st">'Conceived'</span>, <span class="st">'Conceived'</span>, <span class="st">'Conceived'</span>, <span class="st">'Conceived'</span>, <span class="st">'Censored'</span>, <span class="st">'Conceived'</span>, <span class="st">'Conceived'</span>, <span class="st">'Conceived'</span>, <span class="st">'Censored'</span>, <span class="st">'Censored'</span>, <span class="st">'Conceived'</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                             <span class="st">'Censored'</span>, <span class="st">'Conceived'</span>, <span class="st">'Censored'</span>, <span class="st">'Conceived'</span>, <span class="st">'Conceived'</span>, <span class="st">'Conceived'</span>, <span class="st">'Censored'</span>, <span class="st">'Conceived'</span>, <span class="st">'Conceived'</span>, <span class="st">'Censored'</span>, <span class="st">'Conceived'</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                             <span class="st">'Conceived'</span>, <span class="st">'Conceived'</span>, <span class="st">'Conceived'</span>, <span class="st">'Censored'</span>, <span class="st">'Conceived'</span>) <span class="co"># inputting which event occurred for each woman</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>conception_study <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">subject=</span>women, <span class="at">months=</span>event_times, <span class="at">event=</span>conception_or_censoring)</span></code></pre></div>
+</details>
+</div>
+<div style="overflow-x:auto;">
+  
+<table class="table table-bordered table-sm" data-quarto-postprocess="true">
+<caption>Time to Event Data from a Study of Conception after Laparoscopy and Hydrotubation</caption>
+<tbody>
+<tr class="odd">
+<td rowspan="2" style="background-color: #e4f8ff"></td>
+<td colspan="38" style="text-align: left; vertical-align: middle; background-color: #006a90; color: white; padding-left: 0.75rem; padding-right: 0.75rem;">Study Participant</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">1</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">2</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">3</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">4</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">5</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">6</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">7</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">8</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">9</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">10</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">11</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">12</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">13</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">14</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">15</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">16</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">17</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">18</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">19</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">20</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">21</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">22</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">23</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">24</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">25</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">26</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">27</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">28</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">29</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">30</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">31</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">32</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">33</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">34</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">35</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">36</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">37</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">38</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; vertical-align: middle; background-color: #006a90; color: white; padding-left: 0.75rem; padding-right: 0.75rem;">Event</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Censored</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Censored</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Censored</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Censored</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Censored</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Censored</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Censored</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Censored</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Censored</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Censored</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Censored</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Censored</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Censored</td>
+<td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem;">Conceived</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; vertical-align: middle; background-color: #006a90; color: white; padding-left: 0.75rem; padding-right: 0.75rem;">Months Until Event</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">11</td>
+<td style="text-align: center; vertical-align: middle;">7</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">4</td>
+<td style="text-align: center; vertical-align: middle;">9</td>
+<td style="text-align: center; vertical-align: middle;">4</td>
+<td style="text-align: center; vertical-align: middle;">24</td>
+<td style="text-align: center; vertical-align: middle;">6</td>
+<td style="text-align: center; vertical-align: middle;">9</td>
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;">6</td>
+<td style="text-align: center; vertical-align: middle;">16</td>
+<td style="text-align: center; vertical-align: middle;">9</td>
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">8</td>
+<td style="text-align: center; vertical-align: middle;">8</td>
+<td style="text-align: center; vertical-align: middle;">4</td>
+<td style="text-align: center; vertical-align: middle;">4</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">7</td>
+<td style="text-align: center; vertical-align: middle;">9</td>
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;">9</td>
+<td style="text-align: center; vertical-align: middle;">24</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">9</td>
+<td style="text-align: center; vertical-align: middle;">13</td>
+<td style="text-align: center; vertical-align: middle;">10</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">2</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+<p>To make it easier to do our survival analysis, let’s summarise this data so that we can easily see the number of women who conceived or were censored at each distinct time step.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Restructuring the Data in R</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>months_from_intervention <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(conception_study<span class="sc">$</span>months)) <span class="co"># getting the different numbers of months after surgical intervention it took for conception or censoring to occur</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>months_from_intervention <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, months_from_intervention) <span class="co"># adding month zero for the start of the study</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>num_times <span class="ot">&lt;-</span> <span class="fu">length</span>(months_from_intervention) <span class="co"># finding the number of unique event times </span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>censored <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times=</span>num_times) </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>conceived <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times=</span>num_times)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_times) { <span class="co"># counting the number of conceptions and censorings at each event time</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  month_i <span class="ot">&lt;-</span> months_from_intervention[i]</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  censored[i] <span class="ot">&lt;-</span> <span class="fu">nrow</span>(conception_study[conception_study<span class="sc">$</span>months <span class="sc">==</span> month_i <span class="sc">&amp;</span> conception_study<span class="sc">$</span>event <span class="sc">==</span> <span class="st">'Censored'</span>, ])</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  conceived[i] <span class="ot">&lt;-</span> <span class="fu">nrow</span>(conception_study[conception_study<span class="sc">$</span>months <span class="sc">==</span> month_i <span class="sc">&amp;</span> conception_study<span class="sc">$</span>event <span class="sc">==</span> <span class="st">'Conceived'</span>, ])</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>conception_data_summary <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">months=</span>months_from_intervention, <span class="at">censored=</span>censored, <span class="at">conceived=</span>conceived)</span></code></pre></div>
+</details>
+</div>
+<div style="overflow-x:auto;">
+  
+<table class="table table-bordered table-sm" data-quarto-postprocess="true">
+<caption>Summarised Conception Study Data</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Months from Intervention</td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Number of Censorings</td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Number of Conceptions</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">4</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">6</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">7</td>
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">8</td>
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">9</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">10</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">11</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">13</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">16</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">24</td>
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+<p>To calculate the conditional probability <span class="math inline">\(\mathbb{P}(T&gt;t_i|T&gt;t_{i-1})\)</span> for each observed number of months from conception, <span class="math inline">\(t_i\)</span>, we first need to find out how many women were still being followed up at each stage.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Finding the Number of Remaining Study Members at Each Time Stage in R</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>num_remaining <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times=</span>num_times) <span class="co"># initialising a vector to store the number of remaining study members at each event time</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>num_remaining[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">38</span> <span class="co"># at month zero, all women are still being followed up </span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>num_times) { <span class="co"># finding the number of women still being followed up at each event time from the previous number, </span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                         <span class="co"># and the number who conceived or were censored at the previous event time</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  num_remaining[i] <span class="ot">&lt;-</span> num_remaining[i<span class="dv">-1</span>] <span class="sc">-</span> censored[i<span class="dv">-1</span>] <span class="sc">-</span> conceived[i<span class="dv">-1</span>]</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>conception_data_summary<span class="sc">$</span>remaining <span class="ot">&lt;-</span> num_remaining <span class="co"># adding a column to the data frame</span></span></code></pre></div>
+</details>
+</div>
+<div style="overflow-x:auto;">
+  
+<table class="table table-bordered table-sm" data-quarto-postprocess="true">
+<caption>Summarised Conception Study Data (Including Numbers of Participants Remaining in Follow Up)</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Months from Intervention</td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Number of Censorings</td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Number of Conceptions</td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Number Still in Study</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">38</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">6</td>
+<td style="text-align: center; vertical-align: middle;">38 − 0 − 0 = 38</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">5</td>
+<td style="text-align: center; vertical-align: middle;">38 − 0 − 6 = 32</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">32 − 1 − 5 = 26</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">4</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">26 − 1 − 3 = 22</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">6</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;">22 − 1 − 3 = 18</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">7</td>
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">18 − 0 − 2 = 16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">8</td>
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">16 − 2 − 0 = 14</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">9</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">14 − 2 − 0 = 12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">10</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">12 − 3 − 3 = 6</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">11</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">6 − 0 − 1 = 5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">13</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">5 − 1 − 0 = 4</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">16</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">4 − 0 − 1 = 3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">24</td>
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">3 − 0 − 1 = 2</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+<p>Now we can start our survival analysis properly by estimating <span class="math inline">\(\mathbb{P}(T&gt;t_i\,|\,T&gt;t_{i-1})\)</span> for each <span class="math inline">\(t_i\)</span>. We have gleaned all the information we need from the number of censorings at each time stage, so this column can be removed.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Estimating the Conditional Probabilities for Each Time Stage in R</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>conception_survival_analysis <span class="ot">&lt;-</span> <span class="fu">subset</span>(conception_data_summary, <span class="at">select=</span><span class="sc">-</span>censored) <span class="co"># creating a new data frame without the censoring column</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>conditional_probabilities <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times=</span>num_times) <span class="co"># # initialising a vector to store the estimated conditional probabilities</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_times) { <span class="co"># finding an estimate for the conditional probability at each event time</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  conditional_probabilities[i] <span class="ot">&lt;-</span> (num_remaining[i]<span class="sc">-</span>conceived[i])<span class="sc">/</span>num_remaining[i]</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>conception_survival_analysis<span class="sc">$</span>conditionals <span class="ot">&lt;-</span> conditional_probabilities</span></code></pre></div>
+</details>
+</div>
+<div style="overflow-x:auto;">
+  
+<table class="table table-bordered table-sm" data-quarto-postprocess="true">
+<caption>Conception Study Data With Estimated Conditional Probabilities</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><span class="math inline">\(i\)</span></td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><span class="math inline">\(t_{i}\)</span> (Months)</td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><span class="math inline">\(\#(T = t_{i})\)</span> (Conceptions)</td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Number Still in Study</td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Estimated <span class="math inline">\(\mathbb{P}(T &gt; t_{i}\,|\, T &gt; t_{i - 1})\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">38</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\text{N/A}\,(\mathbb{P}(T &gt; 0) = 1)\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">6</td>
+<td style="text-align: center; vertical-align: middle;">38</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1 - \frac{6}{38} = \frac{32}{38} \approx 0.84\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;">5</td>
+<td style="text-align: center; vertical-align: middle;">32</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1 - \frac{5}{32} = \frac{27}{32} \approx 0.84\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">26</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1 - \frac{3}{26} = \frac{23}{26} \approx 0.88\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">4</td>
+<td style="text-align: center; vertical-align: middle;">4</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">22</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1 - \frac{3}{22} = \frac{19}{22} \approx 0.86\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">5</td>
+<td style="text-align: center; vertical-align: middle;">6</td>
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;">18</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1 - \frac{2}{18} = \frac{16}{18} \approx 0.89\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">6</td>
+<td style="text-align: center; vertical-align: middle;">7</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">16</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1 - \frac{0}{16} = 1\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">7</td>
+<td style="text-align: center; vertical-align: middle;">8</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">14</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1 - \frac{0}{14} = 1\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">8</td>
+<td style="text-align: center; vertical-align: middle;">9</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">12</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1 - \frac{3}{12} = \frac{9}{12} = 0.75\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">9</td>
+<td style="text-align: center; vertical-align: middle;">10</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">6</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1 - \frac{1}{6} = \frac{5}{6} \approx 0.83\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">10</td>
+<td style="text-align: center; vertical-align: middle;">11</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">5</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1 - \frac{0}{5} = 1\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">11</td>
+<td style="text-align: center; vertical-align: middle;">13</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">4</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1 - \frac{1}{4} = \frac{3}{4} = 0.75\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">12</td>
+<td style="text-align: center; vertical-align: middle;">16</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1 - \frac{1}{3} = \frac{2}{3} \approx 0.67\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">13</td>
+<td style="text-align: center; vertical-align: middle;">24</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1 - \frac{0}{2} = 1\)</span></td>
+</tr>
+</tbody>
+</table>
+
+</div>
+<p>Finally, we can use these conditional probabilities to estimate <span class="math inline">\(S(t)\)</span>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Estimating the Survival Function in R</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>survival_function <span class="ot">&lt;-</span> <span class="fu">cumprod</span>(conditional_probabilities) <span class="co"># finding the cumulative product of the estimated conditional probabilities</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>conception_survival_analysis<span class="sc">$</span>survival <span class="ot">&lt;-</span> survival_function</span></code></pre></div>
+</details>
+</div>
+<div style="overflow-x:auto;">
+  
+<table class="table table-bordered table-sm" data-quarto-postprocess="true">
+<caption>Survival Analysis of Time to Event Data from a Study of Conception after Laparoscopy and Hydrotubation</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><span class="math inline">\(i\)</span></td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><span class="math inline">\(t_{i}\)</span> (Months)</td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><span class="math inline">\(\#(T = t_{i})\)</span> (Conceptions)</td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Number Still in Study</td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Estimated <span class="math inline">\(\mathbb{P}(T &gt; t_{i}\,|\, T &gt; t_{i - 1})\)</span></td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Estimated <span class="math inline">\(\mathbb{P}(T &gt; t_{i})\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">38</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\text{N/A}\,(\mathbb{P}(T &gt; 0) = 1)\)</span></td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">6</td>
+<td style="text-align: center; vertical-align: middle;">38</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{32}{38}\)</span></td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{32}{38} \times 1 = \frac{32}{38} \approx 0.84\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;">5</td>
+<td style="text-align: center; vertical-align: middle;">32</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{27}{32}\)</span></td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{27}{32} \times \frac{32}{38} = \frac{27}{38} \approx 0.71\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">26</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{23}{26}\)</span></td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{23}{26} \times \frac{27}{38} = \frac{621}{988} \approx 0.63\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">4</td>
+<td style="text-align: center; vertical-align: middle;">4</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">22</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{19}{22}\)</span></td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{19}{22} \times \frac{621}{988} = \frac{621}{1144} \approx 0.54\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">5</td>
+<td style="text-align: center; vertical-align: middle;">6</td>
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;">18</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{16}{18}\)</span></td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{16}{18} \times \frac{621}{1144} = \frac{69}{143} \approx 0.48\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">6</td>
+<td style="text-align: center; vertical-align: middle;">7</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">16</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1\)</span></td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1 \times \frac{69}{143} = \frac{69}{143} \approx 0.48\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">7</td>
+<td style="text-align: center; vertical-align: middle;">8</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">14</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1\)</span></td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1 \times \frac{69}{143} = \frac{69}{143} \approx 0.48\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">8</td>
+<td style="text-align: center; vertical-align: middle;">9</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">12</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{9}{12}\)</span></td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{9}{12} \times \frac{69}{143} = \frac{207}{572} \approx 0.36\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">9</td>
+<td style="text-align: center; vertical-align: middle;">10</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">6</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{5}{6}\)</span></td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{5}{6} \times \frac{207}{572} = \frac{345}{1144} \approx 0.30\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">10</td>
+<td style="text-align: center; vertical-align: middle;">11</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">5</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1\)</span></td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1 \times \frac{345}{1144} = \frac{345}{1144} \approx 0.30\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">11</td>
+<td style="text-align: center; vertical-align: middle;">13</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">4</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{3}{4}\)</span></td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{3}{4} \times \frac{345}{1144} = \frac{1035}{4576} \approx 0.23\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle;">12</td>
+<td style="text-align: center; vertical-align: middle;">16</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{2}{3}\)</span></td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(\frac{2}{3} \times \frac{1035}{4576} = \frac{345}{2288} \approx 0.15\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle;">13</td>
+<td style="text-align: center; vertical-align: middle;">24</td>
+<td style="text-align: center; vertical-align: middle;">0</td>
+<td style="text-align: center; vertical-align: middle;">2</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1\)</span></td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(1 \times \frac{345}{2288} = \frac{345}{2288} \approx 0.15\)</span></td>
+</tr>
+</tbody>
+</table>
+
+</div>
+<p>We can now plot our estimate for <span class="math inline">\(\mathbb{P}(T&gt;t)\)</span> as a stepwise function of <span class="math inline">\(t\)</span>. As is conventional when plotting Kaplan-Meier curves we also mark the months in which censoring occurs.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Plotting the Estimated Survival Function in R</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="at">bottom=</span><span class="fl">4.2</span>, <span class="at">left=</span><span class="fl">5.1</span>, <span class="at">top=</span><span class="fl">1.8</span>, <span class="at">right=</span><span class="fl">0.9</span>), <span class="at">family=</span><span class="st">"Roboto Slab"</span>) <span class="co"># setting the plot options</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(conception_survival_analysis<span class="sc">$</span>months, conception_survival_analysis<span class="sc">$</span>survival, <span class="at">type=</span><span class="st">"s"</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">xlab=</span><span class="st">"Months"</span>, <span class="at">ylab=</span><span class="st">"Estimated Survival Function"</span>, <span class="at">col=</span><span class="st">"#009ed8"</span>, <span class="at">lwd=</span><span class="fl">4.8</span>, <span class="at">cex.lab=</span><span class="fl">1.8</span>, <span class="at">cex.axis=</span><span class="fl">1.8</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>censoring_months <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(conception_study[<span class="fu">which</span>((conception_study<span class="sc">$</span>event <span class="sc">==</span> <span class="st">'Censored'</span>)),]<span class="sc">$</span>months))  <span class="co"># finding the months in which censoring occurred</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>surv_fuc_eval_at_censoring <span class="ot">&lt;-</span> conception_survival_analysis[conception_survival_analysis<span class="sc">$</span>months <span class="sc">%in%</span> censoring_months,]<span class="sc">$</span>survival <span class="co"># evaluating the estimated survival function </span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                                                                                                                                <span class="co"># at those points</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(censoring_months, surv_fuc_eval_at_censoring, <span class="at">pch=</span><span class="dv">4</span>, <span class="at">cex=</span><span class="fl">1.8</span>, <span class="at">col=</span><span class="st">"#006a90"</span>, <span class="at">lwd=</span><span class="fl">4.8</span>)</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/survival-function-plot-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Our estimated survival function allows us to work out a principled estimate for the median time to conception after laparoscopy and hydrotubation. Since the median time it takes to conceive, <span class="math inline">\(t_m\)</span>, is equal to the point where <span class="math inline">\(\mathbb{P}(T&gt;t_m)=0.5\)</span>, we can just draw a line across from 0.5 on the y-axis to our Kaplan-Meier curve.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Finding the Median Time to Conception in R</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>median_month <span class="ot">&lt;-</span> conception_survival_analysis<span class="sc">$</span>months[<span class="fu">which</span>(conception_survival_analysis<span class="sc">$</span>survival <span class="sc">&lt;=</span> <span class="fl">0.5</span>)[<span class="dv">1</span>]] <span class="co"># finding the first month at which the estimated survival function drops to equal or below 0.5</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="at">bottom=</span><span class="fl">4.2</span>, <span class="at">left=</span><span class="fl">5.1</span>, <span class="at">top=</span><span class="fl">1.8</span>, <span class="at">right=</span><span class="fl">0.9</span>), <span class="at">family=</span><span class="st">"Roboto Slab"</span>) <span class="co"># setting the plot options</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(conception_survival_analysis<span class="sc">$</span>months, conception_survival_analysis<span class="sc">$</span>survival, <span class="at">type=</span><span class="st">"s"</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">xlab=</span><span class="st">"Months"</span>, <span class="at">ylab=</span><span class="st">"Estimated Survival Function"</span>, <span class="at">col=</span><span class="st">"#009ed8"</span>, <span class="at">lwd=</span><span class="fl">4.8</span>, <span class="at">cex.lab=</span><span class="fl">1.8</span>, <span class="at">cex.axis=</span><span class="fl">1.8</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(censoring_months, surv_fuc_eval_at_censoring, <span class="at">pch=</span><span class="dv">4</span>, <span class="at">cex=</span><span class="fl">1.8</span>, <span class="at">col=</span><span class="st">"#006a90"</span>, <span class="at">lwd=</span><span class="fl">4.8</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="fl">0.5</span>, median_month, <span class="fl">0.5</span>, <span class="at">col=</span><span class="st">"#ffc000"</span>, <span class="at">lwd=</span><span class="fl">4.8</span>, <span class="at">lty=</span><span class="dv">2</span>) <span class="co"># plotting the line across from the y-axis to the survival curve</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at=</span>median_month, <span class="at">cex.lab=</span><span class="fl">1.8</span>, <span class="at">cex.axis=</span><span class="fl">1.8</span>) <span class="co"># marking 0.5 on the y-axis</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(median_month, <span class="sc">-</span><span class="dv">1</span>, median_month, <span class="fl">0.5</span>, <span class="at">col=</span><span class="st">"#ffc000"</span>, <span class="at">lwd=</span><span class="fl">4.8</span>, <span class="at">lty=</span><span class="dv">2</span>) <span class="co"># plotting the line down from the survival curve to the x-axis</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>, <span class="at">at=</span><span class="fl">0.5</span>, <span class="at">cex.lab=</span><span class="fl">1.8</span>, <span class="at">cex.axis=</span><span class="fl">1.8</span>) <span class="co"># marking the median on the x-axis</span></span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/median-time-to-conception-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We find that the median number of months that passed before women conceived after laparoscopy and hydrotubation was six. So, based on the results of this study, we would expect a woman to have a 50% chance of conceiving within the first six months following laparoscopy and hydrotubation.</p>
+</section>
+<section id="further-reading" class="level2">
+<h2 class="anchored" data-anchor-id="further-reading">Further Reading</h2>
+<ul>
+<li><a href="http://new.pmean.com/what-is-kaplan-meier-curve/"><strong>What is the Kaplan Meier curve?</strong> – a blog post by Steve Simon</a></li>
+<li><a href="https://statsandr.com/blog/what-is-survival-analysis/"><strong>What is survival analysis?</strong> – a blog post by Antoine Soetewey</a></li>
+</ul>
+
+
+</section>
+
+
+<div id="quarto-appendix"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">References</h2>
+
+<ol>
+<li id="fn1"><p>Emily Zabor, <a href="https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html">“Survival Analysis in R,”</a> June 21, 2023.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Douglas Altman and Martin Bland, <a href="https://doi.org/10.1136/bmj.317.7156.468">“Time to event (survival) data,”</a> <em>BMJ</em> 317, no. 7156 (August 1998): 468–469.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Vimal Chadha et al., <a href="https://doi.org/10.1016/s0272-6386(00)70048-5">“Tenckhoff catheters prove superior to cook catheters in pediatric acute peritoneal dialysis,”</a> <em>American Journal of Kidney Diseases</em> 35, no. 6 (June 2000): 111–1116.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Edward Kaplan and Paul Meier, <a href="https://doi.org/10.2307/2281868">“Nonparametric Estimation From Incomplete Observations,”</a> <em>Journal of the American Statistical Association</em> 53, no. 282 (June 1958): 45–481.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Richard Van Noorden, Brendan Maher, and Regina Nuzzo, <a href="https://doi.org/10.1038/514550a">“The Top 100 Papers,”</a> <em>Nature</em> 514, no. 7524 (October 2014): 55–553.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Paramjit Luthra, Martin Bland, and Stuart Stanton, <a href="https://doi.org/10.1136/bmj.284.6321.1013">“Incidence of Pregnancy After Laparoscopy and Hydrotubation,”</a> <em>Br Med J (Clin Res Ed)</em> 284, no. 6321 (April, 1982): 101.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Martin Bland and Douglas Altman, <a href="https://doi.org/10.1136/bmj.317.7172.1572">“Survival probabilities (the Kaplan-Meier method),”</a> <em>BMJ</em> 317, no. 7172 (December 1998): 1572–1580.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

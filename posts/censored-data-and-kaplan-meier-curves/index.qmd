@@ -1,0 +1,1966 @@
+---
+title: "Censored Data and Kaplan-Meier Curves"
+date: "2025-02-10"
+image: thumbnail.png
+---
+
+::: callout-warning
+## Disclaimer
+
+This article was written solely for informational and educational purposes, and does not constitute medical advice. If you have any health concerns, please consult a qualified medical professional.
+:::
+
+Patients and medical professionals are often interested in the probability that an event will or will not have occurred after a certain amount of time. For example, what is the probability that a burn will have healed after a month? What is the probability that someone's cancer will not have returned five years after they have gone into remission? To estimate these probabilities, researchers use a branch of statistics known as **survival analysis**.
+
+## Time to Event Data
+
+Survival analysis is the study of **time to event data**. These are data that for each subject measure the time that elapses from a defined starting point -- for example, the diagnosis of a disease -- until a particular event happens -- for example, death. Despite the name, survival analysis does not presume that this event is death -- indeed, it could be a positive event, such as discharge from hospital. Though commonly used in medical statistics, survival analysis is not exclusive to epidemiology; it is also employed in fields as diverse as engineering and sociology, meaning it is sometimes known by other names, such as 'reliability analysis'[^1].
+
+One of the central tasks of survival analysis is to estimate the **survival function**, $S(t)$, for the event of interest. This is a function of time equal to the probability that the event takes longer than the input time, $t$, to occur
+
+::: callout-note
+## Notation
+
+-   $T$ denotes a random variable representing the time until the event occurs.
+-   $t$ denotes a specific time duration.
+-   $S(t)=\mathbb{P}(T>t)$ denotes the survival function.
+:::
+
+Let's consider a very simple scenario in which we might estimate a survival function. Suppose an electrical manufacturing company has a batch of faulty light bulbs, and they decide to pick ten of them at random to leave on and monitor for a week. They observe that:
+
+-   On the first day, three light bulbs fail.
+-   On the second day, four light bulbs fail.
+-   On the third day, no light bulbs fail
+-   On the fourth day, two light bulbs fail.
+-   On the fifth day, the final light bulb fails.
+
+![](light-bulbs.png)
+
+Putting aside the fact that this is a very small sample, it is relatively straightforward to estimate the survival function for these faulty light bulbs from this experiment. For example, to estimate $S(1)$, we just look at the proportion of light bulbs that last longer than one day -- seven tenths. By the [law of large numbers](https://en.wikipedia.org/wiki/Law_of_large_numbers), as we increase the number of light bulbs in the sample this proportion will eventually converge to the true probability of a faulty light bulb lasting longer than one day. We can do this calculation for each time marker, including the start point of the experiment -- we call this Day 0.
+
+```{=html}
+<div style="overflow-x:auto;">
+  <table class="table table-bordered table-sm">
+    <caption>Estimated Faulty Light Bulb Survival Function</caption>
+    <tr>
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white; width: 50%;">
+        Day
+        </td>
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        Survival Function Estimate
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+        <mn>1</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+        <mfrac>
+        <mn>7</mn>
+        <mn>10</mn>
+        </mfrac>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        2
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+        <mfrac>
+        <mn>3</mn>
+        <mn>10</mn>
+        </mfrac>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+        <mfrac>
+        <mn>3</mn>
+        <mn>10</mn>
+        </mfrac>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        4
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+        <mfrac>
+        <mn>1</mn>
+        <mn>10</mn>
+        </mfrac>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        5
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+        <mn>0</mn>
+        </math>
+        </td>
+    </tr>
+</table>
+</div>
+```
+
+```{r fig.height=6, fig.width=12}
+#| code-fold: true
+#| code-summary: "Plotting the Estimated Survival Function in R"
+#| label: estimated-light-bulb-survival-function
+days <- 0:5 # creating a vector of time markers
+survival_function <- c(1, 7/10, 3/10, 3/10, 1/10, 0) # creating a vector of estimated probabilities
+par(mar=c(bottom=4.2, left=5.1, top=1.8, right=0.9), family="Roboto Slab") # setting the plot options
+plot(days, survival_function, type="s", xlab="Day", ylab="Estimated Survival Function", col="#006a90", lwd=4.8, cex.lab=1.8, cex.axis=1.8)
+```
+
+Easy, right? Unfortunately, the time to event data we find in medical applications are rarely this straightforward to work with.
+
+## Censoring
+
+In many medical studies producing time to event data, patients are recruited over a period of some time and then followed until a defined end date, at which point the investigators will want to analyse their outcomes. As a result of this, the event of interest may not have happened for all the subjects of the study. In survival analysis, these 'incomplete' data points are known as **censored data**. They do give us some information -- we know the event we are studying had not yet happened at the point at which censoring occurred. However, we cannot tell when, or indeed if, it would have gone on to happen.
+
+Censoring can also come about in other ways, including patients being lost to follow up, or experiencing a 'competing event'[^2]. For example, in a study of times from catheter placement to complication in acute peritoneal dialysis, observations were considered censored when a catheter was removed before a complication arose[^3].
+
+Censored data make estimating a survival function considerably more complicated. Imagine, for example, that three of the light bulbs in our previous thought experiment accidentally got smashed at the end of the first day. 
+
+![](light-bulbs-censored.png)
+
+We could still approximate $S(1)$ to be seven tenths, since $$\mathbb{P}(T>1)=1-\mathbb{P}(T\leq1),$$ which, since three light bulbs fail on the first day, we can estimate to be $$1-\frac{3}{10}=\frac{7}{10},$$ as in the original case. But what about $S(2)$ onwards? We don't know on which days the smashed light bulbs would have failed, so we can't estimate $S(t)$ for these values of $t$ in the same way.
+
+## The Kaplan-Meier Method
+
+In 1958, Edward Kaplan and Paul Meier proposed an ingenious solution to the censoring problem[^4]. Their paper has gone on to become the most cited publication in the history of statistics[^5], and is seen as a seminal contribution to the field of survival analysis. Kaplan and Meier's central insight was that while censoring may stop us from directly estimating $\mathbb{P}(T>t_i)$ for a particular value of time, $t_i$, it does not stop us from estimating $$\mathbb{P}(T>t_i\,|\,T>t_{i-1}),$$ This is the conditional probability of an event taking longer than $t_i$ days, months, or years to occur, given that it has not already happened in $t_{i-1}$ days, months, or years.
+
+::: callout-note
+## Notation
+- $t_1,t_2,t_3\ldots$ denote the times to the event of interest in ascending order.
+- $t_{i-1}$ denotes the next lowest time to the event of interest to $t_i$.
+- $t_0$ denotes a time of $0$.
+:::
+
+These conditional probabilities are quite easy to find, since 
+
+$$\begin{split}
+\mathbb{P}(T>t_i\,|\,T>t_{i-1})&=1-\mathbb{P}(T\leq t_i\,|\,T>t_{i-1})\\&=1-\mathbb{P}(T=t_i\,|\,T>t_{i-1}).
+\end{split}$$
+
+which we can estimate by calculating the proportion of subjects remaining in the study (those who have not experienced censoring or the event of interest) after $t_{i-1}$ that do not have a time to event of $t_i$.
+
+In our smashed light blub thought experiment, for example, we could estimate $\mathbb{P}(T>2\,|\,T>1)$ to be two quarters (or one half). This is because on the first day three light bulbs fail and three light bulbs are censored, so four remain in the experiment on the second day, two of which survive
+
+Kaplan and Meier realised that we can get from these conditional probabilities to the survival function using the [chain rule of conditional probabilities](https://en.wikipedia.org/wiki/Chain_rule_(probability)). For any $t_i$, we have that 
+
+$$
+\begin{split}
+\mathbb{P}(T>t_i)
+&=\mathbb{P}(T> t_i\,|\,T>t_{i-1})\mathbb{P}(T>t_{i-1})\\
+&=\mathbb{P}(T> t_i\,|\,T>t_{i-1})\mathbb{P}(T>t_{i-1}\,|\,T>t_{i-2})\mathbb{P}(T>t_{i-2})\\
+&=\mathbb{P}(T> t_i\,|\,T>t_{i-1})\mathbb{P}(T>t_{i-1}\,|\,T>t_{i-2})\mathbb{P}(T>t_{i-2}\,|\,T>t_{i-3})\mathbb{P}(T>t_{i-3})\cdots\\
+&\cdots\mathbb{P}(T>t_2\,|\,T>t_1)\mathbb{P}(T>t_2\,|\,T>t_1)\mathbb{P}(T>t_1\,|\,T>t_0)\mathbb{P}(T>t_0).
+\end{split}
+$$
+We know that $\mathbb{P}(T>t_0)$, the probability of the time to the event of interest being more than zero, is one, since the event has not happened to any of our subjects at the start of the study. So by the expression above, we can recursively estimate the survival function $S(t_{i})$ for each $t_1,t_2,t_3,\ldots$, using the cumulative product of the conditional probabilities $\mathbb{P}(T> t_i\,|\,T>t_{i-1})$.
+
+## An Example With Real Data
+
+To get an idea of how the Kaplan-Meier method of estimating a survival function works, let's try it out on some data from a real observational study from the 1980s[^6]. Over two years, a group of obstetricians in London recorded the time it took for a group of 38 women who had been experiencing fertility issues to conceive after a surgical intervention. The times to conception or censoring for each woman can be obtained from a 1998 article on the Kaplan-Meier method in the BMJ[^7].
+
+```{r}
+#| code-fold: true
+#| code-summary: "Inputting the Results of the Study into a Data Frame in R"
+#| label: inputting-data
+women <- 1:38 # creating identifiers for each woman in the study
+event_times <- c(1, 1, 11, 7, 3, 4, 9, 4, 24, 6, 9, 2, 6, 16, 9, 2, 2, 3, 1, 8, 8, 4, 4, 1, 7, 9, 2, 9, 24, 
+                 1, 1, 9, 13, 10, 3, 2, 3, 2) # inputting the number of months after their surgical intervention at which they conceived or were censored
+conception_or_censoring <- c('Conceived', 'Conceived', 'Censored', 'Censored', 'Conceived', 'Conceived', 'Censored', 'Conceived', 'Censored', 'Conceived', 'Censored',
+                             'Conceived', 'Conceived', 'Conceived', 'Conceived', 'Censored', 'Conceived', 'Conceived', 'Conceived', 'Censored', 'Censored', 'Conceived',
+                             'Censored', 'Conceived', 'Censored', 'Conceived', 'Conceived', 'Conceived', 'Censored', 'Conceived', 'Conceived', 'Censored', 'Conceived',
+                             'Conceived', 'Conceived', 'Conceived', 'Censored', 'Conceived') # inputting which event occurred for each woman
+conception_study <- data.frame(subject=women, months=event_times, event=conception_or_censoring)
+```
+
+```{=html}
+<div style="overflow-x:auto;">
+  <table class="table table-bordered table-sm">
+  <caption>Time to Event Data from a Study of Conception after Laparoscopy and Hydrotubation</caption>
+    <tr>
+        <td colspan="1" rowspan="2" style="background-color: #e4f8ff"></td><td colspan="38" style="text-align: left; vertical-align: middle; background-color: #006a90; color: white; padding-left: 0.75rem; padding-right: 0.75rem;">Study Participant</td>
+    </tr>
+    <tr>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">1</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">2</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">3</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">4</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">5</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">6</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">7</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">8</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">9</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">10</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">11</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">12</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">13</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">14</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">15</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">16</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">17</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">18</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">19</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">20</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">21</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">22</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">23</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">24</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">25</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">26</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">27</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">28</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">29</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">30</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">31</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">32</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">33</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">34</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">35</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">36</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">37</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">38</td>
+    </tr>
+    <tr>
+      <td style="text-align: left; vertical-align: middle; background-color: #006a90; color: white; padding-left: 0.75rem; padding-right: 0.75rem;">Event</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Censored</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Censored</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Censored</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Censored</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Censored</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Censored</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Censored</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Censored</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Censored</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Censored</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Censored</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Censored</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Censored</td>
+        <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
+    </tr>
+    <tr>
+      <td style="text-align: left; vertical-align: middle; background-color: #006a90; color: white; padding-left: 0.75rem; padding-right: 0.75rem;">Months Until Event</td>
+        <td style="text-align: center; vertical-align: middle;">1</td>
+        <td style="text-align: center; vertical-align: middle;">1</td>
+        <td style="text-align: center; vertical-align: middle;">11</td>
+        <td style="text-align: center; vertical-align: middle;">7</td>
+        <td style="text-align: center; vertical-align: middle;">3</td>
+        <td style="text-align: center; vertical-align: middle;">4</td>
+        <td style="text-align: center; vertical-align: middle;">9</td>
+        <td style="text-align: center; vertical-align: middle;">4</td>
+        <td style="text-align: center; vertical-align: middle;">24</td>
+        <td style="text-align: center; vertical-align: middle;">6</td>
+        <td style="text-align: center; vertical-align: middle;">9</td>
+        <td style="text-align: center; vertical-align: middle;">2</td>
+        <td style="text-align: center; vertical-align: middle;">6</td>
+        <td style="text-align: center; vertical-align: middle;">16</td>
+        <td style="text-align: center; vertical-align: middle;">9</td>
+        <td style="text-align: center; vertical-align: middle;">2</td>
+        <td style="text-align: center; vertical-align: middle;">2</td>
+        <td style="text-align: center; vertical-align: middle;">3</td>
+        <td style="text-align: center; vertical-align: middle;">1</td>
+        <td style="text-align: center; vertical-align: middle;">8</td>
+        <td style="text-align: center; vertical-align: middle;">8</td>
+        <td style="text-align: center; vertical-align: middle;">4</td>
+        <td style="text-align: center; vertical-align: middle;">4</td>
+        <td style="text-align: center; vertical-align: middle;">1</td>
+        <td style="text-align: center; vertical-align: middle;">7</td>
+        <td style="text-align: center; vertical-align: middle;">9</td>
+        <td style="text-align: center; vertical-align: middle;">2</td>
+        <td style="text-align: center; vertical-align: middle;">9</td>
+        <td style="text-align: center; vertical-align: middle;">24</td>
+        <td style="text-align: center; vertical-align: middle;">1</td>
+        <td style="text-align: center; vertical-align: middle;">1</td>
+        <td style="text-align: center; vertical-align: middle;">9</td>
+        <td style="text-align: center; vertical-align: middle;">13</td>
+        <td style="text-align: center; vertical-align: middle;">10</td>
+        <td style="text-align: center; vertical-align: middle;">3</td>
+        <td style="text-align: center; vertical-align: middle;">2</td>
+        <td style="text-align: center; vertical-align: middle;">3</td>
+        <td style="text-align: center; vertical-align: middle;">2</td>
+    </tr>
+</table>
+</div>
+```
+
+To make it easier to do our survival analysis, let's summarise this data so that we can easily see the number of women who conceived or were censored at each distinct time step.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Restructuring the Data in R"
+#| label: summarising-data
+months_from_intervention <- sort(unique(conception_study$months)) # getting the different numbers of months after surgical intervention it took for conception or censoring to occur
+months_from_intervention <- c(0, months_from_intervention) # adding month zero for the start of the study
+num_times <- length(months_from_intervention) # finding the number of unique event times 
+censored <- rep(NA, times=num_times) 
+conceived <- rep(NA, times=num_times)
+for (i in 1:num_times) { # counting the number of conceptions and censorings at each event time
+  month_i <- months_from_intervention[i]
+  censored[i] <- nrow(conception_study[conception_study$months == month_i & conception_study$event == 'Censored', ])
+  conceived[i] <- nrow(conception_study[conception_study$months == month_i & conception_study$event == 'Conceived', ])
+}
+conception_data_summary <- data.frame(months=months_from_intervention, censored=censored, conceived=conceived)
+```
+
+```{=html}
+<div style="overflow-x:auto;">
+  <table class="table table-bordered table-sm">
+    <caption>Summarised Conception Study Data</caption>
+    <tr>
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        Months from Intervention
+        </td>
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        Number of Censorings
+        </td>
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        Number of Conceptions
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        6
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        2
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        5
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        4
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        6
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        2
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        7
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        2
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        8
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        2
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        9
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        10
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        11
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        13
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        16
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        24
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        2
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+    </tr>
+</table>
+</div>
+```
+
+To calculate the conditional probability $\mathbb{P}(T>t_i|T>t_{i-1})$ for each observed number of months from conception, $t_i$, we first need to find out how many women were still being followed up at each stage. 
+
+```{r}
+#| code-fold: true
+#| code-summary: "Finding the Number of Remaining Study Members at Each Time Stage in R"
+#| label: remaining-women
+num_remaining <- rep(NA, times=num_times) # initialising a vector to store the number of remaining study members at each event time
+num_remaining[1] <- 38 # at month zero, all women are still being followed up 
+for (i in 2:num_times) { # finding the number of women still being followed up at each event time from the previous number, 
+                         # and the number who conceived or were censored at the previous event time
+  num_remaining[i] <- num_remaining[i-1] - censored[i-1] - conceived[i-1]
+}
+conception_data_summary$remaining <- num_remaining # adding a column to the data frame
+```
+
+```{=html}
+<div style="overflow-x:auto;">
+  <table class="table table-bordered table-sm">
+    <caption>Summarised Conception Study Data (Including Numbers of Participants Remaining in Follow Up)</caption>
+    <tr>
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        Months from Intervention
+        </td>
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        Number of Censorings
+        </td>
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        Number of Conceptions
+        </td>
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        Number Still in Study
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        38 
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        6
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        38 &minus; 0 &minus; 0 = 38
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        2
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        5
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        38 &minus; 0 &minus; 6 = 32
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        32 &minus; 1 &minus; 5 = 26
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        4
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        26 &minus; 1 &minus; 3 = 22
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        6
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        2
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        22 &minus; 1 &minus; 3 = 18
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        7
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        2
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        18 &minus; 0 &minus; 2 = 16
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        8
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        2
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        16 &minus; 2 &minus; 0 = 14
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        9
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        14 &minus; 2 &minus; 0 = 12
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        10
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        12 &minus; 3 &minus; 3 = 6
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        11
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        6 &minus; 0 &minus; 1 = 5
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        13
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        5 &minus; 1 &minus; 0 = 4
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        16
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        4 &minus; 0 &minus; 1 = 3
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        24
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        2
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        3 &minus; 0 &minus; 1 = 2
+        </td>
+    </tr>
+</table>
+</div>
+```
+
+Now we can start our survival analysis properly by estimating $\mathbb{P}(T>t_i\,|\,T>t_{i-1})$ for each $t_i$. We have gleaned all the information we need from the number of censorings at each time stage, so this column can be removed.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Estimating the Conditional Probabilities for Each Time Stage in R"
+#| label: conditional-probabilities
+conception_survival_analysis <- subset(conception_data_summary, select=-censored) # creating a new data frame without the censoring column
+conditional_probabilities <- rep(NA, times=num_times) # # initialising a vector to store the estimated conditional probabilities
+for (i in 1:num_times) { # finding an estimate for the conditional probability at each event time
+  conditional_probabilities[i] <- (num_remaining[i]-conceived[i])/num_remaining[i]
+}
+conception_survival_analysis$conditionals <- conditional_probabilities
+```
+
+```{=html}
+<div style="overflow-x:auto;">
+  <table class="table table-bordered table-sm">
+    <caption>Conception Study Data With Estimated Conditional Probabilities</caption>
+    <tr>
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        <math>
+        <mi>i</mi>
+        </math>
+        </td>
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        <math>
+        <msub>
+        <mi>t</mi>
+        <mi>i</mi>
+        </msub>
+        </math>
+        (Months)
+        </td>
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        <math>
+        <mi mathvariant="normal">#</mi>
+        <mo stretchy="false">(</mo>
+        <mi>T</mi>
+        <mo>=</mo>
+        <msub>
+        <mi>t</mi>
+        <mi>i</mi>
+        </msub>
+        <mo stretchy="false">)</mo>
+        </math>
+        (Conceptions)
+        </td>
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        Number Still in Study
+        </td>
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        Estimated
+        <math>
+          <mrow data-mjx-texclass="ORD">
+            <mi mathvariant="double-struck">P</mi>
+          </mrow>
+          <mo stretchy="false">(</mo>
+          <mi>T</mi>
+          <mo>&gt;</mo>
+          <msub>
+            <mi>t</mi>
+            <mi>i</mi>
+          </msub>
+          <mstyle scriptlevel="0">
+            <mspace width="0.167em"></mspace>
+          </mstyle>
+          <mo data-mjx-texclass="ORD" stretchy="false">|</mo>
+          <mstyle scriptlevel="0">
+            <mspace width="0.167em"></mspace>
+          </mstyle>
+          <mi>T</mi>
+          <mo>&gt;</mo>
+          <msub>
+            <mi>t</mi>
+            <mrow data-mjx-texclass="ORD">
+              <mi>i</mi>
+              <mo>&#x2212;</mo>
+              <mn>1</mn>
+            </mrow>
+          </msub>
+          <mo stretchy="false">)</mo>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        38 
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mtext>N/A</mtext>
+          <mstyle scriptlevel="0">
+            <mspace width="0.167em"></mspace>
+          </mstyle>
+          <mo stretchy="false">(</mo>
+          <mrow data-mjx-texclass="ORD">
+            <mi mathvariant="double-struck">P</mi>
+          </mrow>
+          <mo stretchy="false">(</mo>
+          <mi>T</mi>
+          <mo>&gt;</mo>
+          <mn>0</mn>
+          <mo stretchy="false">)</mo>
+          <mo>=</mo>
+          <mn>1</mn>
+          <mo stretchy="false">)</mo>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        6
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        38
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+          <mo>&#x2212;</mo>
+          <mfrac>
+            <mn>6</mn>
+            <mn>38</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mn>32</mn>
+            <mn>38</mn>
+          </mfrac>
+          <mo>&#x2248;</mo>
+          <mn>0.84</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        2
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        2
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        5
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        32
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+          <mo>&#x2212;</mo>
+          <mfrac>
+            <mn>5</mn>
+            <mn>32</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mn>27</mn>
+            <mn>32</mn>
+          </mfrac>
+          <mo>&#x2248;</mo>
+          <mn>0.84</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        26
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+          <mo>&#x2212;</mo>
+          <mfrac>
+            <mn>3</mn>
+            <mn>26</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mn>23</mn>
+            <mn>26</mn>
+          </mfrac>
+          <mo>&#x2248;</mo>
+          <mn>0.88</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        4
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        4
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        22
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+          <mo>&#x2212;</mo>
+          <mfrac>
+            <mn>3</mn>
+            <mn>22</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mn>19</mn>
+            <mn>22</mn>
+          </mfrac>
+          <mo>&#x2248;</mo>
+          <mn>0.86</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        5
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        6
+        <td style="text-align: center; vertical-align: middle;">
+        2
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        18
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+          <mo>&#x2212;</mo>
+          <mfrac>
+            <mn>2</mn>
+            <mn>18</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mn>16</mn>
+            <mn>18</mn>
+          </mfrac>
+          <mo>&#x2248;</mo>
+          <mn>0.89</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        6
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        7
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        16
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+          <mo>&#x2212;</mo>
+          <mfrac>
+            <mn>0</mn>
+            <mn>16</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mn>1</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        7
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        8
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        14
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+          <mo>&#x2212;</mo>
+          <mfrac>
+            <mn>0</mn>
+            <mn>14</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mn>1</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        8
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        9
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        12
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+          <mo>&#x2212;</mo>
+          <mfrac>
+            <mn>3</mn>
+            <mn>12</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mn>9</mn>
+            <mn>12</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mn>0.75</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        9
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        10
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        6
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+          <mo>&#x2212;</mo>
+          <mfrac>
+            <mn>1</mn>
+            <mn>6</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mn>5</mn>
+            <mn>6</mn>
+          </mfrac>
+          <mo>&#x2248;</mo>
+          <mn>0.83</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        10
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        11
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        5
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+          <mo>&#x2212;</mo>
+          <mfrac>
+            <mn>0</mn>
+            <mn>5</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mn>1</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        11
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        13
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        4
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+          <mo>&#x2212;</mo>
+          <mfrac>
+            <mn>1</mn>
+            <mn>4</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mn>3</mn>
+            <mn>4</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mn>0.75</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        12
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        16
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+          <mo>&#x2212;</mo>
+          <mfrac>
+            <mn>1</mn>
+            <mn>3</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mn>2</mn>
+            <mn>3</mn>
+          </mfrac>
+          <mo>&#x2248;</mo>
+          <mn>0.67</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        13
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        24
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        2
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+          <mo>&#x2212;</mo>
+          <mfrac>
+            <mn>0</mn>
+            <mn>2</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mn>1</mn>
+        </math>
+        </td>
+    </tr>
+</table>
+</div>
+```
+
+Finally, we can use these conditional probabilities to estimate $S(t)$.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Estimating the Survival Function in R"
+#| label: survival-function
+survival_function <- cumprod(conditional_probabilities) # finding the cumulative product of the estimated conditional probabilities
+conception_survival_analysis$survival <- survival_function
+```
+
+```{=html}
+<div style="overflow-x:auto;">
+  <table class="table table-bordered table-sm">
+    <caption>Survival Analysis of Time to Event Data from a Study of Conception after Laparoscopy and Hydrotubation</caption>
+    <tr>
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        <math>
+        <mi>i</mi>
+        </math>
+        </td>
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        <math>
+        <msub>
+        <mi>t</mi>
+        <mi>i</mi>
+        </msub>
+        </math>
+        (Months)
+        </td>
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        <math>
+        <mi mathvariant="normal">#</mi>
+        <mo stretchy="false">(</mo>
+        <mi>T</mi>
+        <mo>=</mo>
+        <msub>
+        <mi>t</mi>
+        <mi>i</mi>
+        </msub>
+        <mo stretchy="false">)</mo>
+        </math>
+        (Conceptions)
+        </td>
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        Number Still in Study
+        </td>
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        Estimated
+        <math>
+          <mrow data-mjx-texclass="ORD">
+            <mi mathvariant="double-struck">P</mi>
+          </mrow>
+          <mo stretchy="false">(</mo>
+          <mi>T</mi>
+          <mo>&gt;</mo>
+          <msub>
+            <mi>t</mi>
+            <mi>i</mi>
+          </msub>
+          <mstyle scriptlevel="0">
+            <mspace width="0.167em"></mspace>
+          </mstyle>
+          <mo data-mjx-texclass="ORD" stretchy="false">|</mo>
+          <mstyle scriptlevel="0">
+            <mspace width="0.167em"></mspace>
+          </mstyle>
+          <mi>T</mi>
+          <mo>&gt;</mo>
+          <msub>
+            <mi>t</mi>
+            <mrow data-mjx-texclass="ORD">
+              <mi>i</mi>
+              <mo>&#x2212;</mo>
+              <mn>1</mn>
+            </mrow>
+          </msub>
+          <mo stretchy="false">)</mo>
+        </math>
+        </td>
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        Estimated
+        <math>
+          <mrow data-mjx-texclass="ORD">
+            <mi mathvariant="double-struck">P</mi>
+          </mrow>
+          <mo stretchy="false">(</mo>
+          <mi>T</mi>
+          <mo>&gt;</mo>
+          <msub>
+            <mi>t</mi>
+            <mi>i</mi>
+          </msub>
+          <mo stretchy="false">)</mo>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        38 
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mtext>N/A</mtext>
+          <mstyle scriptlevel="0">
+            <mspace width="0.167em"></mspace>
+          </mstyle>
+          <mo stretchy="false">(</mo>
+          <mrow data-mjx-texclass="ORD">
+            <mi mathvariant="double-struck">P</mi>
+          </mrow>
+          <mo stretchy="false">(</mo>
+          <mi>T</mi>
+          <mo>&gt;</mo>
+          <mn>0</mn>
+          <mo stretchy="false">)</mo>
+          <mo>=</mo>
+          <mn>1</mn>
+          <mo stretchy="false">)</mo>
+        </math>
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        6
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        38
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mfrac>
+            <mn>32</mn>
+            <mn>38</mn>
+          </mfrac>
+        </math>
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mfrac>
+            <mn>32</mn>
+            <mn>38</mn>
+          </mfrac>
+          <mo>&#xD7;</mo>
+          <mn>1</mn>
+          <mo>=</mo>
+          <mfrac>
+            <mn>32</mn>
+            <mn>38</mn>
+          </mfrac>
+          <mo>&#x2248;</mo>
+          <mn>0.84</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        2
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        2
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        5
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        32
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mfrac>
+            <mn>27</mn>
+            <mn>32</mn>
+          </mfrac>
+        </math>
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mfrac>
+            <mn>27</mn>
+            <mn>32</mn>
+          </mfrac>
+          <mo>&#xD7;</mo>
+          <mfrac>
+            <mn>32</mn>
+            <mn>38</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mn>27</mn>
+            <mn>38</mn>
+          </mfrac>
+          <mo>&#x2248;</mo>
+          <mn>0.71</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        26
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mfrac>
+            <mn>23</mn>
+            <mn>26</mn>
+          </mfrac>
+        </math>
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mfrac>
+            <mn>23</mn>
+            <mn>26</mn>
+          </mfrac>
+          <mo>&#xD7;</mo>
+          <mfrac>
+            <mn>27</mn>
+            <mn>38</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mn>621</mn>
+            <mn>988</mn>
+          </mfrac>
+          <mo>&#x2248;</mo>
+          <mn>0.63</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        4
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        4
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        22
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mfrac>
+            <mn>19</mn>
+            <mn>22</mn>
+          </mfrac>
+        </math>
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mfrac>
+            <mn>19</mn>
+            <mn>22</mn>
+          </mfrac>
+          <mo>&#xD7;</mo>
+          <mfrac>
+            <mn>621</mn>
+            <mn>988</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mn>621</mn>
+            <mn>1144</mn>
+          </mfrac>
+          <mo>&#x2248;</mo>
+          <mn>0.54</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        5
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        6
+        <td style="text-align: center; vertical-align: middle;">
+        2
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        18
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mfrac>
+            <mn>16</mn>
+            <mn>18</mn>
+          </mfrac>
+        </math>
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mfrac>
+            <mn>16</mn>
+            <mn>18</mn>
+          </mfrac>
+          <mo>&#xD7;</mo>
+          <mfrac>
+            <mn>621</mn>
+            <mn>1144</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mn>69</mn>
+            <mn>143</mn>
+          </mfrac>
+          <mo>&#x2248;</mo>
+          <mn>0.48</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        6
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        7
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        16
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+        </math>
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+          <mo>&#xD7;</mo>
+          <mfrac>
+            <mn>69</mn>
+            <mn>143</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mn>69</mn>
+            <mn>143</mn>
+          </mfrac>
+          <mo>&#x2248;</mo>
+          <mn>0.48</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        7
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        8
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        14
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+        </math>
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+          <mo>&#xD7;</mo>
+          <mfrac>
+            <mn>69</mn>
+            <mn>143</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mn>69</mn>
+            <mn>143</mn>
+          </mfrac>
+          <mo>&#x2248;</mo>
+          <mn>0.48</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        8
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        9
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        12
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mfrac>
+            <mn>9</mn>
+            <mn>12</mn>
+          </mfrac>
+        </math>
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mfrac>
+            <mn>9</mn>
+            <mn>12</mn>
+          </mfrac>
+          <mo>&#xD7;</mo>
+          <mfrac>
+            <mn>69</mn>
+            <mn>143</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mn>207</mn>
+            <mn>572</mn>
+          </mfrac>
+          <mo>&#x2248;</mo>
+          <mn>0.36</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        9
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        10
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        6
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mfrac>
+            <mn>5</mn>
+            <mn>6</mn>
+          </mfrac>
+        </math>
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mfrac>
+            <mn>5</mn>
+            <mn>6</mn>
+          </mfrac>
+          <mo>&#xD7;</mo>
+          <mfrac>
+            <mn>207</mn>
+            <mn>572</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mn>345</mn>
+            <mn>1144</mn>
+          </mfrac>
+          <mo>&#x2248;</mo>
+          <mn>0.30</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        10
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        11
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        5
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+        </math>
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+          <mo>&#xD7;</mo>
+          <mfrac>
+            <mn>345</mn>
+            <mn>1144</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mn>345</mn>
+            <mn>1144</mn>
+          </mfrac>
+          <mo>&#x2248;</mo>
+          <mn>0.30</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        11
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        13
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        4
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mfrac>
+            <mn>3</mn>
+            <mn>4</mn>
+          </mfrac>
+        </math>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mfrac>
+            <mn>3</mn>
+            <mn>4</mn>
+          </mfrac>
+          <mo>&#xD7;</mo>
+          <mfrac>
+            <mn>345</mn>
+            <mn>1144</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mn>1035</mn>
+            <mn>4576</mn>
+          </mfrac>
+          <mo>&#x2248;</mo>
+          <mn>0.23</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        12
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        16
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        1
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        3
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mfrac>
+            <mn>2</mn>
+            <mn>3</mn>
+          </mfrac>
+        </math>
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mfrac>
+            <mn>2</mn>
+            <mn>3</mn>
+          </mfrac>
+          <mo>&#xD7;</mo>
+          <mfrac>
+            <mn>1035</mn>
+            <mn>4576</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mn>345</mn>
+            <mn>2288</mn>
+          </mfrac>
+          <mo>&#x2248;</mo>
+          <mn>0.15</mn>
+        </math>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle;">
+        13
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        24
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        2
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+        </math>
+        </td>
+        <td style="text-align: center; vertical-align: middle;">
+        <math>
+          <mn>1</mn>
+          <mo>&#xD7;</mo>
+          <mfrac>
+            <mn>345</mn>
+            <mn>2288</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mn>345</mn>
+            <mn>2288</mn>
+          </mfrac>
+          <mo>&#x2248;</mo>
+          <mn>0.15</mn>
+        </math>
+        </td>
+    </tr>
+</table>
+</div>
+```
+
+We can now plot our estimate for $\mathbb{P}(T>t)$ as a stepwise function of $t$. As is conventional when plotting Kaplan-Meier curves we also mark the months in which censoring occurs.
+
+```{r fig.height=7.5, fig.width=12}
+#| code-fold: true
+#| code-summary: "Plotting the Estimated Survival Function in R"
+#| label: survival-function-plot
+par(mar=c(bottom=4.2, left=5.1, top=1.8, right=0.9), family="Roboto Slab") # setting the plot options
+plot(conception_survival_analysis$months, conception_survival_analysis$survival, type="s", ylim=c(0,1), xlab="Months", ylab="Estimated Survival Function", col="#009ed8", lwd=4.8, cex.lab=1.8, cex.axis=1.8)
+censoring_months <- sort(unique(conception_study[which((conception_study$event == 'Censored')),]$months))  # finding the months in which censoring occurred
+surv_fuc_eval_at_censoring <- conception_survival_analysis[conception_survival_analysis$months %in% censoring_months,]$survival # evaluating the estimated survival function 
+                                                                                                                                # at those points
+points(censoring_months, surv_fuc_eval_at_censoring, pch=4, cex=1.8, col="#006a90", lwd=4.8)
+```
+
+Our estimated survival function allows us to work out a principled estimate for the median time to conception after laparoscopy and hydrotubation. Since the median time it takes to conceive, $t_m$, is equal to the point where $\mathbb{P}(T>t_m)=0.5$, we can just draw a line across from 0.5 on the y-axis to our Kaplan-Meier curve. 
+
+```{r fig.height=7.5, fig.width=12}
+#| code-fold: true
+#| code-summary: "Finding the Median Time to Conception in R"
+#| label: median-time-to-conception
+median_month <- conception_survival_analysis$months[which(conception_survival_analysis$survival <= 0.5)[1]] # finding the first month at which the estimated survival function drops to equal or below 0.5
+par(mar=c(bottom=4.2, left=5.1, top=1.8, right=0.9), family="Roboto Slab") # setting the plot options
+plot(conception_survival_analysis$months, conception_survival_analysis$survival, type="s", ylim=c(0,1), xlab="Months", ylab="Estimated Survival Function", col="#009ed8", lwd=4.8, cex.lab=1.8, cex.axis=1.8)
+points(censoring_months, surv_fuc_eval_at_censoring, pch=4, cex=1.8, col="#006a90", lwd=4.8)
+segments(-1, 0.5, median_month, 0.5, col="#ffc000", lwd=4.8, lty=2) # plotting the line across from the y-axis to the survival curve
+axis(1, at=median_month, cex.lab=1.8, cex.axis=1.8) # marking 0.5 on the y-axis
+segments(median_month, -1, median_month, 0.5, col="#ffc000", lwd=4.8, lty=2) # plotting the line down from the survival curve to the x-axis
+axis(2, at=0.5, cex.lab=1.8, cex.axis=1.8) # marking the median on the x-axis
+```
+
+We find that the median number of months that passed before women conceived after laparoscopy and hydrotubation was six. So, based on the results of this study, we would expect a woman to have a 50% chance of conceiving within the first six months following laparoscopy and hydrotubation.
+
+## Further Reading
+
+-   [**What is the Kaplan Meier curve?** -- a blog post by Steve Simon](http://new.pmean.com/what-is-kaplan-meier-curve/)
+-   [**What is survival analysis?** -- a blog post by Antoine Soetewey](https://statsandr.com/blog/what-is-survival-analysis/)
+
+[^1]: Emily Zabor, [“Survival Analysis in R,”](https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html) June 21, 2023.
+[^2]: Douglas Altman and Martin Bland, [“Time to event (survival) data,”](https://doi.org/10.1136/bmj.317.7156.468) *BMJ* 317, no. 7156 (August 1998): 468--469.
+[^3]: Vimal Chadha et al., [“Tenckhoff catheters prove superior to cook catheters in pediatric acute peritoneal dialysis,”](https://doi.org/10.1016/s0272-6386(00)70048-5) *American Journal of Kidney Diseases* 35, no. 6 (June 2000): 111--1116.
+[^4]: Edward Kaplan and Paul Meier, [“Nonparametric Estimation From Incomplete Observations,”](https://doi.org/10.2307/2281868) *Journal of the American Statistical Association* 53, no. 282 (June 1958): 45--481.
+[^5]: Richard Van Noorden, Brendan Maher, and Regina Nuzzo, [“The Top 100 Papers,”]( https://doi.org/10.1038/514550a) *Nature* 514, no. 7524 (October 2014): 55--553.
+[^6]: Paramjit Luthra, Martin Bland, and Stuart Stanton, [“Incidence of Pregnancy After Laparoscopy and Hydrotubation,”](https://doi.org/10.1136/bmj.284.6321.1013) *Br Med J (Clin Res Ed)* 284, no. 6321 (April, 1982): 101.
+[^7]: Martin Bland and Douglas Altman, [“Survival probabilities (the Kaplan-Meier method),”]( https://doi.org/10.1136/bmj.317.7172.1572) *BMJ* 317, no. 7172 (December 1998): 1572--1580.

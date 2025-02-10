@@ -1,7 +1,7 @@
 ---
 title: "About"
 ---
-I'm a maths graduate who's very interested in the many applications of mathematics and statistics to medicine, and I decided to start this blog as a way of challenging myself to keep learning new things (as well as deepening my understanding of areas I already have some knowledge of). It’s a place where I can practise writing expository articles that explore various topics in 'medical maths’ using diagrams and R code. Thank you for reading – I hope you find my explanations interesting and/or useful! 
+I'm a maths graduate who's very interested in the many applications of mathematics and statistics to medicine, and I decided to start this website as a way of challenging myself to keep learning new things (as well as deepening my understanding of areas I already have some knowledge of). It’s a place where I can practise writing expository articles that explore various topics in 'medical maths’ using diagrams and R code. Thank you for reading – I hope you find my explanations interesting and/or useful! 
 
 ![](venn-diagram.png)
 

@@ -1,10 +1,10 @@
 ---
-title: "Posts"
+title: "Articles"
 listing:
-  type: table
+  type: grid
   contents: posts
-  fields: [date, title]
-  sort: "date desc"
+  fields: [image, title]
+  sort: "title asc"
   categories: false
   sort-ui: false
   filter-ui: false
