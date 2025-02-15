@@ -507,7 +507,7 @@ As a result of this atypical coffee consumption in the control group, the result
 [^7]: Judea Pearl, Madelyn Glymour, and Nicholas Jewell, *Causal Inference in Statistics: A Primer.* New York: Wiley, 2016.
 [^8]: Jeffrey Aronson, Clare Bankhead, and David Nunan, ["Confounding,"](https://catalogofbias.org/biases/confounding/) Catalogue of Bias, 2018.
 [^9]: Ricardo Silva, ["Causality,"](https://mlg.eng.cam.ac.uk/zoubin/tutorials06.html) (lecture, Advanced Tutorial Lecture Series on Machine Learning, Cambridge, November 9, 2006).
-[^10]: PAPER_steven-julious-and-mark-mullee_confounding-and-simpson's-paradox Steven Julious and Mark Mullee, ["Confounding and Simpson's Paradox,"](https://doi.org/10.1136%2Fbmj.309.6967.1480) *BMJ* 309, no. 6968 (December 1994): 1480--1481.
+[^10]: Steven Julious and Mark Mullee, ["Confounding and Simpson's Paradox,"](https://doi.org/10.1136%2Fbmj.309.6967.1480) *BMJ* 309, no. 6968 (December 1994): 1480--1481.
 [^11]: Clive Charig et al., ["Comparison of treatment of renal calculi by open surgery, percutaneous nephrolithotomy, and extracorporeal shockwave lithotripsy,"](https://doi.org/10.1136%2Fbmj.292.6524.879) *British Medical Journal (Clinical Research Edition)* 292, no. 6524 (March 1986): 879--882.
 [^12]: Brian MacMahon et al., ["Coffee and cancer of the pancreas,"](https://doi.org/10.1056/NEJM198103123041102) *The New England Journal of Medicine* 304, no. 11 (March 1981): 630--633.
 [^13]: Simak Bidel et al., ["Coffee consumption and risk of gastric and pancreatic cancer --  A prospective cohort study,"](https://doi.org/10.1002/ijc.27773) 312, no.7 (April 2012): 1651--1659.
