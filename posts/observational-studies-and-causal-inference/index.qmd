@@ -490,9 +490,9 @@ In the decades since this study was published, several large prospective cohort 
 
 In his seminal epidemiology textbook[^16], Leon Gordis points out the control group for this study -- patients without pancreatic cancer -- was chosen in an unusual way. When a patient who did have pancreatic cancer agreed to answer a survey about their dietary habits, control patients were selected by asking the doctor responsible for their care to identify other patients of theirs without the condition. Since these doctors were often gastroenterologists, patients with gastrointestinal disorders were over-represented in the control group. These patients tended to drink less coffee than the average member of the population, either because it exacerbated their symptoms or because they had been advised to cut down their intake by their doctors. 
 
-![](pancreatic-cancer-dag.png)
+As a result of this atypical coffee consumption in the control group, the results of this observational study are hard to interpret. This is because even if it was the case that there was no causal relationship between coffee consumption and pancreatic cancer, we would still expect to see an association between them due to the fact that people with GI disorders were more likely to be chosen as controls than other patients. We can show this in a DAG in which 'Selection into Study' is a collider.
 
-This is a classic example of selection into a study acting as a collider.
+![](pancreatic-cancer-dag.png)
 
 ## Further Reading
 - [**An introduction to Causal inference** -- a blog post by Fabian Dablander]()
