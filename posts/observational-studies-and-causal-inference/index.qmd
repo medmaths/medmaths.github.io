@@ -492,7 +492,7 @@ In his seminal epidemiology textbook[^16], Leon Gordis points out the control gr
 
 ![](pancreatic-cancer-dag.png)
 
-As a result of this atypical coffee consumption in the control group, the results of this observational study are hard to interpret. This is because even if it was the case that there was no causal relationship between coffee consumption and pancreatic cancer, we would still expect to see an association between them due to the fact that people with GI disorders were more likely to be chosen as controls than other patients. We can show this in a DAG in which 'Selection into Study' is a collider.
+As a result of the atypical coffee consumption in the control group, the results of this observational study are hard to interpret. This is because even if it was the case that there was no causal relationship between coffee consumption and pancreatic cancer, we would still expect to see an association between them due to the fact that people with GI disorders were more likely to be chosen as controls than other patients. We can show this in a DAG in which 'Selection into Study' is a collider.
 
 ## Further Reading
 - [**An introduction to Causal inference** -- a blog post by Fabian Dablander]()
