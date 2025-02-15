@@ -128,7 +128,7 @@ In discrete mathematics, a **graph** is a structure made up of vertices linked b
 
 For example, in the above graph, there is a path between A and C along the the sequence of edges between vertices A, B, D, E, and C. 
 
-**Directed** graphs are a particular type of graph in which all the edges are arrows. In these types of graph a vertex can be an descendant or ancestor of another vertex if there is a path of arrows all pointing in the same direction between them; the descendant lies at the arrowhead and ancestors lies at the tail. If this path is only one arrow long, the ancestor is called a parent of the descendant, which is called the child[^7].
+**Directed** graphs are a particular type of graph in which all the edges are arrows. In these types of graph a vertex can be an descendant or ancestor of another vertex if there is a path of arrows all pointing in the same direction between them; the descendant lies at the arrowhead and ancestors lies at the tail. If this path is only one edge long, the ancestor can be called the descendant's parent and the descendant can be called the parent's child[^7].
 
 ![](example-dag.png)
 
