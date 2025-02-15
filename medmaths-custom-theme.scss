@@ -13,10 +13,16 @@ $callout-color-warning: #ffc000 !default;
 $callout-color-note: #a6a6a6 !default;
 $link-color: #008dc0 !default;
 $link-hover-color: #006a90 !default;
-.quarto-appendix-heading {
-  font-size: 1.6em !important;
-}
+$code-bg: #f1f3f4 !default;
+$code-color: #000000 !default;
 /*-- scss:rules --*/
+.cell-output {
+  background-color: #e4f8ff;
+  border-radius: 0.25em;
+}
+.quarto-appendix-heading {
+  font-size: 1.6em;
+}
 .math.display .MathJax {
   overflow-x: auto;
   overflow-y: hidden;

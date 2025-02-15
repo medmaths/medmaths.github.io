@@ -3,7 +3,8 @@
     "listing": "/index.html",
     "items": [
       "/posts/censored-data-and-kaplan-meier-curves/index.html",
-      "/posts/diagnostic-testing-and-bayes-theorem/index.html"
+      "/posts/diagnostic-testing-and-bayes-theorem/index.html",
+      "/posts/observational-studies-and-causal-inference/index.html"
     ]
   }
 ]

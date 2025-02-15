@@ -1,6 +1,6 @@
 ---
 title: "Diagnostic Testing and Bayes' Theorem"
-date: "2025-01-30"
+# date: "2025-01-30"
 date-modified: "2025-02-10"
 image: thumbnail.png
 ---
@@ -8,6 +8,7 @@ image: thumbnail.png
 ## Disclaimer
 This article was written solely for informational and educational purposes, and does not constitute medical advice. If you have any health concerns, please consult a qualified medical professional.
 :::
+
 If I am screened for a disease and receive a positive test result, how worried should I be? What are the chances it was a false positive? In this article I'll discuss why medical test results aren’t always as straightforward as they might seem, and how an equation first discovered over 200 years ago can help us to understand them better.
 
 ## Sensitivity and Specificity
@@ -34,6 +35,7 @@ Steven McGee gives a helpful illustration of these concepts in his book Evidence
   </table>
 </div>
 ```
+
 The sensitivity of a test for a disease is the proportion of patients who have the condition and test positive. To calculate it we can divide the number of true positives by the sum of the number of true positives and the number of false negatives. 
 
 ::: {.callout-note}
@@ -170,7 +172,7 @@ cum_avg <- cumsum(props_for_avg) / seq_along(props_for_avg) # we calculate a cum
 par(mar=c(bottom=4.2, left=5.1, top=1.8, right=0.9), family="Roboto Slab")
 plot(cum_avg, ylim=c(0.5,1), xlab="Number of Simulations", ylab="Average False Positive Proportion", type="l", col="#808080", lwd=4.2, cex.lab=1.5, cex.axis=1.5)
 abline(h=0.7421875, col="#009ed8", lty=1, lwd=4.2)
-legend("topright", legend=c("Calculated Probability"), col="#009ed8", lty=1, lwd=9, cex=1.2)
+legend("topright", legend="Calculated Probability", col="#009ed8", lty=1, lwd=4.2, cex=1.2)
 ```
 Reassuringly, as we do more simulations, the average proportion of positive test results that are false appears to converge to our calculated value of $\mathbb{P}(D^{-}|T^{+})$.
 
@@ -179,5 +181,5 @@ Reassuringly, as we do more simulations, the average proportion of positive test
 - [**An Interactive Fagan Nomogram** -- a blog post by Carlos Scheidegger about the Fagan nomogram](https://cscheid.net/v2/hacks/fagan-nomogram.html) 
 
 [^1]: Jacob Yerushalmy, ["Statistical problems in assessing methods of medical diagnosis with special reference to x-ray techniques,"](https://doi.org/10.2307%2F4586294) *Public Health Reports* 62, no. 2 (October 1947): 1432--1439.
-[^2]: Steven McGee, *Evidence-Based Physical Diagnosis.* Philadelphia: Saunders, 2012.
+[^2]: Steven McGee, *Evidence-Based Physical Diagnosis.* 3rd ed. Philadelphia: Saunders, 2012.
 [^3]: Sharon Bertsch McGrayne, *The Theory That Would Not Die.* New Haven: Yale University Press, 2011.

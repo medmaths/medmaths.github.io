@@ -10,11 +10,11 @@ image: thumbnail.png
 This article was written solely for informational and educational purposes, and does not constitute medical advice. If you have any health concerns, please consult a qualified medical professional.
 :::
 
-Patients and medical professionals are often interested in the probability that an event will or will not have occurred after a certain amount of time. For example, what is the probability that a burn will have healed after a month? What is the probability that someone's cancer will not have returned five years after they have gone into remission? To estimate these probabilities, researchers use a branch of statistics known as **survival analysis**.
+Patients and medical professionals are often interested in the probability that an event will or will not have occurred after a certain amount of time. For example, what is the probability that a burn will have healed after two weeks? What is the probability that someone's cancer will not have returned five years after they have gone into remission? To estimate these probabilities, researchers use a branch of statistics known as **survival analysis**.
 
 ## Time to Event Data
 
-Survival analysis is the study of **time to event data**. These are data that for each subject measure the time that elapses from a defined starting point -- for example, the diagnosis of a disease -- until a particular event happens -- for example, death. Despite the name, survival analysis does not presume that this event is death -- indeed, it could be a positive event, such as discharge from hospital. Though commonly used in medical statistics, survival analysis is not exclusive to epidemiology; it is also employed in fields as diverse as engineering and sociology, meaning it is sometimes known by other names, such as 'reliability analysis'[^1].
+Survival analysis is the study of **time to event data**. These are data that for each subject measure the time that elapses from a defined starting point -- for example, the diagnosis of a disease -- until a particular event happens -- for example, death. Despite the name, survival analysis does not presume that this event is death -- indeed, it could be a positive event, such as discharge from hospital. Though commonly used in medical statistics, survival analysis is not exclusive to epidemiology. It is also employed in fields as diverse as engineering and sociology, meaning it is sometimes known by other names, such as 'reliability analysis'[^1].
 
 One of the central tasks of survival analysis is to estimate the **survival function**, $S(t)$, for the event of interest. This is a function of time equal to the probability that the event takes longer than the input time, $t$, to occur
 
@@ -133,7 +133,7 @@ Putting aside the fact that this is a very small sample, it is relatively straig
 days <- 0:5 # creating a vector of time markers
 survival_function <- c(1, 7/10, 3/10, 3/10, 1/10, 0) # creating a vector of estimated probabilities
 par(mar=c(bottom=4.2, left=5.1, top=1.8, right=0.9), family="Roboto Slab") # setting the plot options
-plot(days, survival_function, type="s", xlab="Day", ylab="Estimated Survival Function", col="#006a90", lwd=4.8, cex.lab=1.8, cex.axis=1.8)
+plot(days, survival_function, type="s", ylim=c(0,1), xlab="Day", ylab="Estimated Survival Function", col="#006a90", lwd=4.8, cex.lab=1.8, cex.axis=1.8)
 ```
 
 Easy, right? Unfortunately, the time to event data we find in medical applications are rarely this straightforward to work with.
@@ -156,7 +156,7 @@ In 1958, Edward Kaplan and Paul Meier proposed an ingenious solution to the cens
 
 ::: callout-note
 ## Notation
-- $t_1,t_2,t_3\ldots$ denote the times to the event of interest in ascending order.
+- $t_1,t_2,t_3\ldots$, etc. denote the times to the event of interest in ascending order.
 - $t_{i-1}$ denotes the next lowest time to the event of interest to $t_i$.
 - $t_0$ denotes a time of $0$.
 :::
@@ -194,7 +194,8 @@ To get an idea of how the Kaplan-Meier method of estimating a survival function 
 #| label: inputting-data
 women <- 1:38 # creating identifiers for each woman in the study
 event_times <- c(1, 1, 11, 7, 3, 4, 9, 4, 24, 6, 9, 2, 6, 16, 9, 2, 2, 3, 1, 8, 8, 4, 4, 1, 7, 9, 2, 9, 24, 
-                 1, 1, 9, 13, 10, 3, 2, 3, 2) # inputting the number of months after their surgical intervention at which they conceived or were censored
+                 1, 1, 9, 13, 10, 3, 2, 3, 2) # inputting the number of months after their surgical intervention
+                                              # at which they conceived or were censored
 conception_or_censoring <- c('Conceived', 'Conceived', 'Censored', 'Censored', 'Conceived', 'Conceived', 'Censored', 'Conceived', 'Censored', 'Conceived', 'Censored',
                              'Conceived', 'Conceived', 'Conceived', 'Conceived', 'Censored', 'Conceived', 'Conceived', 'Conceived', 'Censored', 'Censored', 'Conceived',
                              'Censored', 'Conceived', 'Censored', 'Conceived', 'Conceived', 'Conceived', 'Censored', 'Conceived', 'Conceived', 'Censored', 'Conceived',
@@ -341,7 +342,8 @@ To make it easier to do our survival analysis, let's summarise this data so that
 #| code-fold: true
 #| code-summary: "Restructuring the Data in R"
 #| label: summarising-data
-months_from_intervention <- sort(unique(conception_study$months)) # getting the different numbers of months after surgical intervention it took for conception or censoring to occur
+months_from_intervention <- sort(unique(conception_study$months)) # getting the different numbers of months after surgical intervention 
+                                                                  # it took for conception or censoring to occur
 months_from_intervention <- c(0, months_from_intervention) # adding month zero for the start of the study
 num_times <- length(months_from_intervention) # finding the number of unique event times 
 censored <- rep(NA, times=num_times) 
@@ -767,7 +769,7 @@ Now we can start our survival analysis properly by estimating $\mathbb{P}(T>t_i\
 #| code-summary: "Estimating the Conditional Probabilities for Each Time Stage in R"
 #| label: conditional-probabilities
 conception_survival_analysis <- subset(conception_data_summary, select=-censored) # creating a new data frame without the censoring column
-conditional_probabilities <- rep(NA, times=num_times) # # initialising a vector to store the estimated conditional probabilities
+conditional_probabilities <- rep(NA, times=num_times) # initialising a vector to store the estimated conditional probabilities
 for (i in 1:num_times) { # finding an estimate for the conditional probability at each event time
   conditional_probabilities[i] <- (num_remaining[i]-conceived[i])/num_remaining[i]
 }
@@ -1927,7 +1929,8 @@ We can now plot our estimate for $\mathbb{P}(T>t)$ as a stepwise function of $t$
 #| code-summary: "Plotting the Estimated Survival Function in R"
 #| label: survival-function-plot
 par(mar=c(bottom=4.2, left=5.1, top=1.8, right=0.9), family="Roboto Slab") # setting the plot options
-plot(conception_survival_analysis$months, conception_survival_analysis$survival, type="s", ylim=c(0,1), xlab="Months", ylab="Estimated Survival Function", col="#009ed8", lwd=4.8, cex.lab=1.8, cex.axis=1.8)
+plot(conception_survival_analysis$months, conception_survival_analysis$survival, type="s", ylim=c(0,1), 
+     xlab="Months", ylab="Estimated Survival Function", col="#009ed8", lwd=4.8, cex.lab=1.8, cex.axis=1.8)
 censoring_months <- sort(unique(conception_study[which((conception_study$event == 'Censored')),]$months))  # finding the months in which censoring occurred
 surv_fuc_eval_at_censoring <- conception_survival_analysis[conception_survival_analysis$months %in% censoring_months,]$survival # evaluating the estimated survival function 
                                                                                                                                 # at those points
@@ -1962,5 +1965,5 @@ We find that the median number of months that passed before women conceived afte
 [^3]: Vimal Chadha et al., [“Tenckhoff catheters prove superior to cook catheters in pediatric acute peritoneal dialysis,”](https://doi.org/10.1016/s0272-6386(00)70048-5) *American Journal of Kidney Diseases* 35, no. 6 (June 2000): 111--1116.
 [^4]: Edward Kaplan and Paul Meier, [“Nonparametric Estimation From Incomplete Observations,”](https://doi.org/10.2307/2281868) *Journal of the American Statistical Association* 53, no. 282 (June 1958): 45--481.
 [^5]: Richard Van Noorden, Brendan Maher, and Regina Nuzzo, [“The Top 100 Papers,”]( https://doi.org/10.1038/514550a) *Nature* 514, no. 7524 (October 2014): 55--553.
-[^6]: Paramjit Luthra, Martin Bland, and Stuart Stanton, [“Incidence of Pregnancy After Laparoscopy and Hydrotubation,”](https://doi.org/10.1136/bmj.284.6321.1013) *Br Med J (Clin Res Ed)* 284, no. 6321 (April, 1982): 101.
+[^6]: Paramjit Luthra, Martin Bland, and Stuart Stanton, [“Incidence of Pregnancy After Laparoscopy and Hydrotubation,”](https://doi.org/10.1136/bmj.284.6321.1013) *British Medical Journal (Clinical Research Edition)* 284, no. 6321 (April, 1982): 101.
 [^7]: Martin Bland and Douglas Altman, [“Survival probabilities (the Kaplan-Meier method),”]( https://doi.org/10.1136/bmj.317.7172.1572) *BMJ* 317, no. 7172 (December 1998): 1572--1580.
