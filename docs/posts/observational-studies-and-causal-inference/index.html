@@ -198,7 +198,7 @@ Disclaimer
 <p>This blog post was written solely for informational and educational purposes, and does not constitute medical advice. If you have any health concerns, please consult a qualified medical professional.</p>
 </div>
 </div>
-<p>Randomised Controlled Trials (RCTs) are widely recognised as the gold standard of study designs, but they are not always possible to perform. For example, it would have been neither ethical nor feasible for Richard Doll and Austin Bradford Hill to randomly assign a group of volunteers to a smoking and non-smoking group in order to show that cigarettes causes lung cancer. However, they were still able to establish a link between smoking and the disease, using first a case-control study and then a prospective cohort study<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>Randomised Controlled Trials (RCTs) are widely recognised as the gold standard of study designs, but they are not always possible to perform. For example, it would have been neither ethical nor feasible for Richard Doll and Austin Bradford Hill to randomly assign a group of volunteers to a smoking and non-smoking group in order to show that cigarettes cause lung cancer. However, they were still able to establish a link between smoking and the disease, using first a case-control study and then a prospective cohort study<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 <p>These are both types of observational study<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, an alternative to RCTs that can be very useful – as in the case of smoking and lung cancer. Unfortunately, the fact the participants are not randomised to different groups in observational studies can make their results particularly difficult to interpret. In this article, I will discuss how diagrams representing causal relationships can help us to spot potential sources of bias in these kinds of studies.</p>
 <section id="causal-inference" class="level2">
 <h2 class="anchored" data-anchor-id="causal-inference">Causal Inference</h2>
@@ -321,10 +321,10 @@ Disclaimer
 <p><strong>Directed</strong> graphs are a particular type of graph in which all the edges are arrows. In these types of graph a vertex can be an descendant or ancestor of another vertex if there is a path of arrows all pointing in the same direction between them; the descendant lies at the arrowhead and ancestors lies at the tail. If this path is only one edge long, the ancestor can be called the descendant’s parent and the descendant can be called the parent’s child<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>.</p>
 <p><img src="example-dag.png" class="img-fluid"></p>
 <p>Here, B is a parent (and thus also an ancestor) of C and D, a child (and descendant) of A, and and ancestor of E.</p>
-<p>Directed graphs are ideal for causal inference, because we can use vertices the to represent variables and edges to represent the causal relationships between them, with parents having a direct effect on their children. For example, a simplified DAG showing the effects of different factors on a person’s chance of developing lung cancer might show the variables ‘Genetics’, ‘Environmental Factors’, and ‘Smoking’ all to be parents of the variable ‘Lung Cancer Risk’.</p>
+<p>Directed graphs are ideal for causal inference, because we can use vertices to represent the variables and edges to represent the causal relationships between them, with parents having a direct effect on their children. For example, a simplified DAG showing the effects of different factors on a person’s chance of developing lung cancer might show the variables ‘Genetics’, ‘Environmental Factors’, and ‘Smoking’ all to be parents of the variable ‘Lung Cancer Risk’.</p>
 <p><img src="smoking-dag.png" class="img-fluid"></p>
 <p>An <strong>acyclic</strong> graph is simply one that contains no cycles (a cycle is a directed path leading from a variable back to itself), so when we use a DAG to model causal relationships a variable cannot cause itself.</p>
-<p>An example of a DAG which might explain the correlation between the stork populations and birth rates of European country could introduce extra variables, such as land area and human population size.</p>
+<p>An example of a DAG which might explain the correlation between the stork populations and birth rates of European countries could introduce extra variables, such as land area and human population size.</p>
 <p><img src="storks-dag.png" class="img-fluid"></p>
 <p>This DAG could account for the association between the ‘Stork Population’ and ‘Birth Rate’ variables without requiring there to be a causal relationship between them; their correlation can be explained by the fact that ‘Land Area’ is both a parent of ‘Stork Population’ and an ancestor of ‘Birth Rate’.</p>
 <p>There are several structures that commonly appear appear in DAGs representing observational studies. In the rest of this article I want to focus on two of the most important – <strong>confounders</strong> and <strong>colliders</strong> – and explore how both of them can help to explain misleading results in medical research.</p>
@@ -370,7 +370,7 @@ Disclaimer
 </div>
 </div>
 </div>
-<p>In the simulated data plotted above, a higher dosage of the treatment drug corresponds with a faster recovery speed within each age category. However, when we combine data from all the age categories we find a a negative correlation between drug dosage and recovery speed.</p>
+<p>In the simulated data plotted above, a higher dosage of the treatment drug corresponds with a faster recovery speed within each age category. However, when we combine data from all the age categories we find a negative correlation between drug dosage and recovery speed.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Finding the Correlation Coefficient in R</summary>
@@ -423,7 +423,7 @@ Disclaimer
 </section>
 <section id="colliders" class="level2">
 <h2 class="anchored" data-anchor-id="colliders">Colliders</h2>
-<p>Another issue that can arise in observational studies is <strong>collider bias</strong>. When we are investigating the effect of X on Y, a collider is a variable lying on a path between X qnd Y where two causal arrows meet, meaning the collider has more than one parent.</p>
+<p>Another issue that can arise in observational studies is <strong>collider bias</strong>. When we are investigating the effect of X on Y, a collider is a variable lying on a path between X and Y where two causal arrows meet, meaning the collider has more than one parent.</p>
 <p><img src="example-collider.png" class="img-fluid"> In observational medical studies, it is not uncommon that the variables we are investigating, X and Y, both have a causal effect on the probability that a patient is included in the study. In these cases, selection into the study is itself a collider variable.</p>
 <p>To understand how collider bias can cause unrelated variables to appear to have a correlation, let’s imagine a hypothetical virus called ‘colliditis’. We’ll supose that the severity of disease experienced by people who catch colliditis is unrelated to the number of cigarettes they smoke in a day. For simplicity, we can assume that the average number of cigarettes of smoked a day and the severity of disease are uniformly distributed in the population of people who have caught colliditis. So if we plotted a random sample of one thousand people from the population of people with the viral infection, it would look like this.</p>
 <div class="cell">
