@@ -385,8 +385,6 @@ points(pooled_rr_estimate, 0, pch=18, col="#006a90", cex=12)
 
 A meta-analysis of these eight trials, and several more completed in the intervening years, was eventually published in a systematic review in 1989[^10]. This systematic review led directly to the publication of new guidelines by the Royal College of Obstetricians and Gynaecologists in 1992, and antenatal steroids are now routinely given to mothers in premature labour[^11]. Their use is monitored, as a measure of optimal perinatal care, in the National Neonatal Audit Programme run by the Royal College of Paediatrics and Child Health[^12]. The 1989 systematic review also inspired the Cochrane Collaboration's logo -- to learn more, see [this page](https://www.cochrane.org/about-us/difference-we-make) on their website.
 
-[link](https://www.ogmagazine.org.au/wp-content/uploads/2019/02/Autumn-2019-For-Web.pdf?utm_source=chatgpt.com)
-
 ## Further Reading
 - [**A short history of systematic reviews** -- an article by Cynthia Farquhar and Jane Marjoribanks](https://doi.org/10.1111/1471-0528.15214 )
 - [**What does the Cochrane logo tell us?** --  a presentation by Steven Woloshin](https://www.testingtreatments.org/2013/02/02/what-does-the-cochrane-logo-tell-us/)
