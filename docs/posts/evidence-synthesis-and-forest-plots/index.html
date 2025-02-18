@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2025-02-18">
+
+<title>Evidence Synthesis and Forest Plots – Medical Maths</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<link href="../../favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../medmaths-custom-styling.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../logo.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Medical Maths</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Evidence Synthesis and Forest Plots</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 18, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Disclaimer
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This blog post was written solely for informational and educational purposes, and does not constitute medical advice. If you have any health concerns, please consult a qualified medical professional.</p>
+</div>
+</div>
+<p>Meta-analyses and the forest plots they produce are important tools in helping researchers to combine evidence from multiple different studies. In this article, I’ll work through the steps of a fixed-effect meta-analysis, using data from an early and influential systematic review.</p>
+<section id="antenatal-steroids" class="level2">
+<h2 class="anchored" data-anchor-id="antenatal-steroids">Antenatal Steroids</h2>
+<p>In 1972, an obstetrican and neonatologist working at the National Women’s Hospital in Auckland, New Zealand, published the initial findings from a randomised contolled trial they had begun in 1969<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Once all the results were in, this trial showed a significant reduction in the mortality of premature babies whose mothers had been given antenatal steroids, compared to those whose mothers had not received this treatment.</p>
+<p>However, one unreplicated trial rarely provides enough evidence for medical practice to change drastically. Over the following decade, another seven, smaller, RCTs of this treatment were carried out, but only two of them showed an effect that was <a href="https://en.wikipedia.org/wiki/Statistical_significance">statistically significant</a> at a significance level of 5%. It took a later meta-analysis to show that, when combined, the first eight RCTs of antenatal steroids were in fact sufficient to show a significant effect of antenatal steroids on neonatal mortality in premature babies<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<p>The results of all eight of these studies can be found in a Cochrane review from 1996<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Inputting the Results of the Eight RCTs into a Data Frame in R</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>steroid_trials <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">control_group_size =</span> <span class="fu">c</span>(<span class="dv">538</span>, <span class="dv">61</span>, <span class="dv">59</span>, <span class="dv">75</span>, <span class="dv">58</span>, <span class="dv">71</span>, <span class="dv">63</span>, <span class="dv">372</span>), </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">control_group_deaths =</span> <span class="fu">c</span>(<span class="dv">60</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">7</span>, <span class="dv">12</span>, <span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">34</span>), </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">treatment_group_size =</span> <span class="fu">c</span>(<span class="dv">532</span>, <span class="dv">69</span>, <span class="dv">67</span>, <span class="dv">71</span>, <span class="dv">64</span>, <span class="dv">56</span>, <span class="dv">81</span>, <span class="dv">371</span>), </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">treatment_group_deaths =</span> <span class="fu">c</span>(<span class="dv">36</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">8</span>, <span class="dv">4</span>, <span class="dv">32</span>))</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>trial_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Liggins and Howie (1972)"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Block et al. (1977)"</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Morrison et al. (1978)"</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Papageorgiou et al. (1979)"</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Schutte et al. (1979)"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Taeusch et al. (1979)"</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Doran et al. (1980)"</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Collaborative Group (1981)"</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(steroid_trials) <span class="ot">&lt;-</span> trial_names</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>num_trials <span class="ot">&lt;-</span> <span class="fu">nrow</span>(steroid_trials)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>totals <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times=</span>num_trials)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_trials) {</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  totals[i] <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>control_group_size[i] <span class="sc">+</span>  steroid_trials<span class="sc">$</span>treatment_group_size[i]</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>steroid_trials<span class="sc">$</span>total_trial_size <span class="ot">&lt;-</span> totals</span></code></pre></div>
+</details>
+</div>
+<div style="overflow-x:auto;">
+  
+<table class="table table-bordered table-sm" data-quarto-postprocess="true">
+<caption>The Results of the First Eight Randomised Controlled Trials of the Effect of Antenatal Steroids on Neonatal Mortality in Premature Babies</caption>
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td colspan="2" rowspan="2" style="background-color: #e4f8ff"></td>
+<td colspan="2" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Control Group</td>
+<td colspan="2" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Treatment Group</td>
+<td rowspan="2" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Total
+<div style="white-space: nowrap;">
+Number of
+</div>
+Babies in the Study</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;"><div style="white-space: nowrap;">
+Number of
+</div>
+<div style="white-space: nowrap;">
+Babies in the
+</div>
+Group</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;"><div style="white-space: nowrap;">
+Number of
+</div>
+Neonatal Deaths</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;"><div style="white-space: nowrap;">
+Number of
+</div>
+<div style="white-space: nowrap;">
+Babies in the
+</div>
+Group</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;"><div style="white-space: nowrap;">
+Number of
+</div>
+Neonatal Deaths</td>
+</tr>
+<tr class="odd">
+<td rowspan="8" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Randomised Control Trial</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;"><div style="white-space: nowrap;">
+Liggins and Howie
+</div>
+(1972)</td>
+<td style="text-align: center; vertical-align: middle;">538</td>
+<td style="text-align: center; vertical-align: middle;">60</td>
+<td style="text-align: center; vertical-align: middle;">532</td>
+<td style="text-align: center; vertical-align: middle;">36</td>
+<td style="text-align: center; vertical-align: middle;">1070</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;"><div style="white-space: nowrap;">
+Block et al.
+</div>
+(1977)</td>
+<td style="text-align: center; vertical-align: middle;">61</td>
+<td style="text-align: center; vertical-align: middle;">5</td>
+<td style="text-align: center; vertical-align: middle;">69</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">130</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;"><div style="white-space: nowrap;">
+Morrison et al.
+</div>
+(1978)</td>
+<td style="text-align: center; vertical-align: middle;">59</td>
+<td style="text-align: center; vertical-align: middle;">7</td>
+<td style="text-align: center; vertical-align: middle;">67</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">126</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;"><div style="white-space: nowrap;">
+Papageorgiou et al.
+</div>
+(1979)</td>
+<td style="text-align: center; vertical-align: middle;">75</td>
+<td style="text-align: center; vertical-align: middle;">7</td>
+<td style="text-align: center; vertical-align: middle;">71</td>
+<td style="text-align: center; vertical-align: middle;">1</td>
+<td style="text-align: center; vertical-align: middle;">146</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;"><div style="white-space: nowrap;">
+Schutte et al.
+</div>
+(1979)</td>
+<td style="text-align: center; vertical-align: middle;">58</td>
+<td style="text-align: center; vertical-align: middle;">12</td>
+<td style="text-align: center; vertical-align: middle;">64</td>
+<td style="text-align: center; vertical-align: middle;">3</td>
+<td style="text-align: center; vertical-align: middle;">122</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;"><div style="white-space: nowrap;">
+Taeusch et al.
+</div>
+(1979)</td>
+<td style="text-align: center; vertical-align: middle;">71</td>
+<td style="text-align: center; vertical-align: middle;">10</td>
+<td style="text-align: center; vertical-align: middle;">56</td>
+<td style="text-align: center; vertical-align: middle;">8</td>
+<td style="text-align: center; vertical-align: middle;">127</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;"><div style="white-space: nowrap;">
+Doran et al.
+</div>
+(1980)</td>
+<td style="text-align: center; vertical-align: middle;">63</td>
+<td style="text-align: center; vertical-align: middle;">11</td>
+<td style="text-align: center; vertical-align: middle;">81</td>
+<td style="text-align: center; vertical-align: middle;">4</td>
+<td style="text-align: center; vertical-align: middle;">144</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;"><div style="white-space: nowrap;">
+Collaborative Group
+</div>
+(1981)</td>
+<td style="text-align: center; vertical-align: middle;">372</td>
+<td style="text-align: center; vertical-align: middle;">34</td>
+<td style="text-align: center; vertical-align: middle;">371</td>
+<td style="text-align: center; vertical-align: middle;">32</td>
+<td style="text-align: center; vertical-align: middle;">743</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+<p>Here, the years in parentheses after the authors’ names are the years of publication of the first papers they disseminated relating to their trials.</p>
+</section>
+<section id="the-individual-trials-findings" class="level2">
+<h2 class="anchored" data-anchor-id="the-individual-trials-findings">The Individual Trials’ Findings</h2>
+<p>Once all the eligible trials have been identified and assessed for bias, the first step of any meta-analysis is to estimate a treatment effect from each of them.</p>
+<p>In this article, we will use the <strong>risk ratio</strong> as a measure of the treatment effect. This is a common measure of the association between an exposure and an event, and is equal to the probability of the event in the exposed group divided by the probability of the event in the non exposed group.</p>
+<p>For example, suppose that a trial produces the following <a href="https://en.wikipedia.org/wiki/Contingency_table">contingency table</a>.</p>
+<div style="overflow-x:auto;">
+  
+<table class="table table-bordered table-sm" data-quarto-postprocess="true">
+<caption>Example Contingency Table</caption>
+<tbody>
+<tr class="odd">
+<td style="background-color: #e4f8ff"></td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Exposed Group</td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Non-Exposed Group</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Number of Events</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(a\)</span></td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(c\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Number of Non-Events</td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(b\)</span></td>
+<td style="text-align: center; vertical-align: middle;"><span class="math inline">\(d\)</span></td>
+</tr>
+</tbody>
+</table>
+
+</div>
+<p>Then we can find an estimate for the risk ratio using the formula<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p><span class="math display">\[
+\widehat{\text{RR}}=\frac{a}{a+b}\div\frac{c}{c+d}.
+\]</span></p>
+<p>A risk ratio of <span class="math inline">\(1\)</span> indicates that there is no difference in the probability of the event occurring in the exposed group and the probability of the event occurring in the non-exposed group. Risk ratios are usually plotted on a logarithmic scales in forest plots, so that a change in risk ratio representing a doubling in risk appears equal to a change in risk ratio representing a halving of risk<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Calculating and Plotting the Risk Ratios in R</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>risk_ratios <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times=</span>num_trials)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_trials) {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  treatment_incidence <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>treatment_group_deaths[i]<span class="sc">/</span>steroid_trials<span class="sc">$</span>treatment_group_size[i]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  control_incidence <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>control_group_deaths[i]<span class="sc">/</span>steroid_trials<span class="sc">$</span>control_group_size[i]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  risk_ratios[i] <span class="ot">&lt;-</span> treatment_incidence<span class="sc">/</span>control_incidence</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>steroid_trials<span class="sc">$</span>risk_ratio <span class="ot">&lt;-</span> risk_ratios</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>empty_forest_plot <span class="ot">&lt;-</span> <span class="cf">function</span> (xax, yax) {</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="dv">1</span>, <span class="at">type=</span><span class="st">"n"</span>, <span class="at">log =</span> <span class="st">"x"</span>, </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex.lab=</span><span class="fl">1.5</span>, <span class="at">cex.axis=</span><span class="fl">1.5</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim=</span>xax, <span class="at">xlab=</span><span class="st">"Risk Ratio"</span>, </span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim=</span>yax, <span class="at">ylab=</span><span class="st">" "</span>, <span class="at">frame.plot =</span> <span class="cn">FALSE</span>, <span class="at">yaxt=</span><span class="st">"n"</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  yline <span class="ot">&lt;-</span> yax <span class="sc">+</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">segments</span>(<span class="dv">1</span>, yax[<span class="dv">1</span>], <span class="dv">1</span>, yax[<span class="dv">2</span>])</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_trials) {</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    y_coord <span class="ot">&lt;-</span> num_trials<span class="sc">+</span><span class="dv">1</span><span class="sc">-</span>i</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">text</span>(<span class="dv">3</span>, y_coord, <span class="at">adj=</span><span class="dv">0</span>, trial_names[i], <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="at">bottom=</span><span class="fl">4.2</span>, <span class="at">left=</span><span class="fl">5.1</span>, <span class="at">top=</span><span class="fl">1.8</span>, <span class="at">right=</span><span class="fl">0.9</span>), <span class="at">family=</span><span class="st">"Roboto Slab"</span>) <span class="co"># setting the plot options</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="fu">empty_forest_plot</span>(<span class="at">xax=</span><span class="fu">c</span>(<span class="fl">0.1</span>, <span class="dv">10</span>), <span class="at">yax=</span><span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">8.5</span>))</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(steroid_trials<span class="sc">$</span>risk_ratio, <span class="dv">8</span><span class="sc">:</span><span class="dv">1</span>, </span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span><span class="dv">4</span>, <span class="at">col=</span><span class="st">"#006a90"</span>, <span class="at">cex=</span><span class="fl">1.8</span>, <span class="at">lwd=</span><span class="fl">4.2</span>)</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/risk-ratios-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>These point estimates for the risk ratio are not actually very useful on their own, because they do not give information about the different levels of uncertainty surrounding each estimate. For instance, we can tell intuitively that the estimate we found from the study of 1070 babies is likely to be less reliable than the estimate we found from the study of 127 babies.</p>
+<p>To solve this problem, we can calculate approximate 95% confidence intervals for each study, using the fact that the natural logarithm of our estimator of the risk ratio <a href="https://en.wikipedia.org/wiki/Convergence_of_random_variables#Convergence_in_distribution">converges in distribution</a> to a normal distribution with a mean of zero, and a standard deviation that we can approximate using the formula<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
+<p><span class="math display">\[
+\widehat{\text{SD}}_{\text{log}\widehat{\text{RR}}}=\sqrt{n}\cdot\text{SE}_{\text{log}\widehat{\text{RR}}}=\sqrt{n}\left(\sqrt{\frac{1}{a}-\frac{1}{a+b}+\frac{1}{c}+\frac{1}{c+d}}\right),
+\]</span> where <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>, <span class="math inline">\(c\)</span>, and <span class="math inline">\(d\)</span> again represent the counts in the contingency table.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Estimating and Plotting the Confidence Intervals in R</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>confidence_intervals <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">lower =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times=</span>num_trials),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">upper =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times=</span>num_trials)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>z_val <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="dv">1</span><span class="sc">-</span>alpha<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_trials) {</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  log_rr <span class="ot">&lt;-</span> <span class="fu">log</span>(steroid_trials<span class="sc">$</span>risk_ratio[i])</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  log_rr_SE <span class="ot">&lt;-</span> <span class="fu">sqrt</span>((<span class="dv">1</span><span class="sc">/</span>steroid_trials<span class="sc">$</span>control_group_deaths[i]) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">/</span>steroid_trials<span class="sc">$</span>treatment_group_deaths[i])</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>                     <span class="sc">-</span> (<span class="dv">1</span><span class="sc">/</span>steroid_trials<span class="sc">$</span>control_group_size[i]) <span class="sc">-</span> (<span class="dv">1</span><span class="sc">/</span>steroid_trials<span class="sc">$</span>treatment_group_size[i]))</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  log_lower <span class="ot">&lt;-</span> log_rr <span class="sc">-</span> z_val <span class="sc">*</span> log_rr_SE</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  log_upper <span class="ot">&lt;-</span> log_rr <span class="sc">+</span> z_val <span class="sc">*</span> log_rr_SE</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  confidence_intervals<span class="sc">$</span>lower[i] <span class="ot">&lt;-</span> <span class="fu">exp</span>(log_lower)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  confidence_intervals<span class="sc">$</span>upper[i] <span class="ot">&lt;-</span> <span class="fu">exp</span>(log_upper)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="at">bottom=</span><span class="fl">4.2</span>, <span class="at">left=</span><span class="fl">5.1</span>, <span class="at">top=</span><span class="fl">1.8</span>, <span class="at">right=</span><span class="fl">0.9</span>), <span class="at">family=</span><span class="st">"Roboto Slab"</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="fu">empty_forest_plot</span>(<span class="at">xax=</span><span class="fu">c</span>(<span class="fl">0.1</span>, <span class="dv">10</span>), <span class="at">yax=</span><span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">8.5</span>))</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>plot_CIs <span class="ot">&lt;-</span> <span class="cf">function</span>(CIs_df) {</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  num_CIs <span class="ot">&lt;-</span> <span class="fu">nrow</span>(CIs_df)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_CIs){</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    y_coord <span class="ot">&lt;-</span> num_CIs<span class="sc">+</span><span class="dv">1</span><span class="sc">-</span>i</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    lower <span class="ot">&lt;-</span> CIs_df<span class="sc">$</span>lower[i]</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    upper <span class="ot">&lt;-</span> CIs_df<span class="sc">$</span>upper[i]</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (lower <span class="sc">&lt;</span> <span class="fl">0.1</span>) {</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>      <span class="fu">arrows</span>(<span class="at">x0=</span><span class="fl">0.1</span>, <span class="at">y0=</span>y_coord, </span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>             <span class="at">x1=</span>upper, <span class="at">y1=</span>y_coord, </span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>             <span class="at">code=</span><span class="dv">1</span>, <span class="at">length=</span><span class="fl">0.18</span>,</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>             <span class="at">lwd=</span><span class="fl">4.2</span>, <span class="at">col=</span><span class="st">"#009ed8"</span>)      </span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>      <span class="fu">segments</span>(<span class="at">x0=</span>lower, <span class="at">y0=</span>y_coord, </span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>               <span class="at">x1=</span>upper, <span class="at">y1=</span>y_coord,</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>               <span class="at">lwd=</span><span class="fl">4.2</span>, <span class="at">col=</span><span class="st">"#009ed8"</span>)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_CIs</span>(confidence_intervals)</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(steroid_trials<span class="sc">$</span>risk_ratio, <span class="dv">8</span><span class="sc">:</span><span class="dv">1</span>, </span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span><span class="dv">4</span>, <span class="at">col=</span><span class="st">"#006a90"</span>, <span class="at">cex=</span><span class="fl">1.8</span>, <span class="at">lwd=</span><span class="fl">4.2</span>)</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/confidence-intervals-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="pooling-the-results" class="level2">
+<h2 class="anchored" data-anchor-id="pooling-the-results">Pooling the Results</h2>
+<p>Now we want to combine these estimates, giving more weight to the those with lower variance. One way to do this would be to give each estimate a weight proportional to the inverse of its an estimate of its variance, which we could calculate using our previously estimated standard deviation of the log risk ratio. However, this method can be unreliable when the study size is small or the probability of the event we are studying is rare, which is why the Cochrane Collaboration recommends that researchers use the <strong>Mantel-Haenszel</strong> method for pooling estimates instead<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>.</p>
+<p>In this method, each estimate, <span class="math inline">\(\widehat{\text{RR}}_i\)</span>, is given a weight of<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p>
+<p><span class="math display">\[
+w_i=\frac{(a_i+b_i)c_i}{a_i+b_i+c_i+d_i},
+\]</span></p>
+<p>where for each trial <span class="math inline">\(a_i\)</span> and <span class="math inline">\(b_i\)</span> are the numbers of events and non-events in the exposed group, and <span class="math inline">\(c_i\)</span> and <span class="math inline">\(d_i\)</span> are the numbers of the events and non-events in the non-exposed group. The Mantel-Haenszel estimate is then equal to</p>
+<p><span class="math display">\[
+\widehat{\text{RR}}_{\text{M-H}}=\frac{\sum w_i \widehat{\text{RR}}_i}{\sum w_i}.
+\]</span></p>
+<p>We can find an approximate confidence interval for the Mantel-Haenszel estimator using the asmpymptotic normality of its natural logarithm. A formula for its approximate standard error is given in <a href="https://imaging.mrc-cbu.cam.ac.uk/statswiki/FAQ/meta?action=AttachFile&amp;do=get&amp;target=cochraneor.pdf">this guide</a> to standard statistical algorithms used in Cochrane reviews.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Calculating a Mantel-Haenszel Pooled Estimate and Confidence Interval for the First Eight Antenatal Steroid RCTs in R</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>weights <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, num_trials)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_trials) {</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  treatment_events <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>treatment_group_deaths[i]</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  treatment_non_events <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>treatment_group_size[i] <span class="sc">-</span> treatment_events</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  control_events <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>control_group_deaths[i]</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  sample_size <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>total_trial_size[i]</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  weights[i] <span class="ot">&lt;-</span> (treatment_events <span class="sc">+</span> treatment_non_events) <span class="sc">*</span> control_events <span class="sc">/</span> sample_size</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>steroid_trials<span class="sc">$</span>normalised_weight <span class="ot">&lt;-</span> weights <span class="sc">/</span> <span class="fu">sum</span>(weights)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>pooled_rr_estimate <span class="ot">&lt;-</span> <span class="fu">sum</span>(steroid_trials<span class="sc">$</span>risk_ratio <span class="sc">*</span> steroid_trials<span class="sc">$</span>normalised_weight)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># We find the standard error using the formula from this guide by Jon Deeks and Julian Higgins:</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># https://imaging.mrc-cbu.cam.ac.uk/statswiki/FAQ/meta?action=AttachFile&amp;do=get&amp;target=cochraneor.pdf</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>n_1 <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>treatment_group_size</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>n_2 <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>control_group_size</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>treatment_group_deaths</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>control_group_deaths</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>total_trial_size</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">sum</span>((n_1<span class="sc">*</span>n_2<span class="sc">*</span>(a<span class="sc">+</span>c)<span class="sc">-</span>a<span class="sc">*</span>c<span class="sc">*</span>N)<span class="sc">/</span>N<span class="sc">^</span><span class="dv">2</span>) </span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">sum</span>(a<span class="sc">*</span>n_2<span class="sc">/</span>N)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">sum</span>(c<span class="sc">*</span>n_1<span class="sc">/</span>N)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>log_SE <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(P<span class="sc">/</span>(R<span class="sc">*</span>S))</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>z_val <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="dv">1</span><span class="sc">-</span>alpha<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>log_CI_lower <span class="ot">&lt;-</span> <span class="fu">log</span>(pooled_rr_estimate) <span class="sc">-</span> z_val <span class="sc">*</span> log_SE</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>log_CI_upper <span class="ot">&lt;-</span> <span class="fu">log</span>(pooled_rr_estimate) <span class="sc">+</span> z_val <span class="sc">*</span> log_SE</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>CI <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">c</span>(log_CI_lower, log_CI_upper))</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"M-H Risk Ratio Estimate: "</span>, pooled_rr_estimate,</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    <span class="st">",</span><span class="sc">\n</span><span class="st">95% Confidence Interval: ("</span>, <span class="fu">exp</span>(log_CI_lower), <span class="st">", "</span>, <span class="fu">exp</span>(log_CI_upper), <span class="st">")"</span>, <span class="at">sep =</span> <span class="st">""</span>)</span></code></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>M-H Risk Ratio Estimate: 0.6009549,
+95% Confidence Interval: (0.4673707, 0.7727203)</code></pre>
+</div>
+</div>
+<p>Our final pooled estimate for the risk ratio is 0.60 to 2 significant figures. This is equivalent to a 40% reduction in the risk of neonatal death in premature babies whose mothers had been given antenatal steroids.</p>
+<p>To complete our forest plot, let’s add our Mantel-Haenszel estimate and its confidence interval to our forest plot. By convention, we plot the individual estimates using squares with sizes proportional to their weights, and use a diamond to distinguish our pooled estimate<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Creating the Final Forest Plot in R</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>weights <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, num_trials)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_trials) {</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  treatment_events <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>treatment_group_deaths[i]</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  treatment_non_events <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>treatment_group_size[i] <span class="sc">-</span> treatment_events</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  control_events <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>control_group_deaths[i]</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  sample_size <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>total_trial_size[i]</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  weights[i] <span class="ot">&lt;-</span> (treatment_events <span class="sc">+</span> treatment_non_events) <span class="sc">*</span> control_events <span class="sc">/</span> sample_size</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>steroid_trials<span class="sc">$</span>normalised_weight <span class="ot">&lt;-</span> weights <span class="sc">/</span> <span class="fu">sum</span>(weights)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>pooled_rr_estimate <span class="ot">&lt;-</span> <span class="fu">sum</span>(steroid_trials<span class="sc">$</span>risk_ratio <span class="sc">*</span> steroid_trials<span class="sc">$</span>normalised_weight)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>n_1 <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>treatment_group_size</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>n_2 <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>control_group_size</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>treatment_group_deaths</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>control_group_deaths</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>total_trial_size</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">sum</span>((n_1<span class="sc">*</span>n_2<span class="sc">*</span>(a<span class="sc">+</span>c)<span class="sc">-</span>a<span class="sc">*</span>c<span class="sc">*</span>N)<span class="sc">/</span>N<span class="sc">^</span><span class="dv">2</span>) </span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">sum</span>(a<span class="sc">*</span>n_2<span class="sc">/</span>N)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">sum</span>(c<span class="sc">*</span>n_1<span class="sc">/</span>N)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>log_SE <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(P<span class="sc">/</span>(R<span class="sc">*</span>S))</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>z_val <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="dv">1</span><span class="sc">-</span>alpha<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>log_CI_lower <span class="ot">&lt;-</span> <span class="fu">log</span>(pooled_rr_estimate) <span class="sc">-</span> z_val <span class="sc">*</span> log_SE</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>log_CI_upper <span class="ot">&lt;-</span> <span class="fu">log</span>(pooled_rr_estimate) <span class="sc">+</span> z_val <span class="sc">*</span> log_SE</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>CI <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">c</span>(log_CI_lower, log_CI_upper))</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="at">bottom=</span><span class="fl">4.2</span>, <span class="at">left=</span><span class="fl">5.1</span>, <span class="at">top=</span><span class="fl">1.8</span>, <span class="at">right=</span><span class="fl">0.9</span>), <span class="at">family=</span><span class="st">"Roboto Slab"</span>)</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="fu">empty_forest_plot</span>(<span class="at">xax=</span><span class="fu">c</span>(<span class="fl">0.1</span>, <span class="dv">10</span>), <span class="at">yax=</span><span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">8.5</span>))</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="dv">3</span>, <span class="dv">0</span>, <span class="at">adj=</span><span class="dv">0</span>, <span class="st">"Pooled Estimate"</span>, <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_CIs</span>(confidence_intervals)</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0=</span>CI[<span class="dv">1</span>], <span class="at">y0=</span><span class="dv">0</span>, </span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>         <span class="at">x1=</span>CI[<span class="dv">2</span>], <span class="at">y1=</span><span class="dv">0</span>,</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>         <span class="at">lwd=</span><span class="fl">4.2</span>, <span class="at">col=</span><span class="st">"#009ed8"</span>)</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>sizes <span class="ot">&lt;-</span> steroid_trials<span class="sc">$</span>normalised_weight<span class="sc">*</span><span class="dv">12</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(steroid_trials<span class="sc">$</span>risk_ratio, <span class="dv">8</span><span class="sc">:</span><span class="dv">1</span>, </span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span><span class="dv">15</span>, <span class="at">col=</span><span class="st">"#006a90"</span>, <span class="at">cex=</span>sizes, <span class="at">lwd=</span><span class="fl">4.2</span>)</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(steroid_trials<span class="sc">$</span>risk_ratio, <span class="dv">8</span><span class="sc">:</span><span class="dv">1</span>, </span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span><span class="st">"|"</span>, <span class="at">col=</span><span class="st">"#006a90"</span>, <span class="at">cex=</span><span class="fl">2.4</span>)</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(pooled_rr_estimate, <span class="dv">0</span>, <span class="at">pch=</span><span class="dv">18</span>, <span class="at">col=</span><span class="st">"#006a90"</span>, <span class="at">cex=</span><span class="dv">12</span>)</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/forest-plot-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A meta-analysis of these eight trials, and several more completed in the intervening years, was eventually published in a systematic review in 1989<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a>. This systematic review led directly to the publication of new guidelines by the Royal College of Obstetricians and Gynaecologists in 1992, and antenatal steroids are now routinely given to mothers in premature labour<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a>. Their use is monitored, as a measure of optimal perinatal care, in the National Neonatal Audit Programme run by the Royal College of Paediatrics and Child Health<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a>. The 1989 systematic review also inspired the Cochrane Collaboration’s logo – to learn more, see <a href="https://www.cochrane.org/about-us/difference-we-make">this page</a> on their website.</p>
+<p><a href="https://www.ogmagazine.org.au/wp-content/uploads/2019/02/Autumn-2019-For-Web.pdf?utm_source=chatgpt.com">link</a></p>
+</section>
+<section id="further-reading" class="level2">
+<h2 class="anchored" data-anchor-id="further-reading">Further Reading</h2>
+<ul>
+<li><a href="https://doi.org/10.1111/1471-0528.15214"><strong>A short history of systematic reviews</strong> – an article by Cynthia Farquhar and Jane Marjoribanks</a></li>
+<li><a href="https://www.testingtreatments.org/2013/02/02/what-does-the-cochrane-logo-tell-us/"><strong>What does the Cochrane logo tell us?</strong> – a presentation by Steven Woloshin</a></li>
+</ul>
+
+
+</section>
+
+
+<div id="quarto-appendix"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">References</h2>
+
+<ol>
+<li id="fn1"><p>Jane Harding and Caroline Crowther, <a href="https://www.ogmagazine.org.au/21/1-21/a-history-antenatal-corticosteroids/">“A history: antenatal corticosteroids,”</a> <em>O&amp;G Magazine</em> 21, no. 1 (March 2019): 13–15.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://wellcomecollection.org/works/fuek3ha4">“Prenatal corticosteroids for reducing morbidity and mortality after preterm birth,”</a> in <em>Wellcome Witnesses to Twentieth Century Medicine, volume 25,</em> edited by Tilli Tansey and Lois Reynolds. London: The Wellcome Trust Centre for the History of Medicine at UCL, 2005.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Patricia Crowley, <a href="https://doi.org/10.1002/14651858.CD000065">“Prophylactic corticosteroids for preterm birth,”</a> <em>Cochrane Database of Systematic Reviews</em> 1996, no. 1.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Michael Borenstein et al., <em>Introduction to Meta-Analysis.</em> Chichester, UK: John Wiley &amp; Sons, 2009.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Jeehyoung Kim, Jay Kaufman, and Heejung Bang, <a href="https://doi.org/10.1016/j.jacc.2017.10.098">“Graphing Ratio Measures on Forest Plot,”</a> <em>Journal of the America College of Cardiology</em> 71, no. 5 (February 2018): 585–586.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Allan Hackshaw, <em>A Concise Guide to Clinical Trials.</em> Chichester, UK: John Wiley &amp; Sons, 2009.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Julian Higgins et al., eds., <a href="https://training.cochrane.org/handbook"><em>Cochrane Handbook for Systematic Reviews of Interventions, version 6.5.</em></a> Cochrane, 2024.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Mathias Harrer et al., <a href="https://training.cochrane.org/handbook"><em>Doing Meta-Analysis in R: A Hands-On Guide.</em></a> Bookdown, 2021.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>Martin Bland, <em>An Introduction to Medical Statistics.</em> 4th ed.&nbsp;Oxford: Oxford University Press, 2015.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p><a href="https://www.jameslindlibrary.org/essays-essay/3-3-reducing-the-play-of-chance-using-meta-analysis/">“Reducing the play of chance using meta-analysis,”</a> The James Lind Library, April 30, 2024.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p>Sense About Science and Academy of Medical Royal Colleges, <a href="https://www.testingtreatments.org/2013/05/06/evidence-based-medicine-matters/">“Evidence based medicine matters,”</a> Testing Treatments interactive, May 6, 2013.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p>Audit team, <a href="https://www.rcpch.ac.uk/work-we-do/clinical-audits/nnap/measures">“National Neonatal Audit Programme (NNAP) measures,”</a> Royal College of Paediatrics and Child Health, September 2024.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

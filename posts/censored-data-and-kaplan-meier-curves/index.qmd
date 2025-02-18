@@ -1929,12 +1929,15 @@ We can now plot our estimate for $\mathbb{P}(T>t)$ as a stepwise function of $t$
 #| code-summary: "Plotting the Estimated Survival Function in R"
 #| label: survival-function-plot
 par(mar=c(bottom=4.2, left=5.1, top=1.8, right=0.9), family="Roboto Slab") # setting the plot options
-plot(conception_survival_analysis$months, conception_survival_analysis$survival, type="s", ylim=c(0,1), 
-     xlab="Months", ylab="Estimated Survival Function", col="#009ed8", lwd=4.8, cex.lab=1.8, cex.axis=1.8)
-censoring_months <- sort(unique(conception_study[which((conception_study$event == 'Censored')),]$months))  # finding the months in which censoring occurred
-surv_fuc_eval_at_censoring <- conception_survival_analysis[conception_survival_analysis$months %in% censoring_months,]$survival # evaluating the estimated survival function 
-                                                                                                                                # at those points
-points(censoring_months, surv_fuc_eval_at_censoring, pch=4, cex=1.8, col="#006a90", lwd=4.8)
+KM_curve_plot <- function (surv_df, study_df) {
+  plot(surv_df$months, surv_df$survival, type="s", ylim=c(0,1), 
+       xlab="Months", ylab="Estimated Survival Function", col="#009ed8", lwd=4.8, cex.lab=1.8, cex.axis=1.8)
+  censoring_months <- sort(unique(study_df[which((study_df$event == 'Censored')),]$months))  # finding the months in which censoring occurred
+  surv_fuc_eval_at_censoring <- surv_df[surv_df$months %in% censoring_months,]$survival # evaluating the estimated survival function
+                                                                                        # at those points
+  points(censoring_months, surv_fuc_eval_at_censoring, pch=4, cex=1.8, col="#006a90", lwd=4.8)
+}
+KM_curve_plot(conception_survival_analysis, conception_study)
 ```
 
 Our estimated survival function allows us to work out a principled estimate for the median time to conception after laparoscopy and hydrotubation. Since the median time it takes to conceive, $t_m$, is equal to the point where $\mathbb{P}(T>t_m)=0.5$, we can just draw a line across from 0.5 on the y-axis to our Kaplan-Meier curve. 
@@ -1945,8 +1948,7 @@ Our estimated survival function allows us to work out a principled estimate for 
 #| label: median-time-to-conception
 median_month <- conception_survival_analysis$months[which(conception_survival_analysis$survival <= 0.5)[1]] # finding the first month at which the estimated survival function drops to equal or below 0.5
 par(mar=c(bottom=4.2, left=5.1, top=1.8, right=0.9), family="Roboto Slab") # setting the plot options
-plot(conception_survival_analysis$months, conception_survival_analysis$survival, type="s", ylim=c(0,1), xlab="Months", ylab="Estimated Survival Function", col="#009ed8", lwd=4.8, cex.lab=1.8, cex.axis=1.8)
-points(censoring_months, surv_fuc_eval_at_censoring, pch=4, cex=1.8, col="#006a90", lwd=4.8)
+KM_curve_plot(conception_survival_analysis, conception_study)
 segments(-1, 0.5, median_month, 0.5, col="#ffc000", lwd=4.8, lty=2) # plotting the line across from the y-axis to the survival curve
 axis(1, at=median_month, cex.lab=1.8, cex.axis=1.8) # marking 0.5 on the y-axis
 segments(median_month, -1, median_month, 0.5, col="#ffc000", lwd=4.8, lty=2) # plotting the line down from the survival curve to the x-axis

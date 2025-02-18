@@ -305,10 +305,10 @@ Disclaimer
 <summary>Testing the Null Hypothesis in R</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>significance_test <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(stork_pairs, yearly_births)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>p_val <span class="ot">&lt;-</span> significance_test<span class="sc">$</span>p.value</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"p-value:"</span>, p_val), <span class="at">quote=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"p-value:"</span>, p_val)</span></code></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] p-value: 0.00789786078801809</code></pre>
+<pre><code>p-value: 0.007897861</code></pre>
 </div>
 </div>
 <p>Clearly, more storks do not cause more babies to be born. But the non-causality of statistical associations might not always be so obvious. To deal with the challenges of understanding causes and effects, a new branch of statistics known as ‘causal inference’ has emerged over the past few decades<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>.</p>
@@ -348,7 +348,7 @@ Disclaimer
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>group_3_recovery_speeds <span class="ot">&lt;-</span> <span class="fl">1.2</span> <span class="sc">*</span> group_3_dosages <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">20</span>,<span class="dv">0</span>,<span class="dv">5</span>)</span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>all_recovery_speeds <span class="ot">&lt;-</span> <span class="fu">c</span>(group_1_recovery_speeds, group_2_recovery_speeds, group_3_recovery_speeds)</span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="at">bottom=</span><span class="fl">2.4</span>, <span class="at">left=</span><span class="dv">3</span>, <span class="at">top=</span><span class="fl">2.4</span>, <span class="at">right=</span><span class="fl">0.9</span>), <span class="at">family=</span><span class="st">"Roboto Slab"</span>)</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(group_1_dosages, group_1_recovery_speeds, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">72</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">36</span>,<span class="dv">120</span>), <span class="at">bty=</span><span class="st">"n"</span>, <span class="at">xaxt=</span><span class="st">"n"</span>, <span class="at">yaxt=</span><span class="st">"n"</span>, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span><span class="fl">2.4</span>,  <span class="at">col=</span><span class="st">"#009ed8"</span>) </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(group_1_dosages, group_1_recovery_speeds, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">72</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">36</span>,<span class="dv">120</span>), <span class="at">bty=</span><span class="st">"n"</span>, <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span><span class="fl">2.4</span>,  <span class="at">col=</span><span class="st">"#009ed8"</span>) </span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(group_2_dosages, group_2_recovery_speeds, <span class="at">pch=</span><span class="dv">17</span>, <span class="at">cex=</span><span class="fl">2.4</span>,  <span class="at">col=</span><span class="st">"#009ed8"</span>)</span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(group_3_dosages, group_3_recovery_speeds, <span class="at">pch=</span><span class="dv">18</span>, <span class="at">cex=</span><span class="fl">2.4</span>,  <span class="at">col=</span><span class="st">"#009ed8"</span>)</span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">arrows</span>(<span class="at">x0=</span><span class="dv">0</span>, <span class="at">y0=</span><span class="dv">39</span>, <span class="at">x1=</span><span class="dv">72</span>, <span class="at">y1=</span><span class="dv">39</span>, <span class="at">length=</span><span class="fl">0.15</span>, <span class="at">code=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">3</span>, <span class="at">col=</span><span class="st">"#808080"</span>) </span>
@@ -375,10 +375,10 @@ Disclaimer
 <details class="code-fold">
 <summary>Finding the Correlation Coefficient in R</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>correlation <span class="ot">&lt;-</span> <span class="fu">cor</span>(all_dosages, all_recovery_speeds)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Pearson Correlation Coefficient:"</span>, correlation), <span class="at">quote=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Pearson Correlation Coefficient:"</span>, correlation)</span></code></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] Pearson Correlation Coefficient: -0.745394350451033</code></pre>
+<pre><code>Pearson Correlation Coefficient: -0.7453944</code></pre>
 </div>
 </div>
 <p>When we draw the DAG for this example, we can see that the variable ‘Age’ is acting as a counfounder, obscuring the true causal relationship between the ‘Drug Dosage’ and ‘Recovery Speed’ variables.</p>
@@ -541,7 +541,7 @@ Disclaimer
 
 <ol>
 <li id="fn1"><p>Jonathan Wood, <a href="https://www.ox.ac.uk/news/science-blog/life-revolutionary">“Life of a revolutionary,”</a> OxSciBlog, November 11, 2009.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p><a href="https://www.cebm.ox.ac.uk/resources/ebm-tools/study-designs">“Study designs,”</a> Centre for Evidence-Based Medicine, May 29, 2020.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://www.cebm.ox.ac.uk/resources/ebm-tools/study-designs">“Study designs,”</a> Centre for Evidence-Based Medicine, October 1, 2020.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>Robert Matthews, <a href="https://doi.org/10.1111/1467-9639.00013">“Storks Deliver Babies (p=0.008),”</a> <em>Teaching Statistics</em> 22, no. 2 (June 2000): 36–38.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>Martin Bland, <em>An Introduction to Medical Statistics.</em> 4th ed.&nbsp;Oxford: Oxford University Press, 2015.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p>Judea Pearl and Dana Mackenzie, <em>The Book of Why: The New Science of Cause and Effects.</em> London: Penguin Books, 2019.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>

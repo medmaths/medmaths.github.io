@@ -113,7 +113,7 @@ Moreover, performing a significance test for correlation with the null hypothesi
 #| label: storks-and-babies-test
 significance_test <- cor.test(stork_pairs, yearly_births)
 p_val <- significance_test$p.value
-print(paste("p-value:", p_val), quote=FALSE)
+cat("p-value:", p_val)
 ```
 
 Clearly, more storks do not cause more babies to be born. But the non-causality of statistical associations might not always be so obvious. To deal with the challenges of understanding causes and effects, a new branch of statistics known as 'causal inference' has emerged over the past few decades[^5]. 
@@ -170,7 +170,7 @@ group_2_recovery_speeds <- 1.2 * group_2_dosages + 50 + rnorm(20,0,5)
 group_3_recovery_speeds <- 1.2 * group_3_dosages + rnorm(20,0,5)
 all_recovery_speeds <- c(group_1_recovery_speeds, group_2_recovery_speeds, group_3_recovery_speeds)
 par(mar=c(bottom=2.4, left=3, top=2.4, right=0.9), family="Roboto Slab")
-plot(group_1_dosages, group_1_recovery_speeds, xlim=c(-3,72), ylim=c(36,120), bty="n", xaxt="n", yaxt="n", pch=16, cex=2.4,  col="#009ed8") 
+plot(group_1_dosages, group_1_recovery_speeds, xlim=c(-3,72), ylim=c(36,120), bty="n", axes = FALSE, pch=16, cex=2.4,  col="#009ed8") 
 points(group_2_dosages, group_2_recovery_speeds, pch=17, cex=2.4,  col="#009ed8")
 points(group_3_dosages, group_3_recovery_speeds, pch=18, cex=2.4,  col="#009ed8")
 arrows(x0=0, y0=39, x1=72, y1=39, length=0.15, code=2, lwd=3, col="#808080") 
@@ -192,7 +192,7 @@ In the simulated data plotted above, a higher dosage of the treatment drug corre
 #| code-summary: "Finding the Correlation Coefficient in R"
 #| label: robert-heaton-example-correlation
 correlation <- cor(all_dosages, all_recovery_speeds)
-print(paste("Pearson Correlation Coefficient:", correlation), quote=FALSE)
+cat("Pearson Correlation Coefficient:", correlation)
 ```
 
 When we draw the DAG for this example, we can see that the variable 'Age' is acting as a counfounder, obscuring the true causal relationship between the 'Drug Dosage' and 'Recovery Speed' variables.
@@ -499,7 +499,7 @@ As a result of the atypical coffee consumption in the control group, the results
 - [**Kidney Stones & Simpson's Paradox** -- a blog post by Amol Kulkarni](https://amol-kulkarni.com/project/kidney_stones_simpson_paradox/)
 
 [^1]: Jonathan Wood, ["Life of a revolutionary,"](https://www.ox.ac.uk/news/science-blog/life-revolutionary) OxSciBlog, November 11, 2009.
-[^2]: ["Study designs,"](https://www.cebm.ox.ac.uk/resources/ebm-tools/study-designs) Centre for Evidence-Based Medicine, May 29, 2020.
+[^2]: ["Study designs,"](https://www.cebm.ox.ac.uk/resources/ebm-tools/study-designs) Centre for Evidence-Based Medicine, October 1, 2020.
 [^3]: Robert Matthews, ["Storks Deliver Babies (p=0.008),"](https://doi.org/10.1111/1467-9639.00013) *Teaching Statistics* 22, no. 2 (June 2000): 36--38.
 [^4]: Martin Bland, *An Introduction to Medical Statistics.* 4th ed. Oxford: Oxford University Press, 2015.
 [^5]: Judea Pearl and Dana Mackenzie, *The Book of Why: The New Science of Cause and Effects.* London: Penguin Books, 2019.

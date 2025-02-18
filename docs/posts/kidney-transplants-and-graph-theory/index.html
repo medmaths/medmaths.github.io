@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2025-02-18">
+
+<title>Kidney Transplants and Graph Theory – Medical Maths</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<link href="../../favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../medmaths-custom-styling.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../logo.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Medical Maths</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Kidney Transplants and Graph Theory</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 18, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Disclaimer
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This article was written solely for informational and educational purposes, and does not constitute medical advice. If you have any health concerns, please consult a qualified medical professional.</p>
+</div>
+</div>
+<p>Thousands of kidney transplants are performed every year in the UK<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, transforming the lives of their recipients<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. In this article, I’ll explore how techniques from the mathematical discipline of graph theory help to facilitate some of these transplants.</p>
+<section id="some-graph-theory-background" class="level2">
+<h2 class="anchored" data-anchor-id="some-graph-theory-background">Some Graph Theory Background</h2>
+<p>Suppose that you are a teacher in charge of taking a group of six students, who we will call Students A, B, C, D, E, and F, on a school trip, and you need to decide what pairs they are going to sit in on the minibus. You ask the students to anonymously let you know who they would be willing to sit with and find out that:</p>
+<ul>
+<li>Student A and Student D would be happy to be in a pair.</li>
+<li>Student A and Student E would be happy to be in a pair.</li>
+<li>Student A and Student F would be happy to be in a pair.</li>
+<li>Student B and Student C would be happy to be in a pair.</li>
+<li>Student B and Student E would be happy to be in a pair.</li>
+<li>Student C and Student D would be happy to be in a pair.</li>
+</ul>
+<p>We can represent this information in a <strong>graph</strong>, which, in <a href="https://en.wikipedia.org/wiki/Discrete_mathematics">discrete mathematics</a>, means a structure consisting of vertices and edges (as opposed to describing a chart or a plot).</p>
+<p><img src="students-graph.png" class="img-fluid"></p>
+<p>Here, the points of the graph – their <strong>vertices</strong> (sometimes also called nodes) – represent the students, and the lines between the vertices, known as <strong>edges</strong>, encode the possible pairings they can sit in; if two students would accept being seated together, they have an edge between them. Graphs are commonly used to study community structures in sociology, and they can also be applied to protein-protein interaction networks in biology and transportation networks in urban planning, to give just two other examples.</p>
+<p>Graphs can be represented computationally in several different ways; here, we will discuss three of the most common – adjacency matrices, adjacency lists, and edge lists. For a graph <span class="math inline">\(G\)</span> with <span class="math inline">\(n\)</span> vertices, the adjacency matrix of <span class="math inline">\(G\)</span> is an <span class="math inline">\(n\times n\)</span> <a href="https://en.wikipedia.org/wiki/Matrix_(mathematics)">matrix</a> <span class="math inline">\(A_G\)</span>, where the entry in row <span class="math inline">\(i\)</span> and column <span class="math inline">\(j\)</span> of <span class="math inline">\(A_G\)</span> is <span class="math inline">\(1\)</span> if vertex <span class="math inline">\(i\)</span> and vertex <span class="math inline">\(j\)</span> are connected by an edge, and <span class="math inline">\(0\)</span> if they are not. For the rest of this article, we will denote the specific graph structure above, representing the possible seating arrangements of the students, by <span class="math inline">\(S\)</span>. The adjacency matrix for <span class="math inline">\(S\)</span> is</p>
+<p><span class="math display">\[
+A_S=
+\begin{pmatrix}
+0 &amp; 0 &amp; 0 &amp; 1 &amp; 1 &amp; 1 \\
+0 &amp; 0 &amp; 1 &amp; 0 &amp; 1 &amp; 0 \\
+0 &amp; 1 &amp; 0 &amp; 1 &amp; 0 &amp; 0 \\
+1 &amp; 0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 \\
+1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
+\end{pmatrix}.
+\]</span></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Defining the Adjacency Matrix for <span class="math inline">\(S\)</span> in R</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>S_adj_mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="co"># Let's walk through how we fill out the first row of the adjacency matrix:</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                      <span class="co"># Row 1 represents the people Student A can sit with; </span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                      <span class="co"># they form a compatible pair with Students D, E, and F,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                      <span class="co"># so there is a 1 in column 4, representing Student D,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                      <span class="co"># a 1 in column 5, representing Student E,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                      <span class="co"># and a 1 in column 6, representing Student F. </span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                      <span class="co"># The pairings A-B and A-C are unacceptable so there are 0s in columns 2 and 3. </span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                      <span class="co"># Vertex A is not connected to itself, because Student A cannot form a pair with themselves,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                      <span class="co"># so there is a 0 in column 1 – in fact, all the diagonal values of this adjacency matrix are 0</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                      <span class="co"># because none of the vertices have edges connecting them to themselves.</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                      <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                      <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                      <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                      <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                      <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>                      <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                      <span class="at">nrow =</span> <span class="dv">6</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</details>
+</div>
+<p>As well as an adjacency matrix <span class="math inline">\(M\)</span> for <span class="math inline">\(G\)</span>, we can also create an adjacency <em>list</em>, <span class="math inline">\(L_G\)</span>, which is a list of length <span class="math inline">\(n\)</span>, where each entry is also a list. The <span class="math inline">\(i\)</span>th element of <span class="math inline">\(L_G\)</span> is a list of vertices that vertex <span class="math inline">\(i\)</span> of graph <span class="math inline">\(G\)</span> forms an edge with – this list can have a length of zero if vertex <span class="math inline">\(i\)</span> is not connected to any vertices.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Finding <span class="math inline">\(L_S\)</span> from <span class="math inline">\(A_S\)</span> in R</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's write a function which takes as its input a graph's adjacency matrix, and returns the adjacency list for the graph </span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>adj_mat_to_adj_list <span class="ot">&lt;-</span> <span class="cf">function</span>(adj_mat){</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  num_nodes <span class="ot">&lt;-</span> <span class="fu">ncol</span>(adj_mat) <span class="co"># we find the number of vertices of the graph</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  adjacency_list <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">"list"</span>, <span class="at">length =</span> num_nodes) <span class="co"># we initialise our adjacency list as an empty list with the same number of elements of vertices of the graph</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Now we make an empty list for each vertex and fill it with the indexes of the vertices that it is connected to:</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_nodes){</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    connected_vertices <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_nodes) {</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (adj_mat[i,j] <span class="sc">==</span> <span class="dv">1</span>) {</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        connected_vertices <span class="ot">&lt;-</span> <span class="fu">c</span>(connected_vertices, j)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    adjacency_list[[i]] <span class="ot">&lt;-</span> connected_vertices</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  adjacency_list</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># We can use this function to find the adjacency list for S:</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>S_adj_list <span class="ot">&lt;-</span> <span class="fu">adj_mat_to_adj_list</span>(S_adj_mat)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(S_adj_list) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>,<span class="st">"B"</span>,<span class="st">"C"</span>,<span class="st">"D"</span>,<span class="st">"E"</span>,<span class="st">"F"</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Vertex 1 (A):"</span>, LETTERS[<span class="fu">unlist</span>(S_adj_list<span class="sc">$</span>A)], </span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"</span><span class="sc">\n</span><span class="st">Vertex 2 (B):"</span>, LETTERS[<span class="fu">unlist</span>(S_adj_list<span class="sc">$</span>B)],</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"</span><span class="sc">\n</span><span class="st">Vertex 3 (C):"</span>, LETTERS[<span class="fu">unlist</span>(S_adj_list<span class="sc">$</span>C)],</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"</span><span class="sc">\n</span><span class="st">Vertex 4 (D):"</span>, LETTERS[<span class="fu">unlist</span>(S_adj_list<span class="sc">$</span>D)],</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"</span><span class="sc">\n</span><span class="st">Vertex 5 (E):"</span>, LETTERS[<span class="fu">unlist</span>(S_adj_list<span class="sc">$</span>E)],</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">"</span><span class="sc">\n</span><span class="st">Vertex 6 (F):"</span>, LETTERS[<span class="fu">unlist</span>(S_adj_list<span class="sc">$</span>F)])</span></code></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Vertex 1 (A): D E F 
+Vertex 2 (B): C E 
+Vertex 3 (C): B D 
+Vertex 4 (D): A C 
+Vertex 5 (E): A B 
+Vertex 6 (F): A</code></pre>
+</div>
+</div>
+<p>Finally, we can also create an ‘edge list’, <span class="math inline">\(E_G\)</span>, of all the edges of <span class="math inline">\(G\)</span>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Finding <span class="math inline">\(E_S\)</span> from <span class="math inline">\(A_S\)</span> in R</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We can write a simple function to get the edge list matrix of a graph from it's adjacency matrix:</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>adj_mat_to_edge_list <span class="ot">&lt;-</span> <span class="cf">function</span>(adj_mat) {</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># We can represent each edge as a vector of length two where the elements are the vertices</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># that the edge is connected to, and thus encode the edge list as a two column matrix</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  edge_list <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">t</span>(<span class="fu">apply</span>(<span class="fu">which</span>(adj_mat <span class="sc">==</span> <span class="dv">1</span>, <span class="at">arr.ind =</span> <span class="cn">TRUE</span>), <span class="dv">1</span>, sort))) </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  edge_list</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's see what the output looks like for S:</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>S_edge_list <span class="ot">&lt;-</span> <span class="fu">adj_mat_to_edge_list</span>(S_adj_mat)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># We can convert the vertex numbers to letters to check we've got the result we've expected:</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>letters_edge_list <span class="ot">&lt;-</span> <span class="fu">apply</span>(S_edge_list, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="cf">function</span>(i) LETTERS[i])</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(letters_edge_list)) {</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(letters_edge_list[i,<span class="dv">1</span>], <span class="st">"–"</span>, letters_edge_list[i,<span class="dv">2</span>], <span class="st">",</span><span class="sc">\n</span><span class="st">"</span>, <span class="at">sep =</span> <span class="st">""</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>A–D,
+A–E,
+A–F,
+B–C,
+B–E,
+C–D,</code></pre>
+</div>
+</div>
+<p>Now that we know some definitions, we can return to our problem – finding a configuration in which the maximum possible number of passengers on the minibus are happy with their partner. Each person can only sit with one other person, so in graph theory terms we are looking to find a <strong>matching</strong> of the graph – this is a set of edges of the graph in which no two edges share any common vertices<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. But it’s not enough just to find any matching – for example the set of edges <span class="math inline">\(\{\)</span><code>A–D</code><span class="math inline">\(\}\)</span> is a matching, as is the set <span class="math inline">\(\{\)</span><code>C–D</code><span class="math inline">\(\}\)</span>, but neither are very useful to us as they both only give us one pairing.</p>
+<p><img src="two-matchings.png" class="img-fluid"></p>
+<p>Instead, we are looking for a <strong>maximum matching</strong>, which is a matching of a graph that has the largest possible number of edges. One way to find a maximum matching of a graph <span class="math inline">\(G\)</span> would be to check all the possible subsets of edges of <span class="math inline">\(G\)</span>, throw out the ones that aren’t matchings, and then pick the largest remaining subset. But since the set of all possible subsets of edges is equal to the <a href="https://en.wikipedia.org/wiki/Power_set">power set</a> of the set of edges of <span class="math inline">\(G\)</span>, it contains <span class="math inline">\(2^{E}\)</span> subsets for us to check, where <span class="math inline">\(E\)</span> is the number of edges of <span class="math inline">\(G\)</span>. For our graph <span class="math inline">\(S\)</span>, this would give us <span class="math inline">\(2^6=64\)</span> subsets to check, which might just about be manageable, but as the number of edges increases, the number of subsets we will need to check using this naive approach will grow exponentially. A graph with 12 edges, for example, would require us to check <span class="math inline">\(2^{12}=4096\)</span> subsets!</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Plotting the Number of Subsets of Edges Against the Number of Edges in R</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="at">bottom=</span><span class="fl">4.2</span>, <span class="at">left=</span><span class="fl">5.1</span>, <span class="at">top=</span><span class="fl">1.8</span>, <span class="at">right=</span><span class="fl">0.9</span>), <span class="at">family=</span><span class="st">"Roboto Slab"</span>) <span class="co"># setting the plot options</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">^</span>xs</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xs, ys, <span class="at">pch=</span><span class="dv">4</span>, <span class="at">cex=</span><span class="fl">1.8</span>, <span class="at">lwd=</span><span class="fl">4.8</span>, <span class="at">col=</span><span class="st">"#009ed8"</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"Number of Edges of Graph"</span>, <span class="at">ylab=</span><span class="st">"Number of Subsets to Check"</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex.lab=</span><span class="fl">1.5</span>, <span class="at">cex.axis=</span><span class="fl">1.5</span>)</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/exponential-growth-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>To understand the algorithms that allow us to find a maximum matching more quickly, we need another concept from graph theory – <strong>augmenting paths</strong>. Given a graph <span class="math inline">\(G\)</span>, and a matching <span class="math inline">\(M\)</span>, an augmenting path is a sequence of edges, <span class="math inline">\(P\)</span>, that connect two unmatched vertices of <span class="math inline">\(G\)</span> such that the edges <span class="math inline">\(P\)</span> are alternately in <span class="math inline">\(M\)</span> and not in <span class="math inline">\(M\)</span>. For example, if we have graph with four vertices and an edge list <code>1–2, 2–3, 3–4</code> and we are given a matching <code>2–3</code>, the augmenting path is <code>1–2, 2–3, 3–4</code>.</p>
+<p><img src="augmenting-path.png" class="img-fluid"></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Writing a Function that Will Find an Augmenting Path for a Given Graph and Matching in R</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>augmenting_path <span class="ot">&lt;-</span> <span class="cf">function</span>(adj_list, match_vec) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># This function takes as input the edge list of the graph, and a vector, `match_vec` which represents the matching. </span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The length of `match_vec` should be the same as the number of vertices of the graph, and `match_vec[i]` is the index</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># of the vertex that the $i$th vertex is matched to – if it is unmatched then we'll define `match_vec[i]` to be zero.</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  vertices_match_status <span class="ot">&lt;-</span> match_vec <span class="sc">!=</span> <span class="dv">0</span> <span class="co"># we create a logical vector to represent whether each vertex is included in the matching</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  num_vertices <span class="ot">&lt;-</span> <span class="fu">length</span>(vertices_match_status) <span class="co"># we find the number of vertices in the graph</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  unmatched_vertices <span class="ot">&lt;-</span> <span class="fu">which</span>(vertices_match_status <span class="sc">==</span> <span class="cn">FALSE</span>, <span class="at">arr.ind=</span><span class="cn">TRUE</span>) <span class="co"># we create a vector of the vertices which are not in the matching</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_vertices) { <span class="co"># we will try finding an augmenting path starting from each unmatched vertex until we find one</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    aug_path <span class="ot">&lt;-</span> <span class="fu">matrix</span>(, <span class="at">nrow=</span><span class="dv">0</span>, <span class="at">ncol=</span><span class="dv">2</span>) <span class="co"># we initialise an empty matrix to start the augmenting path </span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (vertices_match_status[i] <span class="sc">==</span> <span class="cn">TRUE</span>) { <span class="co"># we skip the matched vertices</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>      <span class="cf">next</span> </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    root <span class="ot">&lt;-</span> i</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    current_vert <span class="ot">&lt;-</span> i <span class="co"># we will use this to keep track of which vertex we have reached in our attempt to find an augmenting path</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Let's keep track of the vertices we've included in our augmenting path attempt from this vertex:</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    unvisited_from_root <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>num_vertices)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    unvisited_from_root <span class="ot">&lt;-</span> unvisited_from_root[<span class="sc">!</span>unvisited_from_root<span class="sc">==</span>root]</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">repeat</span> { <span class="co"># we create a repeating loop that will run the same procedure until we break out of it using break or return</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>      neighbours <span class="ot">&lt;-</span> <span class="fu">unlist</span>(adj_list[[current_vert]]) <span class="co"># we create a vector of the vertices that have an edge between them and the vertex that we are currently on </span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>      neighbours_unvisited_from_root <span class="ot">&lt;-</span> <span class="fu">intersect</span>(neighbours, unvisited_from_root) <span class="co"># we create a vector of vertices adjacent to the vertex we are currently on that have not already been included in our attempt to find an augmenting path</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">length</span>(neighbours_unvisited_from_root) <span class="sc">==</span> <span class="dv">0</span>) { <span class="co"># if there are none of these, we can stop running our repear loop and try our searh again from the next unmatched vertex</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>      match_to_current_vert <span class="ot">&lt;-</span> match_vec[current_vert] </span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>      <span class="co"># if we are on a vertex that is part of the matching, and the vertex it is matched to is not yet part of the augmenting path, we want to go to that vertex next </span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (match_to_current_vert <span class="sc">%in%</span> unvisited_from_root) { </span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>        next_vert <span class="ot">&lt;-</span> match_to_current_vert</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>        unvisited_from_root <span class="ot">&lt;-</span> unvisited_from_root[<span class="sc">!</span>unvisited_from_root<span class="sc">==</span>next_vert]</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>        aug_path <span class="ot">&lt;-</span> <span class="fu">rbind</span>(aug_path, <span class="fu">c</span>(current_vert,next_vert))</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>        current_vert <span class="ot">&lt;-</span> next_vert</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">next</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>      unmatched_neighbours_unvisited_from_root <span class="ot">&lt;-</span> <span class="fu">intersect</span>(unmatched_vertices, neighbours_unvisited_from_root) <span class="co"># we create a vector of unmatched vertices adjacent to the vertex we are currently on that we haven't already included in our augmenting path attempt</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">length</span>(unmatched_neighbours_unvisited_from_root) <span class="sc">&gt;</span> <span class="dv">0</span>) { <span class="co"># if any of these exist, then we have found an augmenting path, and we can return it!</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>        aug_path <span class="ot">&lt;-</span> <span class="fu">rbind</span>(aug_path, <span class="fu">c</span>(current_vert,unmatched_neighbours_unvisited_from_root[<span class="dv">1</span>]))</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(aug_path)</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>      <span class="co"># If we didn't return an augmenting path in the if statement above, all the vertices adjacent to the vertex we are currently on that are not already included in our augmenting path attempt must be part of the matching, so we will go to one of these next and continue searching:</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>      next_vert <span class="ot">&lt;-</span> neighbours_unvisited_from_root[<span class="dv">1</span>]</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>      unvisited_from_root <span class="ot">&lt;-</span> unvisited_from_root[<span class="sc">!</span>unvisited_from_root<span class="sc">==</span>next_vert]</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>      aug_path <span class="ot">&lt;-</span> <span class="fu">rbind</span>(aug_path, <span class="fu">c</span>(current_vert,next_vert))</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>      current_vert <span class="ot">&lt;-</span> next_vert</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If we haven't returned an augmenting path after searching from all unmatched vertices, we return an empty matrix:</span></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>  aug_path <span class="ot">&lt;-</span> <span class="fu">matrix</span>(, <span class="at">nrow=</span><span class="dv">0</span>, <span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(aug_path) </span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</details>
+</div>
+<p>How do augmenting paths help us find the maximum matching of a graph? Well in 1957, mathematician Claude Berge proved that if an augmenting path cannot be found for a graph and a matching, then that matching is a maximum matching<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. This is the insight that is central to the <a href="https://mathworld.wolfram.com/HungarianMaximumMatchingAlgorithm.html">Hungarian Maximum Matching Algorithm</a>, which works by starting with any matching on a graph (including an empty matching) and searching the graph from each unmatched vertex until it finds an augmenting path. It then finds the <a href="https://en.wikipedia.org/wiki/Symmetric_difference">symmetric difference</a> of the path and the current matching, and this set of edges becomes the new, improved matching that it will use for its next iteration. For example, in the scenario above where we have a graph with edge list <code>1–2, 2–3, 3–4</code> and a matching <code>2–3</code>, the first iteration of the algorithm will find the augmenting path <code>1–2, 2–3, 3–4</code>, and will update the matching to be <code>1–2, 3–4</code>.</p>
+<p><img src="hungarian-maximum-matching-algorithm-iteration.png" class="img-fluid"></p>
+<p>When it can no longer find any augmenting paths, the Hungarian Maximum Matching Algorithm terminates, and thanks to Claude Berge, we can be sure that the matching it has found is a maximum matching.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Coding the Hungarian Maximum Matching Algorithm in R</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's use our augmenting_path function to write a Hungarian Maximum Matching Algorithm that takes as its input the adjacency matrix of a graph and a matching vector:</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>maximum_matching <span class="ot">&lt;-</span> <span class="cf">function</span>(adj_mat, match_vec) {</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  adj_list <span class="ot">&lt;-</span> <span class="fu">adj_mat_to_adj_list</span>(adj_mat) <span class="co"># we use the function we wrote earlian </span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  num_vertices <span class="ot">&lt;-</span> <span class="fu">length</span>(match_vec) <span class="co"># we find the number of vertices in the graph</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Let's create a matrix to store the current matching:</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  current_matching <span class="ot">&lt;-</span> <span class="fu">matrix</span>(, <span class="at">nrow=</span><span class="dv">0</span>, <span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># We can populate it with the initial matching to start with:</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_vertices) {</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (match_vec[i] <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>      <span class="cf">next</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    current_matching <span class="ot">&lt;-</span> <span class="fu">rbind</span>(current_matching, <span class="fu">c</span>(i,match_vec[i]))</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">nrow</span>(current_matching) <span class="sc">!=</span> <span class="dv">0</span>) {</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    current_matching <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">t</span>(<span class="fu">apply</span>(current_matching, <span class="dv">1</span>, sort))) <span class="co"># we order the edges with the lower indexed vertex first, and remove duplicates</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Now we will run our augmenting path algorithm and and use it to increase our current matching until no more augmenting paths can be found:</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  current_match_vec <span class="ot">&lt;-</span> match_vec</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">repeat</span> {</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    aug_path <span class="ot">&lt;-</span> <span class="fu">augmenting_path</span>(adj_list, current_match_vec) <span class="co"># we find an augmenting path for the input graph and the current matching </span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    aug_path_length <span class="ot">&lt;-</span> <span class="fu">nrow</span>(aug_path)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If the augmenting_path function has not found any augmenting paths, we break out of the repeat loop:</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (aug_path_length <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span> </span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    aug_path <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">apply</span>(aug_path, <span class="dv">1</span>, sort)) <span class="co"># we order the edges in the augmenting path with the lowest indexed vertex first</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If the augmenting path consists of only one edge, we add that edge to our matching and run another iteration of the augmenting_path function with the new matching:</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (aug_path_length <span class="sc">==</span> <span class="dv">1</span>) { </span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>      current_matching <span class="ot">&lt;-</span> <span class="fu">rbind</span>(current_matching, aug_path) </span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Before running the augmenting_path function again we need to update the current_match_vec algorithm to reflect our new matching:</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>      current_matching_length <span class="ot">&lt;-</span> <span class="fu">nrow</span>(current_matching)</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>      current_match_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>,num_vertices)</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>current_matching_length) {</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>        current_match_vec[current_matching[i,<span class="dv">1</span>]] <span class="ot">&lt;-</span> current_matching[i,<span class="dv">2</span>]</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>        current_match_vec[current_matching[i,<span class="dv">2</span>]] <span class="ot">&lt;-</span> current_matching[i,<span class="dv">1</span>]</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>      <span class="cf">next</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If the augmenting path has more than one edge, we add the edges that are not included in the current matching, and remove the ones that are </span></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>    <span class="co"># (by the definition of an augmenting path, these alternate):</span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>aug_path_length) {</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (i<span class="sc">%%</span><span class="dv">2</span> <span class="sc">==</span> <span class="dv">1</span>) { </span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>        current_matching <span class="ot">&lt;-</span> <span class="fu">rbind</span>(current_matching, aug_path[i,])</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (i<span class="sc">%%</span><span class="dv">2</span> <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>        current_matching <span class="ot">&lt;-</span> current_matching[<span class="sc">!</span>(current_matching[,<span class="dv">1</span>]<span class="sc">==</span>aug_path[i,<span class="dv">1</span>] <span class="sc">&amp;</span> current_matching[,<span class="dv">2</span>]<span class="sc">==</span>aug_path[i,<span class="dv">2</span>]),]</span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Before running the augmenting_path function again we need to update the current_match_vec algorithm to reflect our new matching:</span></span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>    current_matching_length <span class="ot">&lt;-</span> <span class="fu">nrow</span>(current_matching)</span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>    current_match_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>,num_vertices)</span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>current_matching_length) {</span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>      current_match_vec[current_matching[i,<span class="dv">1</span>]] <span class="ot">&lt;-</span> current_matching[i,<span class="dv">2</span>]</span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>      current_match_vec[current_matching[i,<span class="dv">2</span>]] <span class="ot">&lt;-</span> current_matching[i,<span class="dv">1</span>]</span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(current_matching[<span class="fu">order</span>(current_matching[,<span class="dv">1</span>]),]) <span class="co"># we return the first matching we arrived at for which no augmenting paths could be found,</span></span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>                                                         <span class="co"># with the edges ordered by their lowest indexed vertex</span></span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</details>
+</div>
+<p>What does this algorithm give us when applied to our example graph <span class="math inline">\(S\)</span>, and an empty matching?</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Applying the Hungarian Maximum Matching Algorithm to <span class="math inline">\(S\)</span> in R</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>S_empty_matching <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>,<span class="dv">6</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>S_max_matching <span class="ot">&lt;-</span> <span class="fu">maximum_matching</span>(S_adj_mat, S_empty_matching)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>letters_matching <span class="ot">&lt;-</span> <span class="fu">apply</span>(S_max_matching, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="cf">function</span>(i) LETTERS[i])</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(letters_matching)) {</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(letters_matching[i,<span class="dv">1</span>], <span class="st">"–"</span>, letters_edge_list[i,<span class="dv">2</span>], <span class="st">",</span><span class="sc">\n</span><span class="st">"</span>, <span class="at">sep =</span> <span class="st">""</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>A–D,
+B–E,
+C–F,</code></pre>
+</div>
+</div>
+<p>So students A and F, B and E, and C and D, can all sit in pairs.</p>
+<p><img src="students-graph-maximum-matching.png" class="img-fluid"></p>
+<p>This may seem like something we could have worked out easily by hand, but matching algorithms are really useful when there are so many vertices and edges to a graph that a human could never work out a maximum matching just from looking at it.</p>
+<p>You may be relieved to learn that we are nearly at the end of the background graph theory I wanted to include in this article before discussing matching algorithms’ applications to kidney transplants! However, before we move on, I should admit that I have been oversimplifying things somewhat. Though the Hungarian Maximum Matching Algorithm will work on a huge variety of graphs, there are some graphs that will trip it up. For example, consider the graph and matching below, taken from <a href="https://math.stackexchange.com/a/4061954">this stack exchange post</a> by <a href="https://misha.fish">Misha Lavrov</a>.</p>
+<p><img src="non-bipartite-graph-where-the-hungarian-maximum-matching-algorithm-fails.png" class="img-fluid"></p>
+<p>Trying to find an augmenting path from vertex 1, the algorithm will go from 1 to 2 to 8 to 9 to 10, before getting stuck and concluding that there is no augmenting path, and thus that the given matching is a maximum matching. Similarly, if it starts from vertex 4 it will follow the sequence of edges <code>4–3, 3–7, 7–6, 6–5</code> before it again gets stuck and terminates.</p>
+<p>Graphs that run into these kinds of problems are always non-<a href="https://en.wikipedia.org/wiki/Bipartite_graph">bipartite</a>, meaning they contain cycles of odd numbers of edges, like the pentagons in the graph above. To ensure that, if they exist, augmenting paths can always be found in these types of graph, the Hungarian Maximum Matching Algorithm needs to be modified. The first person to find a way to do this was computer scientist Jack Edmonds, who introduced an ingenious method for adapting the algorithm to deal with odd length cycles in his ‘blossom’ algorithm in 1965<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>. The details of his algorithm are fascinating, but beyond the scope of this article, which is why I have only used bipartite graphs as examples, and will continue to do so in the next section. If you want to learn how a maximum matching can be found for any graph using Edmonds’ blossom algorithm, I recommend <a href="https://www.youtube.com/watch?v=3roPs1Bvg1Q">this excellent youtube video</a> by <a href="slama.dev">Tomáš Sláma</a>.</p>
+</section>
+<section id="how-matching-algorithms-apply-to-kidney-transplants" class="level2">
+<h2 class="anchored" data-anchor-id="how-matching-algorithms-apply-to-kidney-transplants">How Matching Algorithms Apply to Kidney Transplants</h2>
+<p>People with end-stage renal disease have kidneys that are unable to perform their function of filtering the blood and are, therefore, unable to survive without undergoing regular dialysis unless they receive a working kidney transplant from a donor. Many people with this condition will have family member or loved one who is willing to donate a kidney to them – as most of us only need one working kidney to live a healthy life – but this is often not possible due to a mismatch between the donor and the intended recipient’s blood and/or antigen type. For example, imagine that a patient with advanced chronic kidney disease, who we’ll call Recipient A, has a sibling, Donor A, who is willing to donate a kidney to them but cannot because they have incompatible blood groups. In the past, this would have meant that Donor A would have been unable to donate a kidney in order to help their sibling<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. Nowadays, however, the pair have another option; they can participate in a the UK Living Kidney Sharing Scheme<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>. Suppose another recipient and donor pair, a parent and child, say, are in the same situation. If the donor in this pair – let’s call them Donor F for reasons that will shortly become clear – is a match with Recipient A, and Donor A’s kidney is compatible with the recipient, Recipient F, then the two pairs can effectively ‘swap’ kidneys, in what is called a <strong>paired exchange</strong>.</p>
+<p><img src="paired-kidney-exchange.png" class="img-fluid"></p>
+<p>We can represent possible paired kidney exchanges between pairs of donors and recipients in a graph, with each vertex representing one incompatible pair, and an edge linking two pairs signifying that a paired exchange is possible between them. Consider the scenario described above; this would be represented by a graph with two vertices and one edge, <code>A–B</code>.</p>
+<p><img src="paired-kidney-exchange-graph.png" class="img-fluid"></p>
+<p>What happens if we introduce more incompatible pairs of donors and recipients? Well, we might end up with a graph like <span class="math inline">\(S\)</span>, but this time with the vertices representing patients in need of kidneys and loved ones who are unable to denote to them. In reality a graph of incompatible donor-recipient pairs in a country like the UK would have hundreds of vertices, but we can use a smaller one to help us think about the problem of matching compatible pairs.</p>
+<p><img src="multiple-paired-kidney-exchanges-graph.png" class="img-fluid"></p>
+<p>As we saw earlier, several different matchings of this graph exist, but some of them will result in more people receiving kidneys than others. For example, if the Pair A’s transplant centre search a regional or national database for a pair that Pair can exchange a kidney with and stop at the first one they find, then Pair A might be matched with Pair D. This would leave Pair B and Pair C free to participate in a paired exchange, but Recipients E and F would then be left without a kidney. If a maximum matching algorithm is used on the other hand, all six recipients will be matched with a compatible donor.</p>
+<p><img src="two-kidney-exchange-matchings.png" class="img-fluid"></p>
+<p>In 2004, a team from John Hopkins Hospital in the US proposed using Edmonds’ blossom algorithm to optimize kidney exchanges<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>. They used simulated pools of donor-recipient pairs to test their scheme, and found that it would result in more transplants, with better antigen matches, than the ‘first-accept’ system that was in use at the time<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a>. Of course, employing an algorithm to decide who gets which organs presents numerous ethical and logistical challenges. For instance, what happens when there is more than one possible maximum matching, resulting in different people getting kidney transplants? Consider what our example graph would look like if we discovered that Recipient B was actually not compatible with Donor E.</p>
+<p><img src="modified-graph.png" class="img-fluid"></p>
+<p>This graph has no <strong>perfect matching</strong> – one in which all vertices are matched – but it does have two different <em>maximum matchings</em>; the matching <code>A–D, B–C</code> and the matching <code>A–F, C–D</code>.</p>
+<p>Which kidney transplants should be performed? Should Recipients E and F or Recipients B and E have to remain on dialysis longer as they wait for the next run of the matching algorithm to be performed, or for a suitable deceased donor to match with them? Should the amount of time the recipients have spent on the waiting list for a kidney factor into this decision? What about their ages or levels of frailty? These are difficult questions that no computer can answer for us.</p>
+<p>We should also note that compatibility between donors and recipients is not actually as binary as ‘a match’ or ‘not a match’. There are six antigens which are particularly important in organ transplantation<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> and it is rare that donors and recipients will have the same type of each of them, but more antigens in common are still better than fewer<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a>. The difference between a donor and recipients age, and whether or the recipient has been sensitised to certain antigens by pregnancy or a previous transplant or blood transfusion, can also influence the chances of success.</p>
+<p>Despite these important concerns, Edmonds’ blossom algorithm is an integral part of the process that NHS Blood and Transplant uses to find possible kidney paired exchanges in the UK. However, it is not the only method used, but is instead embedded as a step within a larger algorithm, developed in conjunction with computer scientists at the University of Glasgow<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a>. As well as finding the largest possible matching, their procedure seeks to maximise the total ‘weight’ of a matching, where the weights given to edges of the graph are calculated by a scoring system used by NHSBT<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a> that takes into account:</p>
+<ul>
+<li>The number of previous matching runs the recipients have participated in (matching runs take place every three months).</li>
+<li>How sensitised the recipients are to foreign antigens.</li>
+<li>How well matched donor and recipients’ antigens are.</li>
+<li>The age difference between donors and recipients.</li>
+<li>How much travel would be required for the participants in a transplant.</li>
+</ul>
+<p>Another way in which the algorithm used by NHS Blood and Transport differs from a straightforward implementation of Edmond’s Blossom algorithm is that it allows for non-directed altruistic donations and 3-way exchanges. If you would like to understand how this is done, I recommend the article written by Dr David Manlove of the University of Glasgow on his and his colleagues work on the algorithm used by the UK Living Kidney Sharing Scheme in <a href="https://www.lms.ac.uk/sites/lms.ac.uk/files/files/NLMS_475_for%20web.pdf">edition 475 of the London Mathematical Society Newsletter</a>.</p>
+</section>
+<section id="further-reading" class="level2">
+<h2 class="anchored" data-anchor-id="further-reading">Further Reading</h2>
+<ul>
+<li><a href="https://doi.org/10.1111/1740-9713.01467"><strong>Primum non nocere (First, do no harm)</strong> – an article by Maria Ibrahim about the role of statistics and statistical analysis in transplant medicine</a></li>
+<li><a href="https://www.theguardian.com/society/2018/nov/10/one-day-six-operations-three-kidneys-organ-donor-chain-brought-together"><strong>One day. Six operations. Three kidneys. The story of an organ donor chain</strong> – an article by Rachel Williams about a 3-way exchange</a></li>
+</ul>
+
+
+</section>
+
+
+<div id="quarto-appendix"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">References</h2>
+
+<ol>
+<li id="fn1"><p><a href="https://www.odt.nhs.uk/statistics-and-reports/annual-activity-report/">“Annual Activity Report,”</a> NHS Blood and Transplant, Accessed February 16, 2025.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://www.organdonation.nhs.uk/helping-you-to-decide/personal-stories/how-living-organ-donors-change-lives/">“How living organ donors change lives,”</a> NHS Blood and Transplant, Accessed February 16, 2025.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Eric Weisstein, <a href="https://mathworld.wolfram.com/Matching.html">“Matching,”</a> Wolfram Mathworld, August 3, 2016.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><a href="https://cp-algorithms.com/graph/kuhn_maximum_bipartite_matching.html">“Kuhn’s Algorithm for Maximum Bipartite Matching,”</a> Algorithms for Competitive Programming, July 17, 2023.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Richard L. Apodaca, <a href="https://depth-first.com/articles/2019/04/02/the-maximum-matching-problem/">“The Maximum Matching Problem,”</a> Depth-First, April 3, 2019.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>David Manlove, <a href="https://doi.org/10.1080/2058802X.2018.1435455">“How Operational Research Helps Kidney Patients in the UK,”</a> <em>Impact</em> 2018, no. 1 (2018): 16–19.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p><a href="https://www.nhsbt.nhs.uk/organ-transplantation/kidney/receiving-a-kidney/living-donor-kidney-transplant/who-can-be-a-living-donor/">“Who can be a living donor?,”</a> NHS Blood and Transplant, Accessed February 16, 2025.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Hari Jagannathan Balasubramanian, <a href="http://thirtylettersinmyname.blogspot.com/2009/03/mathematics-of-matching-kidneys.html">“The mathematics of matching kidneys,”</a> Thirty letters in my name, March 28, 2009.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>Dorry Segev et al., <a href="https://doi.org/10.1001/jama.293.15.1883">“Kidney Paired Donation and Optimizing the Use of Live Donor Organs,”</a> <em>JAMA</em> 293, no. 15 (April 2004): 1883–1890.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p><a href="https://health.ucdavis.edu/transplant/livingkidneydonation/matching-and-compatibility.html">“Matching and Compatibility,”</a> UC Davis Health, Accessed February 16, 2025.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p><a href="https://www.gosh.nhs.uk/conditions-and-treatments/procedures-and-treatments/tissue-typing-kidney-donation/">“Tissue typing for kidney donation,”</a> Great Ormond Street Hospital, May, 2015.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p>David Manlove and Gregg O’Malley, <a href="https://doi.org/10.1145/2670129">“Paired and Altruistic Kidney Donation in the UK: Algorithms and Experimentation,”</a> <em>Journal of Experimental Algorithmics</em> 19 (2014): 1–21<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13"><p><a href="https://www.odt.nhs.uk/living-donation/uk-living-kidney-sharing-scheme/">“Living Donor Kidney Matching Run Process,”</a> NHS Blood and Transplant, Accessed September 2, 2024.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
