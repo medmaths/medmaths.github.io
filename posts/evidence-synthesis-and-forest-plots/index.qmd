@@ -277,7 +277,7 @@ points(steroid_trials$risk_ratio, 8:1,
 
 ## Pooling the Results
 
-Now we want to combine these estimates, giving more weight to the those with lower variance. One way to do this would be to give each estimate a weight proportional to the inverse of its an estimate of its variance, which we could calculate using our previously estimated standard deviation of the log risk ratio. However, this method can be unreliable when the study size is small or the probability of the event we are studying is rare, which is why the Cochrane Collaboration recommends that researchers use the **Mantel-Haenszel** method for pooling estimates instead[^7].
+Now we want to combine these estimates, giving more weight to the those with lower variance. One way to do this would be to give each estimate a weight proportional to the inverse an estimate of its variance, which we could calculate using our previously estimated standard deviation of the log risk ratio. However, this method can be unreliable when the study size is small or the probability of the event we are studying is rare, which is why the Cochrane Collaboration recommends that researchers use the **Mantel-Haenszel** method for pooling estimates instead[^7].
 
 In this method, each estimate, $\widehat{\text{RR}}_i$, is given a weight of[^8]
 
