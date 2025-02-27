@@ -39,32 +39,32 @@ Let's consider a very simple scenario in which we might estimate a survival func
 Putting aside the fact that this is a very small sample, it is relatively straightforward to estimate the survival function for these faulty light bulbs from this experiment. For example, to estimate $S(1)$, we just look at the proportion of light bulbs that last longer than one day -- seven tenths. By the [law of large numbers](https://en.wikipedia.org/wiki/Law_of_large_numbers), as we increase the number of light bulbs in the sample this proportion will eventually converge to the true probability of a faulty light bulb lasting longer than one day. We can do this calculation for each time marker, including the start point of the experiment -- we call this Day 0.
 
 ```{=html}
-<div style="overflow-x:auto;">
+<div style="overflow-x:auto">
   <table class="table table-bordered table-sm">
     <caption>Estimated Faulty Light Bulb Survival Function</caption>
     <tr>
-        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white; width: 50%;">
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white; width: 50%">
         Day
         </td>
-        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">
         Survival Function Estimate
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
         <mn>1</mn>
         </math>
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
         <mfrac>
         <mn>7</mn>
@@ -74,10 +74,10 @@ Putting aside the fact that this is a very small sample, it is relatively straig
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         2
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
         <mfrac>
         <mn>3</mn>
@@ -87,10 +87,10 @@ Putting aside the fact that this is a very small sample, it is relatively straig
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
         <mfrac>
         <mn>3</mn>
@@ -100,10 +100,10 @@ Putting aside the fact that this is a very small sample, it is relatively straig
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         4
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
         <mfrac>
         <mn>1</mn>
@@ -113,10 +113,10 @@ Putting aside the fact that this is a very small sample, it is relatively straig
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         5
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
         <mn>0</mn>
         </math>
@@ -142,7 +142,7 @@ Easy, right? Unfortunately, the time to event data we find in medical applicatio
 
 In many medical studies producing time to event data, patients are recruited over a period of some time and then followed until a defined end date, at which point the investigators will want to analyse their outcomes. As a result of this, the event of interest may not have happened for all the subjects of the study. In survival analysis, these 'incomplete' data points are known as **censored data**. They do give us some information -- we know the event we are studying had not yet happened at the point at which censoring occurred. However, we cannot tell when, or indeed if, it would have gone on to happen.
 
-Censoring can also come about in other ways, including patients being lost to follow up, or experiencing a 'competing event'[^2]. For example, in a study of times from catheter placement to complication in acute peritoneal dialysis, observations were considered censored when a catheter was removed before a complication arose[^3].
+Censoring can also come about in other ways, including patients being lost to follow up, or experiencing a 'competing event'[^2]. For example, in a study of the time it took for catheter-associated complications to arise in children undergoing  peritoneal dialysis, observations were considered censored when a patient's catheter was removed before a complication had occurred[^3].
 
 Censored data make estimating a survival function considerably more complicated. Imagine, for example, that three of the light bulbs in our previous thought experiment accidentally got smashed at the end of the first day. 
 
@@ -204,54 +204,54 @@ conception_study <- data.frame(subject=women, months=event_times, event=concepti
 ```
 
 ```{=html}
-<div style="overflow-x:auto;">
+<div style="overflow-x:auto">
   <table class="table table-bordered table-sm">
   <caption>Time to Event Data from a Study of Conception after Laparoscopy and Hydrotubation</caption>
     <tr>
-        <td colspan="1" rowspan="2" style="background-color: #e4f8ff"></td><td colspan="38" style="text-align: left; vertical-align: middle; background-color: #006a90; color: white; padding-left: 0.75rem; padding-right: 0.75rem;">Study Participant</td>
+        <td colspan="1" rowspan="2" style="background-color: #e4f8ff"></td><td colspan="38" style="text-align: left; vertical-align: middle; background-color: #006a90; color: white; padding-left: 0.75rem; padding-right: 0.75rem">Study Participant</td>
     </tr>
     <tr>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">1</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">2</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">3</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">4</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">5</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">6</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">7</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">8</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">9</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">10</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">11</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">12</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">13</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">14</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">15</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">16</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">17</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">18</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">19</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">20</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">21</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">22</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">23</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">24</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">25</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">26</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">27</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">28</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">29</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">30</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">31</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">32</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">33</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">34</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">35</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">36</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">37</td>
-      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">38</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">1</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">2</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">3</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">4</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">5</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">6</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">7</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">8</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">9</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">10</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">11</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">12</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">13</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">14</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">15</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">16</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">17</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">18</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">19</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">20</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">21</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">22</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">23</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">24</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">25</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">26</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">27</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">28</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">29</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">30</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">31</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">32</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">33</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">34</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">35</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">36</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">37</td>
+      <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">38</td>
     </tr>
     <tr>
-      <td style="text-align: left; vertical-align: middle; background-color: #006a90; color: white; padding-left: 0.75rem; padding-right: 0.75rem;">Event</td>
+      <td style="text-align: left; vertical-align: middle; background-color: #006a90; color: white; padding-left: 0.75rem; padding-right: 0.75rem">Event</td>
         <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
         <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
         <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Censored</td>
@@ -292,45 +292,45 @@ conception_study <- data.frame(subject=women, months=event_times, event=concepti
         <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem">Conceived</td>
     </tr>
     <tr>
-      <td style="text-align: left; vertical-align: middle; background-color: #006a90; color: white; padding-left: 0.75rem; padding-right: 0.75rem;">Months Until Event</td>
-        <td style="text-align: center; vertical-align: middle;">1</td>
-        <td style="text-align: center; vertical-align: middle;">1</td>
-        <td style="text-align: center; vertical-align: middle;">11</td>
-        <td style="text-align: center; vertical-align: middle;">7</td>
-        <td style="text-align: center; vertical-align: middle;">3</td>
-        <td style="text-align: center; vertical-align: middle;">4</td>
-        <td style="text-align: center; vertical-align: middle;">9</td>
-        <td style="text-align: center; vertical-align: middle;">4</td>
-        <td style="text-align: center; vertical-align: middle;">24</td>
-        <td style="text-align: center; vertical-align: middle;">6</td>
-        <td style="text-align: center; vertical-align: middle;">9</td>
-        <td style="text-align: center; vertical-align: middle;">2</td>
-        <td style="text-align: center; vertical-align: middle;">6</td>
-        <td style="text-align: center; vertical-align: middle;">16</td>
-        <td style="text-align: center; vertical-align: middle;">9</td>
-        <td style="text-align: center; vertical-align: middle;">2</td>
-        <td style="text-align: center; vertical-align: middle;">2</td>
-        <td style="text-align: center; vertical-align: middle;">3</td>
-        <td style="text-align: center; vertical-align: middle;">1</td>
-        <td style="text-align: center; vertical-align: middle;">8</td>
-        <td style="text-align: center; vertical-align: middle;">8</td>
-        <td style="text-align: center; vertical-align: middle;">4</td>
-        <td style="text-align: center; vertical-align: middle;">4</td>
-        <td style="text-align: center; vertical-align: middle;">1</td>
-        <td style="text-align: center; vertical-align: middle;">7</td>
-        <td style="text-align: center; vertical-align: middle;">9</td>
-        <td style="text-align: center; vertical-align: middle;">2</td>
-        <td style="text-align: center; vertical-align: middle;">9</td>
-        <td style="text-align: center; vertical-align: middle;">24</td>
-        <td style="text-align: center; vertical-align: middle;">1</td>
-        <td style="text-align: center; vertical-align: middle;">1</td>
-        <td style="text-align: center; vertical-align: middle;">9</td>
-        <td style="text-align: center; vertical-align: middle;">13</td>
-        <td style="text-align: center; vertical-align: middle;">10</td>
-        <td style="text-align: center; vertical-align: middle;">3</td>
-        <td style="text-align: center; vertical-align: middle;">2</td>
-        <td style="text-align: center; vertical-align: middle;">3</td>
-        <td style="text-align: center; vertical-align: middle;">2</td>
+      <td style="text-align: left; vertical-align: middle; background-color: #006a90; color: white; padding-left: 0.75rem; padding-right: 0.75rem">Months Until Event</td>
+        <td style="text-align: center; vertical-align: middle">1</td>
+        <td style="text-align: center; vertical-align: middle">1</td>
+        <td style="text-align: center; vertical-align: middle">11</td>
+        <td style="text-align: center; vertical-align: middle">7</td>
+        <td style="text-align: center; vertical-align: middle">3</td>
+        <td style="text-align: center; vertical-align: middle">4</td>
+        <td style="text-align: center; vertical-align: middle">9</td>
+        <td style="text-align: center; vertical-align: middle">4</td>
+        <td style="text-align: center; vertical-align: middle">24</td>
+        <td style="text-align: center; vertical-align: middle">6</td>
+        <td style="text-align: center; vertical-align: middle">9</td>
+        <td style="text-align: center; vertical-align: middle">2</td>
+        <td style="text-align: center; vertical-align: middle">6</td>
+        <td style="text-align: center; vertical-align: middle">16</td>
+        <td style="text-align: center; vertical-align: middle">9</td>
+        <td style="text-align: center; vertical-align: middle">2</td>
+        <td style="text-align: center; vertical-align: middle">2</td>
+        <td style="text-align: center; vertical-align: middle">3</td>
+        <td style="text-align: center; vertical-align: middle">1</td>
+        <td style="text-align: center; vertical-align: middle">8</td>
+        <td style="text-align: center; vertical-align: middle">8</td>
+        <td style="text-align: center; vertical-align: middle">4</td>
+        <td style="text-align: center; vertical-align: middle">4</td>
+        <td style="text-align: center; vertical-align: middle">1</td>
+        <td style="text-align: center; vertical-align: middle">7</td>
+        <td style="text-align: center; vertical-align: middle">9</td>
+        <td style="text-align: center; vertical-align: middle">2</td>
+        <td style="text-align: center; vertical-align: middle">9</td>
+        <td style="text-align: center; vertical-align: middle">24</td>
+        <td style="text-align: center; vertical-align: middle">1</td>
+        <td style="text-align: center; vertical-align: middle">1</td>
+        <td style="text-align: center; vertical-align: middle">9</td>
+        <td style="text-align: center; vertical-align: middle">13</td>
+        <td style="text-align: center; vertical-align: middle">10</td>
+        <td style="text-align: center; vertical-align: middle">3</td>
+        <td style="text-align: center; vertical-align: middle">2</td>
+        <td style="text-align: center; vertical-align: middle">3</td>
+        <td style="text-align: center; vertical-align: middle">2</td>
     </tr>
 </table>
 </div>
@@ -357,171 +357,174 @@ conception_data_summary <- data.frame(months=months_from_intervention, censored=
 ```
 
 ```{=html}
-<div style="overflow-x:auto;">
+<div style="overflow-x:auto">
   <table class="table table-bordered table-sm">
     <caption>Summarised Conception Study Data</caption>
     <tr>
-        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
-        Months from Intervention
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">
+        <div style="white-space: nowrap">Months from</div>
+        <div style="white-space: nowrap">Intervention</div>
         </td>
-        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
-        Number of Censorings
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">
+        <div style="white-space: nowrap">Number of</div>
+        <div style="white-space: nowrap">Censorings</div>
         </td>
-        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
-        Number of Conceptions
-        </td>
-    </tr>
-    <tr>
-        <td style="text-align: center; vertical-align: middle;">
-        0
-        </td>
-        <td style="text-align: center; vertical-align: middle;">
-        0
-        </td>
-        <td style="text-align: center; vertical-align: middle;">
-        0
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">
+        <div style="white-space: nowrap">Number of</div>
+        <div style="white-space: nowrap">Conceptions</div>
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle">
+        0
+        </td>
+        <td style="text-align: center; vertical-align: middle">
+        0
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         6
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         2
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         5
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         4
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         6
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         2
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         7
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         2
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         8
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         2
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         9
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         10
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         11
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         13
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         16
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         24
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         2
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
     </tr>
@@ -533,7 +536,7 @@ To calculate the conditional probability $\mathbb{P}(T>t_i|T>t_{i-1})$ for each 
 
 ```{r}
 #| code-fold: true
-#| code-summary: "Finding the Number of Remaining Study Members at Each Time Stage in R"
+#| code-summary: "Finding the Number of Study Participants Still Being Followed Up at Each Time Stage in R"
 #| label: remaining-women
 num_remaining <- rep(NA, times=num_times) # initialising a vector to store the number of remaining study members at each event time
 num_remaining[1] <- 38 # at month zero, all women are still being followed up 
@@ -545,216 +548,220 @@ conception_data_summary$remaining <- num_remaining # adding a column to the data
 ```
 
 ```{=html}
-<div style="overflow-x:auto;">
+<div style="overflow-x:auto">
   <table class="table table-bordered table-sm">
     <caption>Summarised Conception Study Data (Including Numbers of Participants Remaining in Follow Up)</caption>
     <tr>
-        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
-        Months from Intervention
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">
+        <div style="white-space: nowrap">Months from</div>
+        <div style="white-space: nowrap">Intervention</div>
         </td>
-        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
-        Number of Censorings
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">
+        <div style="white-space: nowrap">Number of</div>
+        <div style="white-space: nowrap">Censorings</div>
         </td>
-        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
-        Number of Conceptions
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">
+        <div style="white-space: nowrap">Number of</div>
+        <div style="white-space: nowrap">Conceptions</div>
         </td>
-        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
-        Number Still in Study
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">
+        <div style="white-space: nowrap">Number of Participants</div>
+        <div style="white-space: nowrap">Still Being Followed</div>
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         38 
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         6
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         38 &minus; 0 &minus; 0 = 38
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         2
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         5
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         38 &minus; 0 &minus; 6 = 32
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         32 &minus; 1 &minus; 5 = 26
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         4
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         26 &minus; 1 &minus; 3 = 22
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         6
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         2
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         22 &minus; 1 &minus; 3 = 18
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         7
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         2
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         18 &minus; 0 &minus; 2 = 16
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         8
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         2
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         16 &minus; 2 &minus; 0 = 14
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         9
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         14 &minus; 2 &minus; 0 = 12
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         10
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         12 &minus; 3 &minus; 3 = 6
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         11
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         6 &minus; 0 &minus; 1 = 5
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         13
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         5 &minus; 1 &minus; 0 = 4
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         16
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         4 &minus; 0 &minus; 1 = 3
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         24
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         2
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3 &minus; 0 &minus; 1 = 2
         </td>
     </tr>
@@ -777,25 +784,26 @@ conception_survival_analysis$conditionals <- conditional_probabilities
 ```
 
 ```{=html}
-<div style="overflow-x:auto;">
+<div style="overflow-x:auto">
   <table class="table table-bordered table-sm">
     <caption>Conception Study Data With Estimated Conditional Probabilities</caption>
     <tr>
-        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">
         <math>
         <mi>i</mi>
         </math>
         </td>
-        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">
         <math>
         <msub>
         <mi>t</mi>
         <mi>i</mi>
         </msub>
         </math>
+        <br>
         (Months)
         </td>
-        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">
         <math>
         <mi mathvariant="normal">#</mi>
         <mo stretchy="false">(</mo>
@@ -809,11 +817,12 @@ conception_survival_analysis$conditionals <- conditional_probabilities
         </math>
         (Conceptions)
         </td>
-        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
-        Number Still in Study
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">
+        <div style="white-space: nowrap">Number of Study</div>
+        <div style="white-space: nowrap">Participants</div>
         </td>
-        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
-        Estimated
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">
+        Estimated<br>
         <math>
           <mrow data-mjx-texclass="ORD">
             <mi mathvariant="double-struck">P</mi>
@@ -847,19 +856,19 @@ conception_survival_analysis$conditionals <- conditional_probabilities
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         38 
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mtext>N/A</mtext>
           <mstyle scriptlevel="0">
@@ -881,19 +890,19 @@ conception_survival_analysis$conditionals <- conditional_probabilities
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         6
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         38
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
           <mo>&#x2212;</mo>
@@ -912,19 +921,19 @@ conception_survival_analysis$conditionals <- conditional_probabilities
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         2
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         2
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         5
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         32
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
           <mo>&#x2212;</mo>
@@ -943,19 +952,19 @@ conception_survival_analysis$conditionals <- conditional_probabilities
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         26
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
           <mo>&#x2212;</mo>
@@ -974,19 +983,19 @@ conception_survival_analysis$conditionals <- conditional_probabilities
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         4
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         4
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         22
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
           <mo>&#x2212;</mo>
@@ -1005,18 +1014,18 @@ conception_survival_analysis$conditionals <- conditional_probabilities
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         5
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         6
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         2
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         18
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
           <mo>&#x2212;</mo>
@@ -1035,19 +1044,19 @@ conception_survival_analysis$conditionals <- conditional_probabilities
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         6
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         7
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         16
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
           <mo>&#x2212;</mo>
@@ -1061,19 +1070,19 @@ conception_survival_analysis$conditionals <- conditional_probabilities
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         7
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         8
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         14
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
           <mo>&#x2212;</mo>
@@ -1087,19 +1096,19 @@ conception_survival_analysis$conditionals <- conditional_probabilities
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         8
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         9
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         12
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
           <mo>&#x2212;</mo>
@@ -1118,19 +1127,19 @@ conception_survival_analysis$conditionals <- conditional_probabilities
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         9
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         10
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         6
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
           <mo>&#x2212;</mo>
@@ -1149,19 +1158,19 @@ conception_survival_analysis$conditionals <- conditional_probabilities
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         10
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         11
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         5
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
           <mo>&#x2212;</mo>
@@ -1175,19 +1184,19 @@ conception_survival_analysis$conditionals <- conditional_probabilities
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         11
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         13
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         4
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
           <mo>&#x2212;</mo>
@@ -1206,19 +1215,19 @@ conception_survival_analysis$conditionals <- conditional_probabilities
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         12
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         16
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
           <mo>&#x2212;</mo>
@@ -1237,19 +1246,19 @@ conception_survival_analysis$conditionals <- conditional_probabilities
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         13
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         24
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         2
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
           <mo>&#x2212;</mo>
@@ -1277,25 +1286,25 @@ conception_survival_analysis$survival <- survival_function
 ```
 
 ```{=html}
-<div style="overflow-x:auto;">
+<div style="overflow-x:auto">
   <table class="table table-bordered table-sm">
     <caption>Survival Analysis of Time to Event Data from a Study of Conception after Laparoscopy and Hydrotubation</caption>
     <tr>
-        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">
         <math>
         <mi>i</mi>
         </math>
         </td>
-        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">
         <math>
         <msub>
         <mi>t</mi>
         <mi>i</mi>
         </msub>
         </math>
-        (Months)
+        <br>(Months)
         </td>
-        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">
         <math>
         <mi mathvariant="normal">#</mi>
         <mo stretchy="false">(</mo>
@@ -1309,10 +1318,11 @@ conception_survival_analysis$survival <- survival_function
         </math>
         (Conceptions)
         </td>
-        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
-        Number Still in Study
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">
+        <div style="white-space: nowrap">Number of Study</div>
+        <div style="white-space: nowrap">Participants</div>
         </td>
-        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">
         Estimated
         <math>
           <mrow data-mjx-texclass="ORD">
@@ -1345,8 +1355,8 @@ conception_survival_analysis$survival <- survival_function
           <mo stretchy="false">)</mo>
         </math>
         </td>
-        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">
-        Estimated
+        <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">
+        Estimated<br>
         <math>
           <mrow data-mjx-texclass="ORD">
             <mi mathvariant="double-struck">P</mi>
@@ -1363,19 +1373,19 @@ conception_survival_analysis$survival <- survival_function
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         38 
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mtext>N/A</mtext>
           <mstyle scriptlevel="0">
@@ -1395,26 +1405,26 @@ conception_survival_analysis$survival <- survival_function
           <mo stretchy="false">)</mo>
         </math>
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
         </math>
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         6
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         38
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mfrac>
             <mn>32</mn>
@@ -1422,7 +1432,7 @@ conception_survival_analysis$survival <- survival_function
           </mfrac>
         </math>
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mfrac>
             <mn>32</mn>
@@ -1441,19 +1451,19 @@ conception_survival_analysis$survival <- survival_function
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         2
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         2
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         5
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         32
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mfrac>
             <mn>27</mn>
@@ -1461,7 +1471,7 @@ conception_survival_analysis$survival <- survival_function
           </mfrac>
         </math>
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mfrac>
             <mn>27</mn>
@@ -1483,19 +1493,19 @@ conception_survival_analysis$survival <- survival_function
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         26
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mfrac>
             <mn>23</mn>
@@ -1503,7 +1513,7 @@ conception_survival_analysis$survival <- survival_function
           </mfrac>
         </math>
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mfrac>
             <mn>23</mn>
@@ -1525,19 +1535,19 @@ conception_survival_analysis$survival <- survival_function
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         4
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         4
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         22
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mfrac>
             <mn>19</mn>
@@ -1545,7 +1555,7 @@ conception_survival_analysis$survival <- survival_function
           </mfrac>
         </math>
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mfrac>
             <mn>19</mn>
@@ -1567,18 +1577,18 @@ conception_survival_analysis$survival <- survival_function
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         5
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         6
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         2
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         18
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mfrac>
             <mn>16</mn>
@@ -1586,7 +1596,7 @@ conception_survival_analysis$survival <- survival_function
           </mfrac>
         </math>
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mfrac>
             <mn>16</mn>
@@ -1608,24 +1618,24 @@ conception_survival_analysis$survival <- survival_function
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         6
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         7
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         16
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
         </math>
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
           <mo>&#xD7;</mo>
@@ -1644,24 +1654,24 @@ conception_survival_analysis$survival <- survival_function
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         7
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         8
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         14
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
         </math>
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
           <mo>&#xD7;</mo>
@@ -1680,19 +1690,19 @@ conception_survival_analysis$survival <- survival_function
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         8
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         9
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         12
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mfrac>
             <mn>9</mn>
@@ -1700,7 +1710,7 @@ conception_survival_analysis$survival <- survival_function
           </mfrac>
         </math>
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mfrac>
             <mn>9</mn>
@@ -1722,19 +1732,19 @@ conception_survival_analysis$survival <- survival_function
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         9
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         10
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         6
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mfrac>
             <mn>5</mn>
@@ -1742,7 +1752,7 @@ conception_survival_analysis$survival <- survival_function
           </mfrac>
         </math>
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mfrac>
             <mn>5</mn>
@@ -1764,24 +1774,24 @@ conception_survival_analysis$survival <- survival_function
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         10
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         11
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         5
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
         </math>
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
           <mo>&#xD7;</mo>
@@ -1800,26 +1810,26 @@ conception_survival_analysis$survival <- survival_function
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         11
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         13
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         4
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mfrac>
             <mn>3</mn>
             <mn>4</mn>
           </mfrac>
         </math>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mfrac>
             <mn>3</mn>
@@ -1841,19 +1851,19 @@ conception_survival_analysis$survival <- survival_function
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         12
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         16
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         1
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         3
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mfrac>
             <mn>2</mn>
@@ -1861,7 +1871,7 @@ conception_survival_analysis$survival <- survival_function
           </mfrac>
         </math>
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mfrac>
             <mn>2</mn>
@@ -1883,24 +1893,24 @@ conception_survival_analysis$survival <- survival_function
         </td>
     </tr>
     <tr>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         13
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         24
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         0
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         2
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
         </math>
         </td>
-        <td style="text-align: center; vertical-align: middle;">
+        <td style="text-align: center; vertical-align: middle">
         <math>
           <mn>1</mn>
           <mo>&#xD7;</mo>
@@ -1955,7 +1965,7 @@ segments(median_month, -1, median_month, 0.5, col="#ffc000", lwd=4.8, lty=2) # p
 axis(2, at=0.5, cex.lab=1.8, cex.axis=1.8) # marking the median on the x-axis
 ```
 
-We find that the median number of months that passed before women conceived after laparoscopy and hydrotubation was six. So, based on the results of this study, we would expect a woman to have a 50% chance of conceiving within the first six months following laparoscopy and hydrotubation.
+We find that the median number of months that passed before women conceived after laparoscopy and hydrotubation was six. So, based on the results of this study, we would expect a woman with the same type of fertility problems as the study participants to have a 50% chance of conceiving within the first six months following laparoscopy and hydrotubation.
 
 ## Further Reading
 
@@ -1965,7 +1975,7 @@ We find that the median number of months that passed before women conceived afte
 [^1]: Emily Zabor, [“Survival Analysis in R,”](https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html) June 21, 2023.
 [^2]: Douglas Altman and Martin Bland, [“Time to event (survival) data,”](https://doi.org/10.1136/bmj.317.7156.468) *BMJ* 317, no. 7156 (August 1998): 468--469.
 [^3]: Vimal Chadha et al., [“Tenckhoff catheters prove superior to cook catheters in pediatric acute peritoneal dialysis,”](https://doi.org/10.1016/s0272-6386(00)70048-5) *American Journal of Kidney Diseases* 35, no. 6 (June 2000): 111--1116.
-[^4]: Edward Kaplan and Paul Meier, [“Nonparametric Estimation From Incomplete Observations,”](https://doi.org/10.2307/2281868) *Journal of the American Statistical Association* 53, no. 282 (June 1958): 45--481.
-[^5]: Richard Van Noorden, Brendan Maher, and Regina Nuzzo, [“The Top 100 Papers,”]( https://doi.org/10.1038/514550a) *Nature* 514, no. 7524 (October 2014): 55--553.
+[^4]: Edward Kaplan and Paul Meier, [“Nonparametric Estimation From Incomplete Observations,”](https://doi.org/10.2307/2281868) *Journal of the American Statistical Association* 53, no. 282 (June 1958): 457--481.
+[^5]: Richard Van Noorden, Brendan Maher, and Regina Nuzzo, [“The Top 100 Papers,”]( https://doi.org/10.1038/514550a) *Nature* 514, no. 7524 (October 2014): 550--553.
 [^6]: Paramjit Luthra, Martin Bland, and Stuart Stanton, [“Incidence of Pregnancy After Laparoscopy and Hydrotubation,”](https://doi.org/10.1136/bmj.284.6321.1013) *British Medical Journal (Clinical Research Edition)* 284, no. 6321 (April, 1982): 101.
-[^7]: Martin Bland and Douglas Altman, [“Survival probabilities (the Kaplan-Meier method),”]( https://doi.org/10.1136/bmj.317.7172.1572) *BMJ* 317, no. 7172 (December 1998): 1572--1580.
+[^7]: Martin Bland and Douglas Altman, [“Survival probabilities (the Kaplan-Meier method),”]( https://doi.org/10.1136/bmj.317.7172.1572) *BMJ* 317, no. 7172 (December 1998): 1572.

@@ -1,6 +1,7 @@
 ---
 title: "Observational Studies and Causal Inference"
-date: "2025-02-15"
+# date: "2025-02-15"
+date-modified: "2025-02-27"
 image: thumbnail.png
 ---
 ::: {.callout-warning}
@@ -8,7 +9,7 @@ image: thumbnail.png
 This blog post was written solely for informational and educational purposes, and does not constitute medical advice. If you have any health concerns, please consult a qualified medical professional.
 :::
 
-Randomised Controlled Trials (RCTs) are widely recognised as the gold standard of study designs, but they are not always possible to perform. For example, it would have been neither ethical nor feasible for Richard Doll and Austin Bradford Hill to randomly assign a group of volunteers to a smoking and non-smoking group in order to show that cigarettes cause lung cancer. However, they were still able to establish a link between smoking and the disease, using first a case-control study and then a prospective cohort study[^1].
+Randomised controlled trials (RCTs) are widely recognised as the gold standard of study designs, but they are not always possible to perform. For example, it would have been neither ethical nor feasible for Richard Doll and Austin Bradford Hill to randomly assign a group of volunteers to a smoking and non-smoking group in order to show that cigarettes cause lung cancer. However, they were still able to establish a link between smoking and the disease, using first a case-control study and then a prospective cohort study[^1].
 
 These are both types of observational study[^2], an alternative to RCTs that can be very useful -- as in the case of smoking and lung cancer. Unfortunately, the fact the participants are not randomised to different groups in observational studies can make their results particularly difficult to interpret. In this article, I will discuss how diagrams representing causal relationships can help us to spot potential sources of bias in these kinds of studies. 
 
@@ -17,70 +18,70 @@ These are both types of observational study[^2], an alternative to RCTs that can
 Causal relationships are notoriously difficult to distinguish from mere statistical associations, as summed up in the famous saying "correlation does not imply causation". A humorous example of this can be found in an educational statistics paper in which the author investigates the fairy tale that storks deliver babies by analysing 1980s estimates of stork populations and birth rates in seventeen different European countries[^3].
 
 ```{=html}
-<div style="overflow-x:auto;">
+<div style="overflow-x:auto">
   <table class="table table-bordered table-sm">
   <caption>Estimates of European Stork Populations and Birth Rates in the 1980s</caption>
     <tr>
-        <td colspan="1" rowspan="2" style="background-color: #e4f8ff"></td><td colspan="17" style="text-align: left; vertical-align: middle; background-color: #006a90; color: white; padding-left: 0.75rem; padding-right: 0.75rem;">Country</td>
+        <td colspan="1" rowspan="2" style="background-color: #e4f8ff"></td><td colspan="17" style="text-align: left; vertical-align: middle; background-color: #006a90; color: white; padding-left: 0.75rem; padding-right: 0.75rem">Country</td>
     </tr>
     <tr>
-      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white;">Albania</td>
-      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white;">Austria</td>
-      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white;">Belgium</td>
-      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white;">Bulgaria</td>
-      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white;">Denmark</td>
-      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white;">France</td>
-      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white;">Germany</td>
-      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white;">Greece</td>
-      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white;">Holland</td>
-      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white;">Hungary</td>
-      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white;">Italy</td>
-      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white;">Poland</td>
-      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white;">Portugal</td>
-      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white;">Romania</td>
-      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white;">Spain</td>
-      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white;">Switzerland</td>
-      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white;">Turkey</td>
+      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white">Albania</td>
+      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white">Austria</td>
+      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white">Belgium</td>
+      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white">Bulgaria</td>
+      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white">Denmark</td>
+      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white">France</td>
+      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white">Germany</td>
+      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white">Greece</td>
+      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white">Holland</td>
+      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white">Hungary</td>
+      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white">Italy</td>
+      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white">Poland</td>
+      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white">Portugal</td>
+      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white">Romania</td>
+      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white">Spain</td>
+      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white">Switzerland</td>
+      <td style="text-align: left; vertical-align: middle; padding-left: 0.75rem; padding-right: 0.75rem; background-color: #009ed8; color: white">Turkey</td>
     </tr>
     <tr>
-      <td style="text-align: left; vertical-align: middle; background-color: #006a90; color: white; padding-left: 0.75rem; padding-right: 0.75rem;">Stork Pairs</td>
-        <td style="text-align: center; vertical-align: middle;">100</td>
-        <td style="text-align: center; vertical-align: middle;">300</td>
-        <td style="text-align: center; vertical-align: middle;">1</td>
-        <td style="text-align: center; vertical-align: middle;">5000</td>
-        <td style="text-align: center; vertical-align: middle;">9</td>
-        <td style="text-align: center; vertical-align: middle;">140</td>
-        <td style="text-align: center; vertical-align: middle;">3300</td>
-        <td style="text-align: center; vertical-align: middle;">2500</td>
-        <td style="text-align: center; vertical-align: middle;">4</td>
-        <td style="text-align: center; vertical-align: middle;">5000</td>
-        <td style="text-align: center; vertical-align: middle;">5</td>
-        <td style="text-align: center; vertical-align: middle;">30,000</td>
-        <td style="text-align: center; vertical-align: middle;">1500</td>
-        <td style="text-align: center; vertical-align: middle;">5000</td>
-        <td style="text-align: center; vertical-align: middle;">8000</td>
-        <td style="text-align: center; vertical-align: middle;">150</td>
-        <td style="text-align: center; vertical-align: middle;">25,000</td>
+      <td style="text-align: left; vertical-align: middle; background-color: #006a90; color: white; padding-left: 0.75rem; padding-right: 0.75rem">Stork Pairs</td>
+        <td style="text-align: center; vertical-align: middle">100</td>
+        <td style="text-align: center; vertical-align: middle">300</td>
+        <td style="text-align: center; vertical-align: middle">1</td>
+        <td style="text-align: center; vertical-align: middle">5000</td>
+        <td style="text-align: center; vertical-align: middle">9</td>
+        <td style="text-align: center; vertical-align: middle">140</td>
+        <td style="text-align: center; vertical-align: middle">3300</td>
+        <td style="text-align: center; vertical-align: middle">2500</td>
+        <td style="text-align: center; vertical-align: middle">4</td>
+        <td style="text-align: center; vertical-align: middle">5000</td>
+        <td style="text-align: center; vertical-align: middle">5</td>
+        <td style="text-align: center; vertical-align: middle">30,000</td>
+        <td style="text-align: center; vertical-align: middle">1500</td>
+        <td style="text-align: center; vertical-align: middle">5000</td>
+        <td style="text-align: center; vertical-align: middle">8000</td>
+        <td style="text-align: center; vertical-align: middle">150</td>
+        <td style="text-align: center; vertical-align: middle">25,000</td>
     </tr>
     <tr>
-      <td style="text-align: left; vertical-align: middle; background-color: #006a90; color: white; padding-left: 0.75rem; padding-right: 0.75rem;">Yearly Births</td>
-        <td style="text-align: center; vertical-align: middle;">83,000</td>
-        <td style="text-align: center; vertical-align: middle;">87,000</td>
-        <td style="text-align: center; vertical-align: middle;">118,000</td>
-        <td style="text-align: center; vertical-align: middle;">117,000</td>
-        <td style="text-align: center; vertical-align: middle;">59,000</td>
-        <td style="text-align: center; vertical-align: middle;">774,000</td>
-        <td style="text-align: center; vertical-align: middle;">901,000</td>
-        <td style="text-align: center; vertical-align: middle;">106,000</td>
-        <td style="text-align: center; vertical-align: middle;">188,000</td>
-        <td style="text-align: center; vertical-align: middle;">124,000</td>
-        <td style="text-align: center; vertical-align: middle;">551,000</td>
-        <td style="text-align: center; vertical-align: middle;">610,000</td>
-        <td style="text-align: center; vertical-align: middle;">120,000</td>
-        <td style="text-align: center; vertical-align: middle;">367,000</td>
-        <td style="text-align: center; vertical-align: middle;">439,000</td>
-        <td style="text-align: center; vertical-align: middle;">82,000</td>
-        <td style="text-align: center; vertical-align: middle;">1,576,000</td>
+      <td style="text-align: left; vertical-align: middle; background-color: #006a90; color: white; padding-left: 0.75rem; padding-right: 0.75rem">Yearly Births</td>
+        <td style="text-align: center; vertical-align: middle">83,000</td>
+        <td style="text-align: center; vertical-align: middle">87,000</td>
+        <td style="text-align: center; vertical-align: middle">118,000</td>
+        <td style="text-align: center; vertical-align: middle">117,000</td>
+        <td style="text-align: center; vertical-align: middle">59,000</td>
+        <td style="text-align: center; vertical-align: middle">774,000</td>
+        <td style="text-align: center; vertical-align: middle">901,000</td>
+        <td style="text-align: center; vertical-align: middle">106,000</td>
+        <td style="text-align: center; vertical-align: middle">188,000</td>
+        <td style="text-align: center; vertical-align: middle">124,000</td>
+        <td style="text-align: center; vertical-align: middle">551,000</td>
+        <td style="text-align: center; vertical-align: middle">610,000</td>
+        <td style="text-align: center; vertical-align: middle">120,000</td>
+        <td style="text-align: center; vertical-align: middle">367,000</td>
+        <td style="text-align: center; vertical-align: middle">439,000</td>
+        <td style="text-align: center; vertical-align: middle">82,000</td>
+        <td style="text-align: center; vertical-align: middle">1,576,000</td>
     </tr>
 </table>
 </div>
@@ -202,19 +203,19 @@ When we draw the DAG for this example, we can see that the variable 'Age' is act
 Simpson's paradox has been observed several times in the medical literature, perhaps most famously in a 1986 observational study by a group of urologists on the effectiveness of different types of procedure for the removal of kidney stones[^11]. Wisely, the researchers recognised that stone size might be a confounding factor, so they split their data according to whether the original stone was less than two centimetres in diameter or not.
 
 ```{=html}
-<div style="overflow-x:auto;">
+<div style="overflow-x:auto">
   <table class="table table-bordered table-sm">
       <caption>Observed Success Rate of Kidney Stone Removal Procedures</caption>
       <tr>
-          <td colspan="2" rowspan="2" style="background-color: #e4f8ff"></td><td colspan="2" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Success Rate</td>
+          <td colspan="2" rowspan="2" style="background-color: #e4f8ff"></td><td colspan="2" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">Success Rate</td>
       </tr>
       <tr>
-        <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white; width: 36%;">Open Surgery</td><td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white; width: 36%;">Percutaneous Nephrolithotomy</td>
+        <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white; width: 33%">Open Surgery</td><td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white; width: 33%">Percutaneous Nephrolithotomy</td>
       </tr>
       <tr>
-          <td rowspan="3" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Stone Size</td>
-          <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">Small</td>
-          <td style="text-align: center; vertical-align: middle;">
+          <td rowspan="3" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">Stone Size</td>
+          <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">Small</td>
+          <td style="text-align: center; vertical-align: middle">
           <b>
           &approx;
           93%
@@ -229,7 +230,7 @@ Simpson's paradox has been observed several times in the medical literature, per
               <mo data-mjx-texclass="CLOSE">)</mo>
             </mrow>
           </math>
-          </td><td style="text-align: center; vertical-align: middle;">
+          </td><td style="text-align: center; vertical-align: middle">
           &approx;
           87%
           <math>
@@ -245,7 +246,7 @@ Simpson's paradox has been observed several times in the medical literature, per
           </td>
       </tr>
       <tr>
-          <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">Large</td><td style="text-align: center; vertical-align: middle;">
+          <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">Large</td><td style="text-align: center; vertical-align: middle">
           <b>
           &approx;
           73%
@@ -260,7 +261,7 @@ Simpson's paradox has been observed several times in the medical literature, per
               <mo data-mjx-texclass="CLOSE">)</mo>
             </mrow>
           </math>
-          </td><td style="text-align: center; vertical-align: middle;">
+          </td><td style="text-align: center; vertical-align: middle">
           &approx;
           69%
           <math>
@@ -276,7 +277,7 @@ Simpson's paradox has been observed several times in the medical literature, per
           </td>
       </tr>
       <tr>
-          <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">Both</td><td style="text-align: center; vertical-align: middle;">
+          <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">Both</td><td style="text-align: center; vertical-align: middle">
           &approx;
           78%
           <math>
@@ -289,7 +290,7 @@ Simpson's paradox has been observed several times in the medical literature, per
               <mo data-mjx-texclass="CLOSE">)</mo>
             </mrow>
           </math>
-          </td><td style="text-align: center; vertical-align: middle;">
+          </td><td style="text-align: center; vertical-align: middle">
           <b>
           &approx;
           83%
@@ -383,19 +384,28 @@ The DAG for this example would show that 'Hospitalisation' is a collider, and th
 For an example of collider bias in the medical literature, let's turn to a case-control study of hospital patients with and without pancreatic cancer published in 1981[^12], which found a strong association between patients' coffee consumption and their likelihood of having developed pancreatic cancer.
 
 ```{=html}
-<div style="overflow-x:auto;">
+<div style="overflow-x:auto">
   <table class="table table-bordered table-sm">
       <caption>Observed Coffee Consumption in Patients With and Without Pancreatic Cancer</caption>
       <tr>
-          <td colspan="2" rowspan="2" style="background-color: #e4f8ff"></td><td colspan="3" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Coffee Consumption</td>
+          <td colspan="2" rowspan="2" style="background-color: #e4f8ff"></td><td colspan="3" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">Coffee Consumption</td>
       </tr>
       <tr>
-        <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">Pecentage That Drink 0 Cups Per Day</td>
-        <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: #cccccc;">Pecentage That Drink 1 or 2 Cups Per Day</td>
-        <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">Pecentage That Drink 3+ Cups Per Day</td>
+        <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">
+        <div style="white-space: nowrap">Pecentage That Drink</div>
+        <div style="white-space: nowrap">O Cups Per Day</div>
+        </td>
+        <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: #cccccc">
+        <div style="white-space: nowrap">Pecentage That Drink</div>
+        <div style="white-space: nowrap">1 or 2 Cups Per Day</div>
+        </td>
+        <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">
+        <div style="white-space: nowrap">Pecentage That Drink</div>
+        <div style="white-space: nowrap">3+ Cups Per Day</div>
+        </td>
       </tr>
       <tr>
-          <td rowspan="2" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Diagnosis</td><td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">Pancreatic Cancer</td><td style="text-align: center; vertical-align: middle;">
+          <td rowspan="2" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">Diagnosis</td><td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">Pancreatic Cancer</td><td style="text-align: center; vertical-align: middle">
           &approx;
           5%
           <math>
@@ -408,7 +418,7 @@ For an example of collider bias in the medical literature, let's turn to a case-
               <mo data-mjx-texclass="CLOSE">)</mo>
             </mrow>
           </math>
-          </td><td style="text-align: center; vertical-align: middle; color: #808080;">          
+          </td><td style="text-align: center; vertical-align: middle; color: #808080">          
           &approx;
           42%
           <math>
@@ -421,7 +431,7 @@ For an example of collider bias in the medical literature, let's turn to a case-
               <mo data-mjx-texclass="CLOSE">)</mo>
             </mrow>
           </math>
-          </td><td style="text-align: center; vertical-align: middle;">
+          </td><td style="text-align: center; vertical-align: middle">
           <b>
           &approx;
           53%
@@ -439,7 +449,10 @@ For an example of collider bias in the medical literature, let's turn to a case-
           </td>
       </tr>
       <tr>
-          <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">Not Pacratic Cancer</td><td style="text-align: center; vertical-align: middle;">
+          <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">
+          <div style="white-space: nowrap">Not Pancreatic</div>
+          <div style="white-space: nowrap">Cancer</div>
+          </td><td style="text-align: center; vertical-align: middle">
           <b>
           &approx;
           14%
@@ -454,7 +467,7 @@ For an example of collider bias in the medical literature, let's turn to a case-
               <mo data-mjx-texclass="CLOSE">)</mo>
             </mrow>
           </math>
-          </td><td style="text-align: center; vertical-align: middle; color: #808080;">
+          </td><td style="text-align: center; vertical-align: middle; color: #808080">
           &approx;
           42%
           <math>
@@ -467,7 +480,7 @@ For an example of collider bias in the medical literature, let's turn to a case-
               <mo data-mjx-texclass="CLOSE">)</mo>
             </mrow>
           </math>
-          </td><td style="text-align: center; vertical-align: middle;">
+          </td><td style="text-align: center; vertical-align: middle">
           &approx;
           44%
           <math>
@@ -488,29 +501,29 @@ For an example of collider bias in the medical literature, let's turn to a case-
 
 In the decades since this study was published, several large prospective cohort studies have found no significant relationship between coffee consumption and pancreatic cancer risk[^13] [^14] [^15], suggesting that the original study may have had a flaw in its design. What could it have been? 
 
-In his seminal epidemiology textbook[^16], Leon Gordis points out the control group for this study -- patients without pancreatic cancer -- was chosen in an unusual way. When a patient who did have pancreatic cancer agreed to answer a survey about their dietary habits, control patients were selected by asking the doctor responsible for their care to identify other patients of theirs without the condition. Since these doctors were often gastroenterologists, patients with gastrointestinal disorders were over-represented in the control group. These patients tended to drink less coffee than the average member of the population, either because it exacerbated their symptoms or because they had been advised to cut down their intake by their doctors. 
+In his seminal epidemiology textbook, Leon Gordis points out the control group for this study -- patients without pancreatic cancer -- was chosen in an unusual way[^16]. When a patient who did have pancreatic cancer agreed to answer a survey about their dietary habits, control patients were selected by asking the doctor responsible for their care to identify other patients of theirs without the condition. Since these doctors were often gastroenterologists, patients with gastrointestinal disorders were over-represented in the control group. These patients tended to drink less coffee than the average member of the population, either because it exacerbated their symptoms or because they had been advised to cut down their intake by their doctors. 
 
 ![](pancreatic-cancer-dag.png)
 
 As a result of the atypical coffee consumption in the control group, the results of this observational study are hard to interpret. This is because even if it was the case that there was no causal relationship between coffee consumption and pancreatic cancer, we would still expect to see an association between them due to the fact that people with GI disorders were more likely to be chosen as controls than other patients. We can show this in a DAG in which 'Selection into Study' is a collider.
 
 ## Further Reading
-- [**An introduction to Causal inference** -- a blog post by Fabian Dablander]()
-- [**Kidney Stones & Simpson's Paradox** -- a blog post by Amol Kulkarni](https://amol-kulkarni.com/project/kidney_stones_simpson_paradox/)
+- [**An introduction to Causal inference** -- a blog post by Fabian Dablander](https://fabiandablander.com/r/Causal-Inference.html)
+- [**Eight basic rules for causal inference** --  a blog post by Peder M. Isager](https://pedermisager.org/blog/seven_basic_rules_for_causal_inference/)
 
 [^1]: Jonathan Wood, ["Life of a revolutionary,"](https://www.ox.ac.uk/news/science-blog/life-revolutionary) OxSciBlog, November 11, 2009.
-[^2]: ["Study designs,"](https://www.cebm.ox.ac.uk/resources/ebm-tools/study-designs) Centre for Evidence-Based Medicine, October 1, 2020.
+[^2]: ["Study designs,"](https://www.cebm.ox.ac.uk/resources/ebm-tools/study-designs) Centre for Evidence-Based Medicine, accessed February 26, 2025.
 [^3]: Robert Matthews, ["Storks Deliver Babies (p=0.008),"](https://doi.org/10.1111/1467-9639.00013) *Teaching Statistics* 22, no. 2 (June 2000): 36--38.
-[^4]: Martin Bland, *An Introduction to Medical Statistics.* 4th ed. Oxford: Oxford University Press, 2015.
-[^5]: Judea Pearl and Dana Mackenzie, *The Book of Why: The New Science of Cause and Effects.* London: Penguin Books, 2019.
+[^4]: Martin Bland, [*An Introduction to Medical Statistics,*](https://openlibrary.org/books/OL27200959M/An_introduction_to_medical_statistics) 4th ed. (Oxford University Press, 2015), 117.
+[^5]: Judea Pearl and Dana Mackenzie, [*The Book of Why: The New Science of Cause and Effects*](https://openlibrary.org/books/OL28703772M/Book_of_Why) (Penguin Books, 2019)
 [^6]: Sander Greenland, Judea Pearl, and James Robins, ["Causal Diagrams for Epidemiologic Research,"](https://doi.org/10.1097%2F00001648-199901000-00008) *Epidemiology* 10, no. 1 (January 1999): 37--48.
-[^7]: Judea Pearl, Madelyn Glymour, and Nicholas Jewell, *Causal Inference in Statistics: A Primer.* New York: Wiley, 2016.
-[^8]: Jeffrey Aronson, Clare Bankhead, and David Nunan, ["Confounding,"](https://catalogofbias.org/biases/confounding/) Catalogue of Bias, 2018.
+[^7]: Judea Pearl, Madelyn Glymour, and Nicholas Jewell, [*Causal Inference in Statistics: A Primer*](https://openlibrary.org/books/OL27305974M/Causal_Inference_in_Statistics) (Wiley, 2016), 25.
+[^8]: Jeffrey Aronson, Clare Bankhead, and David Nunan, ["Confounding,"](https://catalogofbias.org/biases/confounding/) Catalogue of Bias, accessed February 26, 2025.
 [^9]: Ricardo Silva, ["Causality,"](https://mlg.eng.cam.ac.uk/zoubin/tutorials06.html) (lecture, Advanced Tutorial Lecture Series on Machine Learning, Cambridge, November 9, 2006).
 [^10]: Steven Julious and Mark Mullee, ["Confounding and Simpson's Paradox,"](https://doi.org/10.1136%2Fbmj.309.6967.1480) *BMJ* 309, no. 6968 (December 1994): 1480--1481.
 [^11]: Clive Charig et al., ["Comparison of treatment of renal calculi by open surgery, percutaneous nephrolithotomy, and extracorporeal shockwave lithotripsy,"](https://doi.org/10.1136%2Fbmj.292.6524.879) *British Medical Journal (Clinical Research Edition)* 292, no. 6524 (March 1986): 879--882.
 [^12]: Brian MacMahon et al., ["Coffee and cancer of the pancreas,"](https://doi.org/10.1056/NEJM198103123041102) *The New England Journal of Medicine* 304, no. 11 (March 1981): 630--633.
 [^13]: Simak Bidel et al., ["Coffee consumption and risk of gastric and pancreatic cancer --  A prospective cohort study,"](https://doi.org/10.1002/ijc.27773) *International Journal of Cancer* 312, no.7 (April 2012): 1651--1659.
 [^14]: Kristin Guertin et al., ["A prospective study of coffee intake and pancreatic cancer: results from the NIH-AARP Diet and Health Study,"](https://doi.org/10.1038/bjc.2015.235) *British Journal of Cancer* 113, no. 7 (September 2015): 1081--1085.
-[^15]: Charlie Zhou et al., ["Coffee and pancreatic cancer risk among never-smokers in the UK prospective Million Women Study,"](https://doi.org/10.1002/ijc.31994) *International Journal of Cancer* 145 no. 6 (September 2019); 1484--1492.
-[^16]: Leon Gordis, *Epidemiology.* 4th ed. Philadelphia: Saunders, 2008.
+[^15]: Charlie Zhou et al., ["Coffee and pancreatic cancer risk among never-smokers in the UK prospective Million Women Study,"](https://doi.org/10.1002/ijc.31994) *International Journal of Cancer* 145 no. 6 (September 2019): 1484--1492.
+[^16]: Leon Gordis, [*Epidemiology,*](https://openlibrary.org/books/OL16939376M/Epidemiology) 4th ed. (Saunders, 2009), 183--185.

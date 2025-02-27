@@ -1,6 +1,7 @@
 ---
 title: "Kidney Transplants and Graph Theory"
-date: "2025-02-18"
+# date: "2025-02-18"
+date-modified: "2025-02-27"
 image: thumbnail.png
 ---
 ::: {.callout-warning}
@@ -194,17 +195,19 @@ augmenting_path <- function(adj_list, match_vec) {
 }
 ```
 
-How do augmenting paths help us find the maximum matching of a graph? Well in 1957, mathematician Claude Berge proved that if an augmenting path cannot be found for a graph and a matching, then that matching is a maximum matching[^4]. This is the insight that is central to the [Hungarian Maximum Matching Algorithm](https://mathworld.wolfram.com/HungarianMaximumMatchingAlgorithm.html), which works by starting with any matching on a graph (including an empty matching) and searching the graph from each unmatched vertex until it finds an augmenting path. It then finds the [symmetric difference](https://en.wikipedia.org/wiki/Symmetric_difference) of the path and the current matching, and this set of edges becomes the new, improved matching that it will use for its next iteration. For example, in the scenario above where we have a graph with edge list `1–2, 2–3, 3–4` and a matching `2–3`, the first iteration of the algorithm will find the augmenting path `1–2, 2–3, 3–4`, and will update the matching to be `1–2, 3–4`. 
+In 1957, mathematician Claude Berge formally proved that if an augmenting path cannot be found for a graph and a matching, then that matching is a maximum matching[^4]. This fact had previously been observed by Dénes König[^5], a pioneer of discrete mathematics who published the first ever textbook on the subject of graph theory[^6]. König's book inspired another mathematician, Harold Kuhn, to propose an algorithmic solution to the maximum matching problem[^7]. 
 
-![](hungarian-maximum-matching-algorithm-iteration.png)
+Kuhn's algorithm works by starting with any matching on a graph (including an empty matching) and searching the graph from each unmatched vertex until it finds an augmenting path[^8]. It then finds the [symmetric difference](https://en.wikipedia.org/wiki/Symmetric_difference) of the path and the current matching, and this set of edges becomes the new, improved matching that it will use for its next iteration. For example, in the scenario above where we have a graph with edge list `1–2, 2–3, 3–4` and a matching `2–3`, the first iteration of the algorithm will find the augmenting path `1–2, 2–3, 3–4`, and will update the matching to be `1–2, 3–4`. 
 
-When it can no longer find any augmenting paths, the Hungarian Maximum Matching Algorithm terminates, and thanks to Claude Berge, we can be sure that the matching it has found is a maximum matching.
+![](kuhns-algorithm-iteration.png)
+
+When it can no longer find any augmenting paths, Kuhn's algorithm terminates, and thanks to Claude Berge's proof, we can be sure that the matching it has found is a maximum matching.
 
 ```{r}
 #| code-fold: true
-#| code-summary: "Coding the Hungarian Maximum Matching Algorithm in R"
-#| label: hungarian-maximum-matching-algorithm
-# Let's use our augmenting_path function to write a Hungarian Maximum Matching Algorithm that takes as its input the adjacency matrix of a graph and a matching vector:
+#| code-summary: "Coding Kuhn's algorithm in R"
+#| label: kuhns-algorithm
+# Let's use our augmenting_path function to write an implementation of Kuhn's algorithm that takes as its input the adjacency matrix of a graph and a matching vector:
 maximum_matching <- function(adj_mat, match_vec) {
   adj_list <- adj_mat_to_adj_list(adj_mat) # we use the function we wrote earlian 
   num_vertices <- length(match_vec) # we find the number of vertices in the graph
@@ -269,7 +272,7 @@ What does this algorithm give us when applied to our example graph $S$, and an e
 
 ```{r}
 #| code-fold: true
-#| code-summary: "Applying the Hungarian Maximum Matching Algorithm to $S$ in R"
+#| code-summary: "Applying Kuhn's Algorithm to $S$ in R"
 #| label: maximum-matching-of-S
 S_empty_matching <- rep(0,6)
 S_max_matching <- maximum_matching(S_adj_mat, S_empty_matching)
@@ -285,17 +288,17 @@ So students A and F, B and E, and C and D, can all sit in pairs.
 
 This may seem like something we could have worked out easily by hand, but matching algorithms are really useful when there are so many vertices and edges to a graph that a human could never work out a maximum matching just from looking at it.
 
-You may be relieved to learn that we are nearly at the end of the background graph theory I wanted to include in this article before discussing matching algorithms' applications to kidney transplants! However, before we move on, I should admit that I have been oversimplifying things somewhat. Though the Hungarian Maximum Matching Algorithm will work on a huge variety of graphs, there are some graphs that will trip it up. For example, consider the graph and matching below, taken from [this stack exchange post](https://math.stackexchange.com/a/4061954) by [Misha Lavrov](https://misha.fish). 
+You may be relieved to learn that we are nearly at the end of the background graph theory I wanted to include in this article before discussing matching algorithms' applications to kidney transplants! However, before we move on, I should admit that I have been oversimplifying things somewhat. Though Kuhn's algorithm will work on a huge variety of graphs, there are some graphs that will trip it up. For example, consider the graph and matching below, taken from [this stack exchange post](https://math.stackexchange.com/a/4061954) by [Misha Lavrov](https://misha.fish). 
 
-![](non-bipartite-graph-where-the-hungarian-maximum-matching-algorithm-fails.png)
+![](non-bipartite-graph-where-kuhns-algorithm-fails.png)
 
 Trying to find an augmenting path from vertex 1, the algorithm will go from 1 to 2 to 8 to 9 to 10, before getting stuck and concluding that there is no augmenting path, and thus that the given matching is a maximum matching. Similarly, if it starts from vertex 4 it will follow the sequence of edges `4–3, 3–7, 7–6, 6–5` before it again gets stuck and terminates. 
 
-Graphs that run into these kinds of problems are always non-[bipartite](https://en.wikipedia.org/wiki/Bipartite_graph), meaning they contain cycles of odd numbers of edges, like the pentagons in the graph above. To ensure that, if they exist, augmenting paths can always be found in these types of graph, the Hungarian Maximum Matching Algorithm needs to be modified. The first person to find a way to do this was computer scientist Jack Edmonds, who introduced an ingenious method for adapting the algorithm to deal with odd length cycles in his 'blossom' algorithm in 1965[^5]. The details of his algorithm are fascinating, but beyond the scope of this article, which is why I have only used bipartite graphs as examples, and will continue to do so in the next section. If you want to learn how a maximum matching can be found for any graph using Edmonds' blossom algorithm, I recommend [this excellent youtube video](https://www.youtube.com/watch?v=3roPs1Bvg1Q) by [Tomáš Sláma](slama.dev).
+Graphs that run into these kinds of problems are always non-[bipartite](https://en.wikipedia.org/wiki/Bipartite_graph), meaning they contain cycles of odd numbers of edges, like the pentagons in the graph above. To ensure that, if they exist, augmenting paths can always be found in these types of graph, Kuhn's algorithm needs to be modified. The first person to find a way to do this was computer scientist Jack Edmonds, who introduced an ingenious method for adapting the algorithm to deal with odd length cycles in his 'blossom' algorithm in 1965[^9]. The details of his algorithm are fascinating, but beyond the scope of this article, which is why I have only used bipartite graphs as examples, and will continue to do so in the next section. If you want to learn how a maximum matching can be found for any graph using Edmonds' blossom algorithm, I recommend [this excellent youtube video](https://www.youtube.com/watch?v=3roPs1Bvg1Q) by [Tomáš Sláma](slama.dev).
 
 ## How Matching Algorithms Apply to Kidney Transplants
 
-People with end-stage renal disease have kidneys that are unable to perform their function of filtering the blood and are, therefore, unable to survive without undergoing regular dialysis unless they receive a working kidney transplant from a donor. Many people with this condition will have family member or loved one who is willing to donate a kidney to them -- as most of us only need one working kidney to live a healthy life -- but this is often not possible due to a mismatch between the donor and the intended recipient's blood and/or antigen type. For example, imagine that a patient with advanced chronic kidney disease, who we'll call Recipient A, has a sibling, Donor A, who is willing to donate a kidney to them but cannot because they have incompatible blood groups. In the past, this would have meant that Donor A would have been unable to donate a kidney in order to help their sibling[^6]. Nowadays, however, the pair have another option; they can participate in a the UK Living Kidney Sharing Scheme[^7]. Suppose another recipient and donor pair, a parent and child, say, are in the same situation. If the donor in this pair – let's call them Donor F for reasons that will shortly become clear – is a match with Recipient A, and Donor A's kidney is compatible with the recipient, Recipient F, then the two pairs can effectively 'swap' kidneys, in what is called a **paired exchange**.
+People with end-stage renal disease have kidneys that are unable to perform their function of filtering the blood and are, therefore, unable to survive without undergoing regular dialysis unless they receive a working kidney transplant from a donor. Many people with this condition will have family member or loved one who is willing to donate a kidney to them -- as most of us only need one working kidney to live a healthy life -- but this is often not possible due to a mismatch between the donor and the intended recipient's blood and/or antigen type. For example, imagine that a patient with advanced chronic kidney disease, who we'll call Recipient A, has a sibling, Donor A, who is willing to donate a kidney to them but cannot because they have incompatible blood groups. In the past, this would have meant that Donor A would have been unable to donate a kidney in order to help their sibling[^10]. Nowadays, however, the pair have another option; they can participate in a the UK Living Kidney Sharing Scheme[^11]. Suppose another recipient and donor pair, a parent and child, say, are in the same situation. If the donor in this pair – let's call them Donor F for reasons that will shortly become clear – is a match with Recipient A, and Donor A's kidney is compatible with the recipient, Recipient F, then the two pairs can effectively 'swap' kidneys, in what is called a **paired exchange**.
 
 ![](paired-kidney-exchange.png)
 
@@ -303,7 +306,7 @@ We can represent possible paired kidney exchanges between pairs of donors and re
 
 ![](paired-kidney-exchange-graph.png)
 
-What happens if we introduce more incompatible pairs of donors and recipients? Well, we might end up with a graph like $S$, but this time with the vertices representing patients in need of kidneys and loved ones who are unable to denote to them. In reality a graph of incompatible donor-recipient pairs in a country like the UK would have hundreds of vertices, but we can use a smaller one to help us think about the problem of matching compatible pairs.
+What happens if we introduce more incompatible pairs of donors and recipients? Well, we might end up with a graph like $S$, but this time with the vertices representing patients in need of kidneys and loved ones who are unable to denote to them. In reality a graph of incompatible donor-recipient pairs in a country like the UK would have hundreds of vertices[^12], but we can use a smaller one to help us think about the problem of matching compatible pairs.
 
 ![](multiple-paired-kidney-exchanges-graph.png)
 
@@ -311,7 +314,7 @@ As we saw earlier, several different matchings of this graph exist, but some of 
 
 ![](two-kidney-exchange-matchings.png)
 
-In 2004, a team from John Hopkins Hospital in the US proposed using Edmonds' blossom algorithm to optimize kidney exchanges[^8]. They used simulated pools of donor-recipient pairs to test their scheme, and found that it would result in more transplants, with better antigen matches, than the 'first-accept' system that was in use at the time[^9]. Of course, employing an algorithm to decide who gets which organs presents numerous ethical and logistical challenges. For instance, what happens when there is more than one possible maximum matching, resulting in different people getting kidney transplants? Consider what our example graph would look like if we discovered that Recipient B was actually not compatible with Donor E.
+In 2004, a team from John Hopkins Hospital in the US proposed using Edmonds' blossom algorithm to optimize kidney exchanges[^13]. They used simulated pools of donor-recipient pairs to test their scheme, and found that it would result in more transplants, with better antigen matches, than the 'first-accept' system that was in use at the time[^14]. Of course, employing an algorithm to decide who gets which organs presents numerous ethical and logistical challenges. For instance, what happens when there is more than one possible maximum matching, resulting in different people getting kidney transplants? Consider what our example graph would look like if we discovered that Recipient B was actually not compatible with Donor E.
 
 ![](modified-graph.png)
 
@@ -319,32 +322,36 @@ This graph has no **perfect matching** – one in which all vertices are matched
 
 Which kidney transplants should be performed? Should Recipients E and F or Recipients B and E have to remain on dialysis longer as they wait for the next run of the matching algorithm to be performed, or for a suitable deceased donor to match with them? Should the amount of time the recipients have spent on the waiting list for a kidney factor into this decision? What about their ages or levels of frailty? These are difficult questions that no computer can answer for us.
 
-We should also note that compatibility between donors and recipients is not actually as binary as 'a match' or 'not a match'. There are six antigens which are particularly important in organ transplantation[^10] and it is rare that donors and recipients will have the same type of each of them, but more antigens in common are still better than fewer[^11]. The difference between a donor and recipients age, and whether or the recipient has been sensitised to certain antigens by pregnancy or a previous transplant or blood transfusion, can also influence the chances of success.
+We should also note that compatibility between donors and recipients is not actually as binary as 'a match' or 'not a match'. There are six antigens which are particularly important in organ transplantation[^15] and it is rare that donors and recipients will have the same type of each of them, but more antigens in common are still better than fewer[^16]. The difference between a donor and recipients age, and whether or the recipient has been sensitised to certain antigens by pregnancy or a previous transplant or blood transfusion, can also influence the chances of success.
 
-Despite these important concerns, Edmonds' blossom algorithm is an integral part of the process that NHS Blood and Transplant uses to find possible kidney paired exchanges in the UK. However, it is not the only method used, but is instead embedded as a step within a larger algorithm, developed in conjunction with computer scientists at the University of Glasgow[^12]. As well as finding the largest possible matching, their procedure seeks to maximise the total 'weight' of a matching, where the weights given to edges of the graph are calculated by a scoring system used by NHSBT[^13] that takes into account:
+Despite these important concerns, Edmonds' blossom algorithm is an integral part of the process that NHS Blood and Transplant uses to find possible kidney paired exchanges in the UK. However, it is not the only method used, but is instead embedded as a step within a larger algorithm, developed in conjunction with computer scientists at the University of Glasgow[^17]. As well as finding the largest possible matching, their procedure seeks to maximise the total 'weight' of a matching, where the weights given to edges of the graph are calculated by a scoring system used by NHSBT[^18] that takes into account:
 
 - The number of previous matching runs the recipients have participated in (matching runs take place every three months).
 - How sensitised the recipients are to foreign antigens.
 - How well matched donor and recipients' antigens are.
 - The age difference between donors and recipients.
-- How much travel would be required for the participants in a transplant.
 
-Another way in which the algorithm used by NHS Blood and Transport differs from a straightforward implementation of Edmond's Blossom algorithm is that it allows for non-directed altruistic donations and 3-way exchanges. If you would like to understand how this is done, I recommend the article written by Dr David Manlove of the University of Glasgow on his and his colleagues work on the algorithm used by the UK Living Kidney Sharing Scheme in [edition 475 of the London Mathematical Society Newsletter](https://www.lms.ac.uk/sites/lms.ac.uk/files/files/NLMS_475_for%20web.pdf).
+Two additional ways in which the algorithm used by NHS Blood and Transport differs from a straightforward implementation of Edmond's Blossom algorithm are its support for [non-directed altruistic donations](its support for non-directed donations) and its ability to facilitate 3-way exchanges. If you would like to understand how this is done, I recommend the article written by Dr David Manlove of the University of Glasgow on his and his colleagues work on the algorithm used by the UK Living Kidney Sharing Scheme in [edition 475 of the London Mathematical Society Newsletter](https://www.lms.ac.uk/sites/lms.ac.uk/files/files/NLMS_475_for%20web.pdf).
 
 ## Further Reading
-- [**Primum non nocere (First, do no harm)** -- an article by Maria Ibrahim about the role of statistics and statistical analysis in transplant medicine](https://doi.org/10.1111/1740-9713.01467)
-- [**One day. Six operations. Three kidneys. The story of an organ donor chain** -- an article by Rachel Williams about a 3-way exchange](https://www.theguardian.com/society/2018/nov/10/one-day-six-operations-three-kidneys-organ-donor-chain-brought-together)
+- [**Primum non nocere (First, do no harm)** -- an article by Maria Ibrahim](https://doi.org/10.1111/1740-9713.01467)
+- [**One day. Six operations. Three kidneys. The story of an organ donor chain** -- an article by Rachel Williams](https://www.theguardian.com/society/2018/nov/10/one-day-six-operations-three-kidneys-organ-donor-chain-brought-together)
 
-[^1]: ["Annual Activity Report,"](https://www.odt.nhs.uk/statistics-and-reports/annual-activity-report/) NHS Blood and Transplant, Accessed February 16, 2025.
-[^2]: ["How living organ donors change lives,"](https://www.organdonation.nhs.uk/helping-you-to-decide/personal-stories/how-living-organ-donors-change-lives/) NHS Blood and Transplant, Accessed February 16, 2025.
-[^3]: Eric Weisstein, ["Matching,"](https://mathworld.wolfram.com/Matching.html) Wolfram Mathworld, August 3, 2016.
-[^4]: ["Kuhn's Algorithm for Maximum Bipartite Matching,"](https://cp-algorithms.com/graph/kuhn_maximum_bipartite_matching.html) Algorithms for Competitive Programming, July 17, 2023.
-[^5]: Richard L. Apodaca, ["The Maximum Matching Problem,"](https://depth-first.com/articles/2019/04/02/the-maximum-matching-problem/) Depth-First, April 3, 2019.
-[^6]: David Manlove, [“How Operational Research Helps Kidney Patients in the UK,”](https://doi.org/10.1080/2058802X.2018.1435455) *Impact* 2018, no. 1 (2018): 16--19. 
-[^7]: ["Who can be a living donor?,"](https://www.nhsbt.nhs.uk/organ-transplantation/kidney/receiving-a-kidney/living-donor-kidney-transplant/who-can-be-a-living-donor/) NHS Blood and Transplant, Accessed February 16, 2025.
-[^8]: Hari Jagannathan Balasubramanian, ["The mathematics of matching kidneys,"](http://thirtylettersinmyname.blogspot.com/2009/03/mathematics-of-matching-kidneys.html) Thirty letters in my name, March 28, 2009.
-[^9]: Dorry Segev et al., ["Kidney Paired Donation and Optimizing the Use of Live Donor Organs,"](https://doi.org/10.1001/jama.293.15.1883) *JAMA* 293, no. 15 (April 2004): 1883–1890.
-[^10]: ["Matching and Compatibility,"](https://health.ucdavis.edu/transplant/livingkidneydonation/matching-and-compatibility.html) UC Davis Health, Accessed February 16, 2025.
-[^11]: ["Tissue typing for kidney donation,"](https://www.gosh.nhs.uk/conditions-and-treatments/procedures-and-treatments/tissue-typing-kidney-donation/) Great Ormond Street Hospital, May, 2015.
-[^12]: David Manlove and Gregg O'Malley, ["Paired and Altruistic Kidney Donation in the UK: Algorithms and Experimentation,"](https://doi.org/10.1145/2670129) *Journal of Experimental Algorithmics* 19 (2014): 1–21
-[^13]: ["Living Donor Kidney Matching Run Process,"](https://www.odt.nhs.uk/living-donation/uk-living-kidney-sharing-scheme/) NHS Blood and Transplant, Accessed September 2, 2024.
+[^1]: ["A history of donation, transfusion and transplantation,"](https://www.nhsbt.nhs.uk/who-we-are/a-history-of-donation-transfusion-and-transplantation/) NHS Blood and Transplant, accessed February 25, 2025.
+[^2]: ["How living organ donors change lives,"](https://www.organdonation.nhs.uk/helping-you-to-decide/personal-stories/how-living-organ-donors-change-lives/) NHS Blood and Transplant, accessed February 16, 2025.
+[^3]: Eric Weisstein, ["Matching,"](https://mathworld.wolfram.com/Matching.html) Wolfram Mathworld, accessed February 26, 2025.
+[^4]: Claude Berge, [“Two Theorems in Graph Theory,”](https://doi.org/10.1073/pnas.43.9.842) Proceedings of the National Academy of Sciences 43, no. 9 (September 1957): 842--844.
+[^5]: ["Kuhn's Algorithm for Maximum Bipartite Matching,"](https://cp-algorithms.com/graph/kuhn_maximum_bipartite_matching.html) Algorithms for Competitive Programming, accessed February 26, 2025.
+[^6]: William Tutte, introduction to [*Theory of Finite and Infinite Graphs,*](https://openlibrary.org/books/OL2216137M/Theory_of_finite_and_infinite_graphs) by Dénes König, trans Richard McCoart (Birkhäuser, 1990), 1.
+[^7]: Harold Kuhn, [“A Tale of Three Eras: The Discovery and Rediscovery of the Hungarian Method,”](https://doi.org/10.1016/j.ejor.2011.11.008) European Journal of Operational Research 219, no. 3 (June 2012): 641--651.
+[^8]: [“Kuhn's Algorithm for Maximum Bipartite Matching."](https://cp-algorithms.com/graph/kuhn_maximum_bipartite_matching.html)
+[^9]: Richard L. Apodaca, ["The Maximum Matching Problem,"](https://depth-first.com/articles/2019/04/02/the-maximum-matching-problem/) Depth-First, April 3, 2019.
+[^10]: David Manlove, [“How Operational Research Helps Kidney Patients in the UK,”](https://doi.org/10.1080/2058802X.2018.1435455) *Impact* 2018, no. 1 (2018): 16--19. 
+[^11]: ["UK Living Kidney Sharing Scheme,"](https://www.odt.nhs.uk/living-donation/uk-living-kidney-sharing-scheme/) NHS Blood and Transplant, accessed February 25, 2025.
+[^12]: Ian Stewart, [*What's the Use?: The Unreasonable Effectiveness of Mathematics*](https://openlibrary.org/books/OL36270828M/What's_the_Use) (Profile Books, 2021)
+[^13]: Hari Jagannathan Balasubramanian, ["The mathematics of matching kidneys,"](http://thirtylettersinmyname.blogspot.com/2009/03/mathematics-of-matching-kidneys.html) Thirty letters in my name, March 28, 2009.
+[^14]: Dorry Segev et al., ["Kidney Paired Donation and Optimizing the Use of Live Donor Organs,"](https://doi.org/10.1001/jama.293.15.1883) *JAMA* 293, no. 15 (April 2004): 1883–1890.
+[^15]: ["Matching and Compatibility,"](https://health.ucdavis.edu/transplant/livingkidneydonation/matching-and-compatibility.html) UC Davis Health, accessed February 16, 2025.
+[^16]: ["Tissue typing for kidney donation,"](https://www.gosh.nhs.uk/conditions-and-treatments/procedures-and-treatments/tissue-typing-kidney-donation/) Great Ormond Street Hospital, May, 2015.
+[^17]: David Manlove and Gregg O'Malley, ["Paired and Altruistic Kidney Donation in the UK: Algorithms and Experimentation,"](https://doi.org/10.1145/2670129) *Journal of Experimental Algorithmics* 19 (2014): 1–21
+[^18]: Kidney Advisory Group, [*POL274/11 – Living Donor Kidney Transplantation*](https://nhsbtdbe.blob.core.windows.net/umbraco-assets-corp/34788/pol274.pdf) (NHS Blood and Transplant, 2024), 3.

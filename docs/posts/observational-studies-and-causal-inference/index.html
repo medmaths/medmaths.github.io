@@ -6,7 +6,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2025-02-15">
 
 <title>Observational Studies and Causal Inference – Medical Maths</title>
 <style>
@@ -170,13 +169,13 @@ window.Quarto = {
 <div class="quarto-title-meta">
 
     
+  
     <div>
-    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 15, 2025</p>
+      <p class="date-modified">February 27, 2025</p>
     </div>
   </div>
-  
     
   </div>
   
@@ -198,12 +197,12 @@ Disclaimer
 <p>This blog post was written solely for informational and educational purposes, and does not constitute medical advice. If you have any health concerns, please consult a qualified medical professional.</p>
 </div>
 </div>
-<p>Randomised Controlled Trials (RCTs) are widely recognised as the gold standard of study designs, but they are not always possible to perform. For example, it would have been neither ethical nor feasible for Richard Doll and Austin Bradford Hill to randomly assign a group of volunteers to a smoking and non-smoking group in order to show that cigarettes cause lung cancer. However, they were still able to establish a link between smoking and the disease, using first a case-control study and then a prospective cohort study<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>Randomised controlled trials (RCTs) are widely recognised as the gold standard of study designs, but they are not always possible to perform. For example, it would have been neither ethical nor feasible for Richard Doll and Austin Bradford Hill to randomly assign a group of volunteers to a smoking and non-smoking group in order to show that cigarettes cause lung cancer. However, they were still able to establish a link between smoking and the disease, using first a case-control study and then a prospective cohort study<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 <p>These are both types of observational study<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, an alternative to RCTs that can be very useful – as in the case of smoking and lung cancer. Unfortunately, the fact the participants are not randomised to different groups in observational studies can make their results particularly difficult to interpret. In this article, I will discuss how diagrams representing causal relationships can help us to spot potential sources of bias in these kinds of studies.</p>
 <section id="causal-inference" class="level2">
 <h2 class="anchored" data-anchor-id="causal-inference">Causal Inference</h2>
 <p>Causal relationships are notoriously difficult to distinguish from mere statistical associations, as summed up in the famous saying “correlation does not imply causation”. A humorous example of this can be found in an educational statistics paper in which the author investigates the fairy tale that storks deliver babies by analysing 1980s estimates of stork populations and birth rates in seventeen different European countries<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
-<div style="overflow-x:auto;">
+<div style="overflow-x:auto">
   
 <table class="table table-bordered table-sm" data-quarto-postprocess="true">
 <caption>Estimates of European Stork Populations and Birth Rates in the 1980s</caption>
@@ -384,7 +383,7 @@ Disclaimer
 <p>When we draw the DAG for this example, we can see that the variable ‘Age’ is acting as a counfounder, obscuring the true causal relationship between the ‘Drug Dosage’ and ‘Recovery Speed’ variables.</p>
 <p><img src="robert-heaton-example-dag.png" class="img-fluid"></p>
 <p>Simpson’s paradox has been observed several times in the medical literature, perhaps most famously in a 1986 observational study by a group of urologists on the effectiveness of different types of procedure for the removal of kidney stones<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a>. Wisely, the researchers recognised that stone size might be a confounding factor, so they split their data according to whether the original stone was less than two centimetres in diameter or not.</p>
-<div style="overflow-x:auto;">
+<div style="overflow-x:auto">
   
 <table class="table table-bordered table-sm" data-quarto-postprocess="true">
 <caption>Observed Success Rate of Kidney Stone Removal Procedures</caption>
@@ -394,8 +393,8 @@ Disclaimer
 <td colspan="2" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Success Rate</td>
 </tr>
 <tr class="even">
-<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white; width: 36%;">Open Surgery</td>
-<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white; width: 36%;">Percutaneous Nephrolithotomy</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white; width: 33%;">Open Surgery</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white; width: 33%;">Percutaneous Nephrolithotomy</td>
 </tr>
 <tr class="odd">
 <td rowspan="3" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Stone Size</td>
@@ -490,19 +489,41 @@ Disclaimer
 <p>The DAG for this example would show that ‘Hospitalisation’ is a collider, and that there is no true causal relationship between the variables ‘Smoking’ and ‘Severity’.</p>
 <p><img src="colliditis-dag.png" class="img-fluid"></p>
 <p>For an example of collider bias in the medical literature, let’s turn to a case-control study of hospital patients with and without pancreatic cancer published in 1981<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a>, which found a strong association between patients’ coffee consumption and their likelihood of having developed pancreatic cancer.</p>
-<div style="overflow-x:auto;">
+<div style="overflow-x:auto">
   
 <table class="table table-bordered table-sm" data-quarto-postprocess="true">
 <caption>Observed Coffee Consumption in Patients With and Without Pancreatic Cancer</caption>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
 <tbody>
 <tr class="odd">
 <td colspan="2" rowspan="2" style="background-color: #e4f8ff"></td>
 <td colspan="3" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Coffee Consumption</td>
 </tr>
 <tr class="even">
-<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">Pecentage That Drink 0 Cups Per Day</td>
-<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: #cccccc;">Pecentage That Drink 1 or 2 Cups Per Day</td>
-<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">Pecentage That Drink 3+ Cups Per Day</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;"><div style="white-space: nowrap">
+Pecentage That Drink
+</div>
+<div style="white-space: nowrap">
+O Cups Per Day
+</div></td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: #cccccc;"><div style="white-space: nowrap">
+Pecentage That Drink
+</div>
+<div style="white-space: nowrap">
+1 or 2 Cups Per Day
+</div></td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;"><div style="white-space: nowrap">
+Pecentage That Drink
+</div>
+<div style="white-space: nowrap">
+3+ Cups Per Day
+</div></td>
 </tr>
 <tr class="odd">
 <td rowspan="2" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Diagnosis</td>
@@ -512,7 +533,12 @@ Disclaimer
 <td style="text-align: center; vertical-align: middle;"><strong>≈ 53%</strong> <span class="math inline">\(\left( \frac{194}{367} \right)\)</span></td>
 </tr>
 <tr class="even">
-<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">Not Pacratic Cancer</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;"><div style="white-space: nowrap">
+Not Pancreatic
+</div>
+<div style="white-space: nowrap">
+Cancer
+</div></td>
 <td style="text-align: center; vertical-align: middle;"><strong>≈ 14%</strong> <span class="math inline">\(\left( \frac{88}{643} \right)\)</span></td>
 <td style="text-align: center; vertical-align: middle; color: #808080;">≈ 42% <span class="math inline">\(\left( \frac{271}{643} \right)\)</span></td>
 <td style="text-align: center; vertical-align: middle;">≈ 44% <span class="math inline">\(\left( \frac{284}{643} \right)\)</span></td>
@@ -522,15 +548,15 @@ Disclaimer
 
 </div>
 <p>In the decades since this study was published, several large prospective cohort studies have found no significant relationship between coffee consumption and pancreatic cancer risk<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a> <a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a> <a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a>, suggesting that the original study may have had a flaw in its design. What could it have been?</p>
-<p>In his seminal epidemiology textbook<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a>, Leon Gordis points out the control group for this study – patients without pancreatic cancer – was chosen in an unusual way. When a patient who did have pancreatic cancer agreed to answer a survey about their dietary habits, control patients were selected by asking the doctor responsible for their care to identify other patients of theirs without the condition. Since these doctors were often gastroenterologists, patients with gastrointestinal disorders were over-represented in the control group. These patients tended to drink less coffee than the average member of the population, either because it exacerbated their symptoms or because they had been advised to cut down their intake by their doctors.</p>
+<p>In his seminal epidemiology textbook, Leon Gordis points out the control group for this study – patients without pancreatic cancer – was chosen in an unusual way<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a>. When a patient who did have pancreatic cancer agreed to answer a survey about their dietary habits, control patients were selected by asking the doctor responsible for their care to identify other patients of theirs without the condition. Since these doctors were often gastroenterologists, patients with gastrointestinal disorders were over-represented in the control group. These patients tended to drink less coffee than the average member of the population, either because it exacerbated their symptoms or because they had been advised to cut down their intake by their doctors.</p>
 <p><img src="pancreatic-cancer-dag.png" class="img-fluid"></p>
 <p>As a result of the atypical coffee consumption in the control group, the results of this observational study are hard to interpret. This is because even if it was the case that there was no causal relationship between coffee consumption and pancreatic cancer, we would still expect to see an association between them due to the fact that people with GI disorders were more likely to be chosen as controls than other patients. We can show this in a DAG in which ‘Selection into Study’ is a collider.</p>
 </section>
 <section id="further-reading" class="level2">
 <h2 class="anchored" data-anchor-id="further-reading">Further Reading</h2>
 <ul>
-<li><a href=""><strong>An introduction to Causal inference</strong> – a blog post by Fabian Dablander</a></li>
-<li><a href="https://amol-kulkarni.com/project/kidney_stones_simpson_paradox/"><strong>Kidney Stones &amp; Simpson’s Paradox</strong> – a blog post by Amol Kulkarni</a></li>
+<li><a href="https://fabiandablander.com/r/Causal-Inference.html"><strong>An introduction to Causal inference</strong> – a blog post by Fabian Dablander</a></li>
+<li><a href="https://pedermisager.org/blog/seven_basic_rules_for_causal_inference/"><strong>Eight basic rules for causal inference</strong> – a blog post by Peder M. Isager</a></li>
 </ul>
 
 
@@ -541,21 +567,21 @@ Disclaimer
 
 <ol>
 <li id="fn1"><p>Jonathan Wood, <a href="https://www.ox.ac.uk/news/science-blog/life-revolutionary">“Life of a revolutionary,”</a> OxSciBlog, November 11, 2009.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p><a href="https://www.cebm.ox.ac.uk/resources/ebm-tools/study-designs">“Study designs,”</a> Centre for Evidence-Based Medicine, October 1, 2020.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://www.cebm.ox.ac.uk/resources/ebm-tools/study-designs">“Study designs,”</a> Centre for Evidence-Based Medicine, accessed February 26, 2025.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>Robert Matthews, <a href="https://doi.org/10.1111/1467-9639.00013">“Storks Deliver Babies (p=0.008),”</a> <em>Teaching Statistics</em> 22, no. 2 (June 2000): 36–38.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>Martin Bland, <em>An Introduction to Medical Statistics.</em> 4th ed.&nbsp;Oxford: Oxford University Press, 2015.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>Judea Pearl and Dana Mackenzie, <em>The Book of Why: The New Science of Cause and Effects.</em> London: Penguin Books, 2019.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Martin Bland, <a href="https://openlibrary.org/books/OL27200959M/An_introduction_to_medical_statistics"><em>An Introduction to Medical Statistics,</em></a> 4th ed.&nbsp;(Oxford University Press, 2015), 117.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Judea Pearl and Dana Mackenzie, <a href="https://openlibrary.org/books/OL28703772M/Book_of_Why"><em>The Book of Why: The New Science of Cause and Effects</em></a> (Penguin Books, 2019)<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn6"><p>Sander Greenland, Judea Pearl, and James Robins, <a href="https://doi.org/10.1097%2F00001648-199901000-00008">“Causal Diagrams for Epidemiologic Research,”</a> <em>Epidemiology</em> 10, no. 1 (January 1999): 37–48.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"><p>Judea Pearl, Madelyn Glymour, and Nicholas Jewell, <em>Causal Inference in Statistics: A Primer.</em> New York: Wiley, 2016.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn8"><p>Jeffrey Aronson, Clare Bankhead, and David Nunan, <a href="https://catalogofbias.org/biases/confounding/">“Confounding,”</a> Catalogue of Bias, 2018.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Judea Pearl, Madelyn Glymour, and Nicholas Jewell, <a href="https://openlibrary.org/books/OL27305974M/Causal_Inference_in_Statistics"><em>Causal Inference in Statistics: A Primer</em></a> (Wiley, 2016), 25.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Jeffrey Aronson, Clare Bankhead, and David Nunan, <a href="https://catalogofbias.org/biases/confounding/">“Confounding,”</a> Catalogue of Bias, accessed February 26, 2025.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn9"><p>Ricardo Silva, <a href="https://mlg.eng.cam.ac.uk/zoubin/tutorials06.html">“Causality,”</a> (lecture, Advanced Tutorial Lecture Series on Machine Learning, Cambridge, November 9, 2006).<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn10"><p>Steven Julious and Mark Mullee, <a href="https://doi.org/10.1136%2Fbmj.309.6967.1480">“Confounding and Simpson’s Paradox,”</a> <em>BMJ</em> 309, no. 6968 (December 1994): 1480–1481.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn11"><p>Clive Charig et al., <a href="https://doi.org/10.1136%2Fbmj.292.6524.879">“Comparison of treatment of renal calculi by open surgery, percutaneous nephrolithotomy, and extracorporeal shockwave lithotripsy,”</a> <em>British Medical Journal (Clinical Research Edition)</em> 292, no. 6524 (March 1986): 879–882.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn12"><p>Brian MacMahon et al., <a href="https://doi.org/10.1056/NEJM198103123041102">“Coffee and cancer of the pancreas,”</a> <em>The New England Journal of Medicine</em> 304, no. 11 (March 1981): 630–633.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn13"><p>Simak Bidel et al., <a href="https://doi.org/10.1002/ijc.27773">“Coffee consumption and risk of gastric and pancreatic cancer – A prospective cohort study,”</a> <em>International Journal of Cancer</em> 312, no.7 (April 2012): 1651–1659.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn14"><p>Kristin Guertin et al., <a href="https://doi.org/10.1038/bjc.2015.235">“A prospective study of coffee intake and pancreatic cancer: results from the NIH-AARP Diet and Health Study,”</a> <em>British Journal of Cancer</em> 113, no. 7 (September 2015): 1081–1085.<a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn15"><p>Charlie Zhou et al., <a href="https://doi.org/10.1002/ijc.31994">“Coffee and pancreatic cancer risk among never-smokers in the UK prospective Million Women Study,”</a> <em>International Journal of Cancer</em> 145 no. 6 (September 2019); 1484–1492.<a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn16"><p>Leon Gordis, <em>Epidemiology.</em> 4th ed.&nbsp;Philadelphia: Saunders, 2008.<a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15"><p>Charlie Zhou et al., <a href="https://doi.org/10.1002/ijc.31994">“Coffee and pancreatic cancer risk among never-smokers in the UK prospective Million Women Study,”</a> <em>International Journal of Cancer</em> 145 no. 6 (September 2019): 1484–1492.<a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16"><p>Leon Gordis, <a href="https://openlibrary.org/books/OL16939376M/Epidemiology"><em>Epidemiology,</em></a> 4th ed.&nbsp;(Saunders, 2009), 183–185.<a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

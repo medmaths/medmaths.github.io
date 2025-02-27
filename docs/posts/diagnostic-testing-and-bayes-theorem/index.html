@@ -171,7 +171,7 @@ window.Quarto = {
     
   
     <div>
-    <div class="quarto-title-meta-heading">Last Modified</div>
+    <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
       <p class="date-modified">February 10, 2025</p>
     </div>
@@ -202,7 +202,7 @@ Disclaimer
 <h2 class="anchored" data-anchor-id="sensitivity-and-specificity">Sensitivity and Specificity</h2>
 <p>When interpreting a diagnostic test result, two of most important pieces of information we need to know are the <strong>sensitivity</strong> and <strong>specificity</strong> of the test. Coined in 1947 by Jacob Yerushalmy<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, these terms refer respectively to the probability that a diagnostic test will correctly identify someone with a disease, and the probability that it will accurately distinguish those without the condition.</p>
 <p>Steven McGee gives a helpful illustration of these concepts in his book Evidence-Based Physical Diagnosis<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, using a hypothetical experiment. He asks us to imagine that a specific physical examination finding – a holosystolic heart murmur – is assessed in a group of 42 people with a particular type of valvular heart disease and a group of 58 people without the condition, producing the following results.</p>
-<div style="overflow-x:auto;">
+<div style="overflow-x:auto">
   
 <table class="table table-bordered table-sm" data-quarto-postprocess="true">
 <caption>Physical Examination Findings in Patients With and Without Tricuspid Regurgitation</caption>
@@ -212,8 +212,8 @@ Disclaimer
 <td colspan="2" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Valvular Heart Disease Status</td>
 </tr>
 <tr class="even">
-<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">Patients With Tricuspid Regurgitation</td>
-<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">Patients Without Tricuspid Regurgitation</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white; width: 33%;">Patients With Tricuspid Regurgitation</td>
+<td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white; width: 33%;">Patients Without Tricuspid Regurgitation</td>
 </tr>
 <tr class="odd">
 <td rowspan="2" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Physical Examination Finding</td>
@@ -269,7 +269,7 @@ Notation
 </section>
 <section id="bayes-to-the-rescue" class="level2">
 <h2 class="anchored" data-anchor-id="bayes-to-the-rescue">Bayes to the Rescue</h2>
-<p>The answer, of course, is Bayes’ Theorem. Discovered by Thomas Bayes in the 1740s and given its modern form by Pierre Simon Laplace in the 1810s<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>, this famous theorem states that for any two events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, we can get the conditional probability of <span class="math inline">\(A\)</span> given <span class="math inline">\(B\)</span> from the conditional probability of <span class="math inline">\(B\)</span> given <span class="math inline">\(A\)</span> using the formula</p>
+<p>The answer, of course, is Bayes’ Theorem. Discovered by Thomas Bayes in the 1740s century, and given its modern form by Pierre Simon Laplace in 1812<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>, this famous theorem states that for any two events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, we can get the conditional probability of <span class="math inline">\(A\)</span> given <span class="math inline">\(B\)</span> from the conditional probability of <span class="math inline">\(B\)</span> given <span class="math inline">\(A\)</span> using the formula</p>
 <p><span class="math display">\[
 \mathbb{P}(A|B)=\frac{\mathbb{P}(B|A)\mathbb{P}(A)}{\mathbb{P}(B)},
 \]</span> where <span class="math inline">\(\mathbb{P}(A)\)</span> and <span class="math inline">\(\mathbb{P}(B)\)</span> are the marginal (unconditional) probabilities of <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> respectively.</p>
@@ -375,8 +375,8 @@ Notation
 <section id="further-reading" class="level2">
 <h2 class="anchored" data-anchor-id="further-reading">Further Reading</h2>
 <ul>
-<li><a href="https://ekamperi.github.io/mathematics/2020/01/19/bayes-theorem-likelihood-ratios.html"><strong>Bayes theorem and likelihood ratios for diagnostic tests</strong> – a blog post by Stathis Kamperis about likelihood ratios</a></li>
-<li><a href="https://cscheid.net/v2/hacks/fagan-nomogram.html"><strong>An Interactive Fagan Nomogram</strong> – a blog post by Carlos Scheidegger about the Fagan nomogram</a></li>
+<li><a href="https://ekamperi.github.io/mathematics/2020/01/19/bayes-theorem-likelihood-ratios.html"><strong>Bayes theorem and likelihood ratios for diagnostic tests</strong> – a blog post by Stathis Kamperis</a></li>
+<li><a href="https://cscheid.net/v2/hacks/fagan-nomogram.html"><strong>An Interactive Fagan Nomogram</strong> – a blog post by Carlos Scheidegger</a></li>
 </ul>
 
 
@@ -387,8 +387,8 @@ Notation
 
 <ol>
 <li id="fn1"><p>Jacob Yerushalmy, <a href="https://doi.org/10.2307%2F4586294">“Statistical problems in assessing methods of medical diagnosis with special reference to x-ray techniques,”</a> <em>Public Health Reports</em> 62, no. 2 (October 1947): 1432–1439.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Steven McGee, <em>Evidence-Based Physical Diagnosis.</em> 3rd ed.&nbsp;Philadelphia: Saunders, 2012.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Sharon Bertsch McGrayne, <em>The Theory That Would Not Die.</em> New Haven: Yale University Press, 2011.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Steven McGee, <a href="https://openlibrary.org/books/OL25054810M/Evidence-based_physical_diagnosis"><em>Evidence-Based Physical Diagnosis,</em></a> 3rd ed.&nbsp;(Saunders, 2012), 11–12.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Sharon McGrayne, <a href="https://dx.doi.org/10.7203/metode.83.3827">“The theory that never died: How an eighteenth century mathematical idea transformed the twenty-first century,”</a> <em>Metode Science Studies Journal</em> 5, (April 2015): 159–165.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

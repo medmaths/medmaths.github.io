@@ -4,7 +4,8 @@ $h1-font-size: 1.8em !default;
 $h2-font-size: 1.6em !default;
 $h3-font-size: 1.4em !default;
 $h4-font-size: 1.2em !default;
-$navbar-hl: #ffffff !default;
+$navbar-bg: #007ba8 !default;
+$navbar-fg: #ffffff !default;
 $navbar-hover-color: #ffffff !default;
 $font-family-code: 'Courier Prime' !default;
 $code-font-size: 1em !default;
@@ -16,11 +17,25 @@ $link-hover-color: #006a90 !default;
 $code-bg: #f1f3f4 !default;
 $code-color: #000000 !default;
 /*-- scss:rules --*/
+#quarto-header > nav > div > div.navbar-brand-container.mx-auto > a:hover {
+  color: #e4f8ff;
+}
+#navbarCollapse > ul > li > a:hover {
+  color: #e4f8ff;
+}
+#navbarCollapse > ul > li > a.nav-link.active {
+  color: #ffffff;
+  text-decoration: underline;
+}
+#navbarCollapse > ul > li > a.nav-link.active:hover {
+  color: #e4f8ff;
+}
 .cell-output {
   background-color: #e4f8ff;
-  border-radius: 0.3em;
-  padding-left: 0.3em;
-  padding-right: 0.3em;
+  border-radius: 0.24em;
+  padding-left: 0.36em;
+  padding-right: 0.36em;
+  padding-top: 0.216em;
 }
 .quarto-appendix-heading {
   font-size: 1.6em;

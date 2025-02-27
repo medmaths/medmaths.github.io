@@ -17,20 +17,20 @@ When interpreting a diagnostic test result, two of most important pieces of info
 Steven McGee gives a helpful illustration of these concepts in his book Evidence-Based Physical Diagnosis[^2], using a hypothetical experiment. He asks us to imagine that a specific physical examination finding -- a holosystolic heart murmur -- is assessed in a group of 42 people with a particular type of valvular heart disease and a group of 58 people without the condition, producing the following results.
 
 ```{=html}
-<div style="overflow-x:auto;">
+<div style="overflow-x:auto">
   <table class="table table-bordered table-sm">
       <caption>Physical Examination Findings in Patients With and Without Tricuspid Regurgitation</caption>
       <tr>
-          <td colspan="2" rowspan="2" style="background-color: #e4f8ff"></td><td colspan="2" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Valvular Heart Disease Status</td>
+          <td colspan="2" rowspan="2" style="background-color: #e4f8ff"></td><td colspan="2" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">Valvular Heart Disease Status</td>
       </tr>
       <tr>
-        <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">Patients With Tricuspid Regurgitation</td><td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">Patients Without Tricuspid Regurgitation</td>
+        <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white; width: 33%">Patients With Tricuspid Regurgitation</td><td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white; width: 33%">Patients Without Tricuspid Regurgitation</td>
       </tr>
       <tr>
-          <td rowspan="2" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Physical Examination Finding</td><td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">Holosystolic Murmur Present</td><td style="text-align: center; vertical-align: middle;">22</td><td style="text-align: center; vertical-align: middle;">3</td>
+          <td rowspan="2" style="text-align: center; vertical-align: middle; background-color: #006a90; color: white">Physical Examination Finding</td><td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">Holosystolic Murmur Present</td><td style="text-align: center; vertical-align: middle">22</td><td style="text-align: center; vertical-align: middle">3</td>
       </tr>
       <tr>
-          <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white;">Holosystolic Murmur Absent</td><td style="text-align: center; vertical-align: middle;">20</td><td style="text-align: center; vertical-align: middle;">55</td>
+          <td style="text-align: center; vertical-align: middle; background-color: #009ed8; color: white">Holosystolic Murmur Absent</td><td style="text-align: center; vertical-align: middle">20</td><td style="text-align: center; vertical-align: middle">55</td>
       </tr>
   </table>
 </div>
@@ -74,7 +74,7 @@ Our problem was that we failed to take into account the population prevalence, o
 Clearly, the sensitivity and specificity of a test aren't on their own sufficient for us to calculate the probability that any particular positive test result is false. How, then, do we find the exact value of this probability?
 
 ## Bayes to the Rescue 
-The answer, of course, is Bayes' Theorem. Discovered by Thomas Bayes in the 1740s and given its modern form by Pierre Simon Laplace in the 1810s[^3], this famous theorem states that for any two events $A$ and $B$, we can get the conditional probability of $A$ given $B$ from the conditional probability of $B$ given $A$ using the formula
+The answer, of course, is Bayes' Theorem. Discovered by Thomas Bayes in the 1740s century, and given its modern form by Pierre Simon Laplace in 1812[^3], this famous theorem states that for any two events $A$ and $B$, we can get the conditional probability of $A$ given $B$ from the conditional probability of $B$ given $A$ using the formula
 
 $$
 \mathbb{P}(A|B)=\frac{\mathbb{P}(B|A)\mathbb{P}(A)}{\mathbb{P}(B)},
@@ -177,9 +177,9 @@ legend("topright", legend="Calculated Probability", col="#009ed8", lty=1, lwd=4.
 Reassuringly, as we do more simulations, the average proportion of positive test results that are false appears to converge to our calculated value of $\mathbb{P}(D^{-}|T^{+})$.
 
 ## Further Reading
-- [**Bayes theorem and likelihood ratios for diagnostic tests** -- a blog post by Stathis Kamperis about likelihood ratios](https://ekamperi.github.io/mathematics/2020/01/19/bayes-theorem-likelihood-ratios.html)
-- [**An Interactive Fagan Nomogram** -- a blog post by Carlos Scheidegger about the Fagan nomogram](https://cscheid.net/v2/hacks/fagan-nomogram.html) 
+- [**Bayes theorem and likelihood ratios for diagnostic tests** -- a blog post by Stathis Kamperis](https://ekamperi.github.io/mathematics/2020/01/19/bayes-theorem-likelihood-ratios.html)
+- [**An Interactive Fagan Nomogram** -- a blog post by Carlos Scheidegger](https://cscheid.net/v2/hacks/fagan-nomogram.html) 
 
 [^1]: Jacob Yerushalmy, ["Statistical problems in assessing methods of medical diagnosis with special reference to x-ray techniques,"](https://doi.org/10.2307%2F4586294) *Public Health Reports* 62, no. 2 (October 1947): 1432--1439.
-[^2]: Steven McGee, *Evidence-Based Physical Diagnosis.* 3rd ed. Philadelphia: Saunders, 2012.
-[^3]: Sharon Bertsch McGrayne, *The Theory That Would Not Die.* New Haven: Yale University Press, 2011.
+[^2]: Steven McGee, [*Evidence-Based Physical Diagnosis,*](https://openlibrary.org/books/OL25054810M/Evidence-based_physical_diagnosis) 3rd ed. (Saunders, 2012), 11--12.
+[^3]: Sharon McGrayne, ["The theory that never died: How an eighteenth century mathematical idea transformed the twenty-first century,"](https://dx.doi.org/10.7203/metode.83.3827) *Metode Science Studies Journal* 5, (April 2015): 159--165.

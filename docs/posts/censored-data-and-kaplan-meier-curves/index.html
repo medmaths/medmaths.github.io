@@ -230,7 +230,7 @@ Notation
 </ul>
 <p><img src="light-bulbs.png" class="img-fluid"></p>
 <p>Putting aside the fact that this is a very small sample, it is relatively straightforward to estimate the survival function for these faulty light bulbs from this experiment. For example, to estimate <span class="math inline">\(S(1)\)</span>, we just look at the proportion of light bulbs that last longer than one day – seven tenths. By the <a href="https://en.wikipedia.org/wiki/Law_of_large_numbers">law of large numbers</a>, as we increase the number of light bulbs in the sample this proportion will eventually converge to the true probability of a faulty light bulb lasting longer than one day. We can do this calculation for each time marker, including the start point of the experiment – we call this Day 0.</p>
-<div style="overflow-x:auto;">
+<div style="overflow-x:auto">
   
 <table class="table table-bordered table-sm" data-quarto-postprocess="true">
 <caption>Estimated Faulty Light Bulb Survival Function</caption>
@@ -288,7 +288,7 @@ Notation
 <section id="censoring" class="level2">
 <h2 class="anchored" data-anchor-id="censoring">Censoring</h2>
 <p>In many medical studies producing time to event data, patients are recruited over a period of some time and then followed until a defined end date, at which point the investigators will want to analyse their outcomes. As a result of this, the event of interest may not have happened for all the subjects of the study. In survival analysis, these ‘incomplete’ data points are known as <strong>censored data</strong>. They do give us some information – we know the event we are studying had not yet happened at the point at which censoring occurred. However, we cannot tell when, or indeed if, it would have gone on to happen.</p>
-<p>Censoring can also come about in other ways, including patients being lost to follow up, or experiencing a ‘competing event’<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. For example, in a study of times from catheter placement to complication in acute peritoneal dialysis, observations were considered censored when a catheter was removed before a complication arose<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
+<p>Censoring can also come about in other ways, including patients being lost to follow up, or experiencing a ‘competing event’<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. For example, in a study of the time it took for catheter-associated complications to arise in children undergoing peritoneal dialysis, observations were considered censored when a patient’s catheter was removed before a complication had occurred<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
 <p>Censored data make estimating a survival function considerably more complicated. Imagine, for example, that three of the light bulbs in our previous thought experiment accidentally got smashed at the end of the first day.</p>
 <p><img src="light-bulbs-censored.png" class="img-fluid"></p>
 <p>We could still approximate <span class="math inline">\(S(1)\)</span> to be seven tenths, since <span class="math display">\[\mathbb{P}(T&gt;1)=1-\mathbb{P}(T\leq1),\]</span> which, since three light bulbs fail on the first day, we can estimate to be <span class="math display">\[1-\frac{3}{10}=\frac{7}{10},\]</span> as in the original case. But what about <span class="math inline">\(S(2)\)</span> onwards? We don’t know on which days the smashed light bulbs would have failed, so we can’t estimate <span class="math inline">\(S(t)\)</span> for these values of <span class="math inline">\(t\)</span> in the same way.</p>
@@ -347,7 +347,7 @@ Notation
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>conception_study <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">subject=</span>women, <span class="at">months=</span>event_times, <span class="at">event=</span>conception_or_censoring)</span></code></pre></div>
 </details>
 </div>
-<div style="overflow-x:auto;">
+<div style="overflow-x:auto">
   
 <table class="table table-bordered table-sm" data-quarto-postprocess="true">
 <caption>Time to Event Data from a Study of Conception after Laparoscopy and Hydrotubation</caption>
@@ -500,15 +500,35 @@ Notation
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>conception_data_summary <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">months=</span>months_from_intervention, <span class="at">censored=</span>censored, <span class="at">conceived=</span>conceived)</span></code></pre></div>
 </details>
 </div>
-<div style="overflow-x:auto;">
+<div style="overflow-x:auto">
   
 <table class="table table-bordered table-sm" data-quarto-postprocess="true">
 <caption>Summarised Conception Study Data</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
 <tbody>
 <tr class="odd">
-<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Months from Intervention</td>
-<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Number of Censorings</td>
-<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Number of Conceptions</td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><div style="white-space: nowrap">
+Months from
+</div>
+<div style="white-space: nowrap">
+Intervention
+</div></td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><div style="white-space: nowrap">
+Number of
+</div>
+<div style="white-space: nowrap">
+Censorings
+</div></td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><div style="white-space: nowrap">
+Number of
+</div>
+<div style="white-space: nowrap">
+Conceptions
+</div></td>
 </tr>
 <tr class="even">
 <td style="text-align: center; vertical-align: middle;">0</td>
@@ -587,7 +607,7 @@ Notation
 <p>To calculate the conditional probability <span class="math inline">\(\mathbb{P}(T&gt;t_i|T&gt;t_{i-1})\)</span> for each observed number of months from conception, <span class="math inline">\(t_i\)</span>, we first need to find out how many women were still being followed up at each stage.</p>
 <div class="cell">
 <details class="code-fold">
-<summary>Finding the Number of Remaining Study Members at Each Time Stage in R</summary>
+<summary>Finding the Number of Study Participants Still Being Followed Up at Each Time Stage in R</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>num_remaining <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times=</span>num_times) <span class="co"># initialising a vector to store the number of remaining study members at each event time</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>num_remaining[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">38</span> <span class="co"># at month zero, all women are still being followed up </span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>num_times) { <span class="co"># finding the number of women still being followed up at each event time from the previous number, </span></span>
@@ -597,16 +617,42 @@ Notation
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>conception_data_summary<span class="sc">$</span>remaining <span class="ot">&lt;-</span> num_remaining <span class="co"># adding a column to the data frame</span></span></code></pre></div>
 </details>
 </div>
-<div style="overflow-x:auto;">
+<div style="overflow-x:auto">
   
 <table class="table table-bordered table-sm" data-quarto-postprocess="true">
 <caption>Summarised Conception Study Data (Including Numbers of Participants Remaining in Follow Up)</caption>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
 <tbody>
 <tr class="odd">
-<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Months from Intervention</td>
-<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Number of Censorings</td>
-<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Number of Conceptions</td>
-<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Number Still in Study</td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><div style="white-space: nowrap">
+Months from
+</div>
+<div style="white-space: nowrap">
+Intervention
+</div></td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><div style="white-space: nowrap">
+Number of
+</div>
+<div style="white-space: nowrap">
+Censorings
+</div></td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><div style="white-space: nowrap">
+Number of
+</div>
+<div style="white-space: nowrap">
+Conceptions
+</div></td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><div style="white-space: nowrap">
+Number of Participants
+</div>
+<div style="white-space: nowrap">
+Still Being Followed
+</div></td>
 </tr>
 <tr class="even">
 <td style="text-align: center; vertical-align: middle;">0</td>
@@ -708,17 +754,31 @@ Notation
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>conception_survival_analysis<span class="sc">$</span>conditionals <span class="ot">&lt;-</span> conditional_probabilities</span></code></pre></div>
 </details>
 </div>
-<div style="overflow-x:auto;">
+<div style="overflow-x:auto">
   
 <table class="table table-bordered table-sm" data-quarto-postprocess="true">
 <caption>Conception Study Data With Estimated Conditional Probabilities</caption>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
 <tbody>
 <tr class="odd">
 <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><span class="math inline">\(i\)</span></td>
-<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><span class="math inline">\(t_{i}\)</span> (Months)</td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><span class="math inline">\(t_{i}\)</span><br>
+(Months)</td>
 <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><span class="math inline">\(\#(T = t_{i})\)</span> (Conceptions)</td>
-<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Number Still in Study</td>
-<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Estimated <span class="math inline">\(\mathbb{P}(T &gt; t_{i}\,|\, T &gt; t_{i - 1})\)</span></td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><div style="white-space: nowrap">
+Number of Study
+</div>
+<div style="white-space: nowrap">
+Participants
+</div></td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Estimated<br>
+<span class="math inline">\(\mathbb{P}(T &gt; t_{i}\,|\, T &gt; t_{i - 1})\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center; vertical-align: middle;">0</td>
@@ -830,18 +890,33 @@ Notation
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>conception_survival_analysis<span class="sc">$</span>survival <span class="ot">&lt;-</span> survival_function</span></code></pre></div>
 </details>
 </div>
-<div style="overflow-x:auto;">
+<div style="overflow-x:auto">
   
 <table class="table table-bordered table-sm" data-quarto-postprocess="true">
 <caption>Survival Analysis of Time to Event Data from a Study of Conception after Laparoscopy and Hydrotubation</caption>
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
 <tbody>
 <tr class="odd">
 <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><span class="math inline">\(i\)</span></td>
-<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><span class="math inline">\(t_{i}\)</span> (Months)</td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><span class="math inline">\(t_{i}\)</span><br>
+(Months)</td>
 <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><span class="math inline">\(\#(T = t_{i})\)</span> (Conceptions)</td>
-<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Number Still in Study</td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;"><div style="white-space: nowrap">
+Number of Study
+</div>
+<div style="white-space: nowrap">
+Participants
+</div></td>
 <td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Estimated <span class="math inline">\(\mathbb{P}(T &gt; t_{i}\,|\, T &gt; t_{i - 1})\)</span></td>
-<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Estimated <span class="math inline">\(\mathbb{P}(T &gt; t_{i})\)</span></td>
+<td style="text-align: center; vertical-align: middle; background-color: #006a90; color: white;">Estimated<br>
+<span class="math inline">\(\mathbb{P}(T &gt; t_{i})\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center; vertical-align: middle;">0</td>
@@ -1002,7 +1077,7 @@ Notation
 </div>
 </div>
 </div>
-<p>We find that the median number of months that passed before women conceived after laparoscopy and hydrotubation was six. So, based on the results of this study, we would expect a woman to have a 50% chance of conceiving within the first six months following laparoscopy and hydrotubation.</p>
+<p>We find that the median number of months that passed before women conceived after laparoscopy and hydrotubation was six. So, based on the results of this study, we would expect a woman with the same type of fertility problems as the study participants to have a 50% chance of conceiving within the first six months following laparoscopy and hydrotubation.</p>
 </section>
 <section id="further-reading" class="level2">
 <h2 class="anchored" data-anchor-id="further-reading">Further Reading</h2>
@@ -1021,10 +1096,10 @@ Notation
 <li id="fn1"><p>Emily Zabor, <a href="https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html">“Survival Analysis in R,”</a> June 21, 2023.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Douglas Altman and Martin Bland, <a href="https://doi.org/10.1136/bmj.317.7156.468">“Time to event (survival) data,”</a> <em>BMJ</em> 317, no. 7156 (August 1998): 468–469.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>Vimal Chadha et al., <a href="https://doi.org/10.1016/s0272-6386(00)70048-5">“Tenckhoff catheters prove superior to cook catheters in pediatric acute peritoneal dialysis,”</a> <em>American Journal of Kidney Diseases</em> 35, no. 6 (June 2000): 111–1116.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>Edward Kaplan and Paul Meier, <a href="https://doi.org/10.2307/2281868">“Nonparametric Estimation From Incomplete Observations,”</a> <em>Journal of the American Statistical Association</em> 53, no. 282 (June 1958): 45–481.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>Richard Van Noorden, Brendan Maher, and Regina Nuzzo, <a href="https://doi.org/10.1038/514550a">“The Top 100 Papers,”</a> <em>Nature</em> 514, no. 7524 (October 2014): 55–553.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Edward Kaplan and Paul Meier, <a href="https://doi.org/10.2307/2281868">“Nonparametric Estimation From Incomplete Observations,”</a> <em>Journal of the American Statistical Association</em> 53, no. 282 (June 1958): 457–481.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Richard Van Noorden, Brendan Maher, and Regina Nuzzo, <a href="https://doi.org/10.1038/514550a">“The Top 100 Papers,”</a> <em>Nature</em> 514, no. 7524 (October 2014): 550–553.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn6"><p>Paramjit Luthra, Martin Bland, and Stuart Stanton, <a href="https://doi.org/10.1136/bmj.284.6321.1013">“Incidence of Pregnancy After Laparoscopy and Hydrotubation,”</a> <em>British Medical Journal (Clinical Research Edition)</em> 284, no. 6321 (April, 1982): 101.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"><p>Martin Bland and Douglas Altman, <a href="https://doi.org/10.1136/bmj.317.7172.1572">“Survival probabilities (the Kaplan-Meier method),”</a> <em>BMJ</em> 317, no. 7172 (December 1998): 1572–1580.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Martin Bland and Douglas Altman, <a href="https://doi.org/10.1136/bmj.317.7172.1572">“Survival probabilities (the Kaplan-Meier method),”</a> <em>BMJ</em> 317, no. 7172 (December 1998): 1572.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

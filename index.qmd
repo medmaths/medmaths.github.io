@@ -9,5 +9,4 @@ listing:
   sort-ui: false
   filter-ui: false
 page-layout: article
-title-block-banner: false
 ---
