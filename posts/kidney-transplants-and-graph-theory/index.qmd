@@ -130,9 +130,8 @@ Instead, we are looking for a **maximum matching**, which is a matching of a gra
 #| code-summary: "Plotting the Number of Subsets of Edges Against the Number of Edges in R"
 #| label: exponential-growth
 par(mar=c(bottom=4.2, left=5.1, top=1.8, right=0.9), family="Roboto Slab") # setting the plot options
-xs <- 1:12
-ys <- 2^xs
-plot(xs, ys, pch=4, cex=1.8, lwd=4.8, col="#009ed8",
+num_edges <- 1:12 
+plot(num_edges, 2^num_edges, pch=4, cex=1.8, lwd=4.8, col="#009ed8",
      xlab="Number of Edges of Graph", ylab="Number of Subsets to Check",
      cex.lab=1.5, cex.axis=1.5)
 ```
@@ -158,18 +157,27 @@ augmenting_path <- function(adj_list, match_vec) {
       next 
     }
     root <- i
-    current_vert <- i # we will use this to keep track of which vertex we have reached in our attempt to find an augmenting path
+    current_vert <- i # we will use this variable to keep track of which vertex we have reached
+                      # in our attempt to find an augmenting path
     # Let's keep track of the vertices we've included in our augmenting path attempt from this vertex:
     unvisited_from_root <- c(1:num_vertices)
     unvisited_from_root <- unvisited_from_root[!unvisited_from_root==root]
-    repeat { # we create a repeating loop that will run the same procedure until we break out of it using break or return
-      neighbours <- unlist(adj_list[[current_vert]]) # we create a vector of the vertices that have an edge between them and the vertex that we are currently on 
-      neighbours_unvisited_from_root <- intersect(neighbours, unvisited_from_root) # we create a vector of vertices adjacent to the vertex we are currently on that have not already been included in our attempt to find an augmenting path
-      if (length(neighbours_unvisited_from_root) == 0) { # if there are none of these, we can stop running our repear loop and try our searh again from the next unmatched vertex
+    repeat { # we create a repeating loop that will run the same procedure 
+             # until we break out of it using break or return
+      neighbours <- unlist(adj_list[[current_vert]]) # we create a vector of the vertices that have an edge 
+                                                     # between them and the vertex that we are currently on 
+      neighbours_unvisited_from_root <- intersect(neighbours, unvisited_from_root) # we create a vector of vertices
+                                                                                   # adjacent to the vertex we are 
+                                                                                   # currently on that have not already 
+                                                                                   # been included in our attempt to 
+                                                                                   # find an augmenting path
+      if (length(neighbours_unvisited_from_root) == 0) { # if there are none of these, we can stop running our repeat loop
+                                                         # and try our search again from the next unmatched vertex
         break
       }
       match_to_current_vert <- match_vec[current_vert] 
-      # if we are on a vertex that is part of the matching, and the vertex it is matched to is not yet part of the augmenting path, we want to go to that vertex next 
+      # if we are on a vertex that is part of the matching, and the vertex it is matched
+      # to is not yet part of the augmenting path, we want to go to that vertex next 
       if (match_to_current_vert %in% unvisited_from_root) { 
         next_vert <- match_to_current_vert
         unvisited_from_root <- unvisited_from_root[!unvisited_from_root==next_vert]
@@ -177,12 +185,18 @@ augmenting_path <- function(adj_list, match_vec) {
         current_vert <- next_vert
         next
       }
-      unmatched_neighbours_unvisited_from_root <- intersect(unmatched_vertices, neighbours_unvisited_from_root) # we create a vector of unmatched vertices adjacent to the vertex we are currently on that we haven't already included in our augmenting path attempt
+      unmatched_neighbours_unvisited_from_root <- intersect(unmatched_vertices, neighbours_unvisited_from_root) # we create a vector of unmatched vertices
+                                                                                                                # adjacent to the vertex we are currently 
+                                                                                                                # on that we haven't already included in our 
+                                                                                                                # augmenting path attempt
       if (length(unmatched_neighbours_unvisited_from_root) > 0) { # if any of these exist, then we have found an augmenting path, and we can return it!
         aug_path <- rbind(aug_path, c(current_vert,unmatched_neighbours_unvisited_from_root[1]))
         return(aug_path)
       }
-      # If we didn't return an augmenting path in the if statement above, all the vertices adjacent to the vertex we are currently on that are not already included in our augmenting path attempt must be part of the matching, so we will go to one of these next and continue searching:
+      # If we didn't return an augmenting path in the if statement above, 
+      # all the vertices adjacent to the vertex we are currently on that
+      # are not already included in our augmenting path attempt must be part 
+      # of the matching, so we will go to one of these next and continue searching:
       next_vert <- neighbours_unvisited_from_root[1]
       unvisited_from_root <- unvisited_from_root[!unvisited_from_root==next_vert]
       aug_path <- rbind(aug_path, c(current_vert,next_vert))
@@ -207,9 +221,10 @@ When it can no longer find any augmenting paths, Kuhn's algorithm terminates, an
 #| code-fold: true
 #| code-summary: "Coding Kuhn's algorithm in R"
 #| label: kuhns-algorithm
-# Let's use our augmenting_path function to write an implementation of Kuhn's algorithm that takes as its input the adjacency matrix of a graph and a matching vector:
+# Let's use our augmenting_path function to write an implementation of Kuhn's algorithm 
+# that takes as its input the adjacency matrix of a graph and a matching vector:
 maximum_matching <- function(adj_mat, match_vec) {
-  adj_list <- adj_mat_to_adj_list(adj_mat) # we use the function we wrote earlian 
+  adj_list <- adj_mat_to_adj_list(adj_mat) # we use the function we wrote earlier 
   num_vertices <- length(match_vec) # we find the number of vertices in the graph
   # Let's create a matrix to store the current matching:
   current_matching <- matrix(, nrow=0, ncol=2)
@@ -221,9 +236,11 @@ maximum_matching <- function(adj_mat, match_vec) {
     current_matching <- rbind(current_matching, c(i,match_vec[i]))
   }
   if (nrow(current_matching) != 0) {
-    current_matching <- unique(t(apply(current_matching, 1, sort))) # we order the edges with the lower indexed vertex first, and remove duplicates
+    current_matching <- unique(t(apply(current_matching, 1, sort))) # we order the edges with the lower indexed vertex first, 
+                                                                    # and remove duplicates
   }
-  # Now we will run our augmenting path algorithm and and use it to increase our current matching until no more augmenting paths can be found:
+  # Now we will run our augmenting path algorithm and and use it to increase our current matching 
+  # until no more augmenting paths can be found:
   current_match_vec <- match_vec
   repeat {
     aug_path <- augmenting_path(adj_list, current_match_vec) # we find an augmenting path for the input graph and the current matching 
@@ -233,10 +250,14 @@ maximum_matching <- function(adj_mat, match_vec) {
       break 
     }
     aug_path <- t(apply(aug_path, 1, sort)) # we order the edges in the augmenting path with the lowest indexed vertex first
-    # If the augmenting path consists of only one edge, we add that edge to our matching and run another iteration of the augmenting_path function with the new matching:
+    # If the augmenting path consists of only one edge, 
+    # we add that edge to our matching and run another iteration 
+    # of the augmenting_path function with the new matching:
     if (aug_path_length == 1) { 
       current_matching <- rbind(current_matching, aug_path) 
-      # Before running the augmenting_path function again we need to update the current_match_vec algorithm to reflect our new matching:
+      # Before running the augmenting_path function again 
+      # we need to update the current_match_vec algorithm 
+      # to reflect our new matching:
       current_matching_length <- nrow(current_matching)
       current_match_vec <- rep(0,num_vertices)
       for (i in 1:current_matching_length) {
@@ -245,8 +266,8 @@ maximum_matching <- function(adj_mat, match_vec) {
       }
       next
     }
-    # If the augmenting path has more than one edge, we add the edges that are not included in the current matching, and remove the ones that are 
-    # (by the definition of an augmenting path, these alternate):
+    # If the augmenting path has more than one edge, we add the edges that are not included in the current matching, 
+    # and remove the ones that are (by the definition of an augmenting path, these alternate):
     for (i in 1:aug_path_length) {
       if (i%%2 == 1) { 
         current_matching <- rbind(current_matching, aug_path[i,])
@@ -263,8 +284,8 @@ maximum_matching <- function(adj_mat, match_vec) {
       current_match_vec[current_matching[i,2]] <- current_matching[i,1]
     }
   }
-  return(current_matching[order(current_matching[,1]),]) # we return the first matching we arrived at for which no augmenting paths could be found,
-                                                         # with the edges ordered by their lowest indexed vertex
+  return(current_matching[order(current_matching[,1]),]) # we return the first matching we arrived at for which no augmenting paths
+                                                         # could be found, with the edges ordered by their lowest indexed vertex
 }
 ```
 
@@ -278,7 +299,7 @@ S_empty_matching <- rep(0,6)
 S_max_matching <- maximum_matching(S_adj_mat, S_empty_matching)
 letters_matching <- apply(S_max_matching, 1:2, function(i) LETTERS[i])
 for (i in 1:nrow(letters_matching)) {
-  cat(letters_matching[i,1], "–", letters_edge_list[i,2], ",\n", sep = "")
+  cat(letters_matching[i,1], "–", letters_matching[i,2], ",\n", sep = "")
 }
 ```
 

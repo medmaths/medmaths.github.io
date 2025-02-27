@@ -171,7 +171,7 @@ window.Quarto = {
     
   
     <div>
-    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-heading">Last Modified</div>
     <div class="quarto-title-meta-contents">
       <p class="date-modified">February 27, 2025</p>
     </div>
@@ -319,11 +319,10 @@ C–D,</code></pre>
 <details class="code-fold">
 <summary>Plotting the Number of Subsets of Edges Against the Number of Edges in R</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="at">bottom=</span><span class="fl">4.2</span>, <span class="at">left=</span><span class="fl">5.1</span>, <span class="at">top=</span><span class="fl">1.8</span>, <span class="at">right=</span><span class="fl">0.9</span>), <span class="at">family=</span><span class="st">"Roboto Slab"</span>) <span class="co"># setting the plot options</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">^</span>xs</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xs, ys, <span class="at">pch=</span><span class="dv">4</span>, <span class="at">cex=</span><span class="fl">1.8</span>, <span class="at">lwd=</span><span class="fl">4.8</span>, <span class="at">col=</span><span class="st">"#009ed8"</span>,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"Number of Edges of Graph"</span>, <span class="at">ylab=</span><span class="st">"Number of Subsets to Check"</span>,</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex.lab=</span><span class="fl">1.5</span>, <span class="at">cex.axis=</span><span class="fl">1.5</span>)</span></code></pre></div>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>num_edges <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(num_edges, <span class="dv">2</span><span class="sc">^</span>num_edges, <span class="at">pch=</span><span class="dv">4</span>, <span class="at">cex=</span><span class="fl">1.8</span>, <span class="at">lwd=</span><span class="fl">4.8</span>, <span class="at">col=</span><span class="st">"#009ed8"</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"Number of Edges of Graph"</span>, <span class="at">ylab=</span><span class="st">"Number of Subsets to Check"</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex.lab=</span><span class="fl">1.5</span>, <span class="at">cex.axis=</span><span class="fl">1.5</span>)</span></code></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -351,41 +350,56 @@ C–D,</code></pre>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>      <span class="cf">next</span> </span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    root <span class="ot">&lt;-</span> i</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    current_vert <span class="ot">&lt;-</span> i <span class="co"># we will use this to keep track of which vertex we have reached in our attempt to find an augmenting path</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Let's keep track of the vertices we've included in our augmenting path attempt from this vertex:</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    unvisited_from_root <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>num_vertices)</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    unvisited_from_root <span class="ot">&lt;-</span> unvisited_from_root[<span class="sc">!</span>unvisited_from_root<span class="sc">==</span>root]</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">repeat</span> { <span class="co"># we create a repeating loop that will run the same procedure until we break out of it using break or return</span></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>      neighbours <span class="ot">&lt;-</span> <span class="fu">unlist</span>(adj_list[[current_vert]]) <span class="co"># we create a vector of the vertices that have an edge between them and the vertex that we are currently on </span></span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>      neighbours_unvisited_from_root <span class="ot">&lt;-</span> <span class="fu">intersect</span>(neighbours, unvisited_from_root) <span class="co"># we create a vector of vertices adjacent to the vertex we are currently on that have not already been included in our attempt to find an augmenting path</span></span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">length</span>(neighbours_unvisited_from_root) <span class="sc">==</span> <span class="dv">0</span>) { <span class="co"># if there are none of these, we can stop running our repear loop and try our searh again from the next unmatched vertex</span></span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>      match_to_current_vert <span class="ot">&lt;-</span> match_vec[current_vert] </span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>      <span class="co"># if we are on a vertex that is part of the matching, and the vertex it is matched to is not yet part of the augmenting path, we want to go to that vertex next </span></span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (match_to_current_vert <span class="sc">%in%</span> unvisited_from_root) { </span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>        next_vert <span class="ot">&lt;-</span> match_to_current_vert</span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>        unvisited_from_root <span class="ot">&lt;-</span> unvisited_from_root[<span class="sc">!</span>unvisited_from_root<span class="sc">==</span>next_vert]</span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>        aug_path <span class="ot">&lt;-</span> <span class="fu">rbind</span>(aug_path, <span class="fu">c</span>(current_vert,next_vert))</span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>        current_vert <span class="ot">&lt;-</span> next_vert</span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">next</span></span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>      unmatched_neighbours_unvisited_from_root <span class="ot">&lt;-</span> <span class="fu">intersect</span>(unmatched_vertices, neighbours_unvisited_from_root) <span class="co"># we create a vector of unmatched vertices adjacent to the vertex we are currently on that we haven't already included in our augmenting path attempt</span></span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">length</span>(unmatched_neighbours_unvisited_from_root) <span class="sc">&gt;</span> <span class="dv">0</span>) { <span class="co"># if any of these exist, then we have found an augmenting path, and we can return it!</span></span>
-<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>        aug_path <span class="ot">&lt;-</span> <span class="fu">rbind</span>(aug_path, <span class="fu">c</span>(current_vert,unmatched_neighbours_unvisited_from_root[<span class="dv">1</span>]))</span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(aug_path)</span>
-<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>      <span class="co"># If we didn't return an augmenting path in the if statement above, all the vertices adjacent to the vertex we are currently on that are not already included in our augmenting path attempt must be part of the matching, so we will go to one of these next and continue searching:</span></span>
-<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>      next_vert <span class="ot">&lt;-</span> neighbours_unvisited_from_root[<span class="dv">1</span>]</span>
-<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>      unvisited_from_root <span class="ot">&lt;-</span> unvisited_from_root[<span class="sc">!</span>unvisited_from_root<span class="sc">==</span>next_vert]</span>
-<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>      aug_path <span class="ot">&lt;-</span> <span class="fu">rbind</span>(aug_path, <span class="fu">c</span>(current_vert,next_vert))</span>
-<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>      current_vert <span class="ot">&lt;-</span> next_vert</span>
-<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If we haven't returned an augmenting path after searching from all unmatched vertices, we return an empty matrix:</span></span>
-<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>  aug_path <span class="ot">&lt;-</span> <span class="fu">matrix</span>(, <span class="at">nrow=</span><span class="dv">0</span>, <span class="at">ncol=</span><span class="dv">2</span>)</span>
-<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(aug_path) </span>
-<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    current_vert <span class="ot">&lt;-</span> i <span class="co"># we will use this variable to keep track of which vertex we have reached</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>                      <span class="co"># in our attempt to find an augmenting path</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Let's keep track of the vertices we've included in our augmenting path attempt from this vertex:</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    unvisited_from_root <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>num_vertices)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    unvisited_from_root <span class="ot">&lt;-</span> unvisited_from_root[<span class="sc">!</span>unvisited_from_root<span class="sc">==</span>root]</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">repeat</span> { <span class="co"># we create a repeating loop that will run the same procedure </span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>             <span class="co"># until we break out of it using break or return</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>      neighbours <span class="ot">&lt;-</span> <span class="fu">unlist</span>(adj_list[[current_vert]]) <span class="co"># we create a vector of the vertices that have an edge </span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>                                                     <span class="co"># between them and the vertex that we are currently on </span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>      neighbours_unvisited_from_root <span class="ot">&lt;-</span> <span class="fu">intersect</span>(neighbours, unvisited_from_root) <span class="co"># we create a vector of vertices</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>                                                                                   <span class="co"># adjacent to the vertex we are </span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>                                                                                   <span class="co"># currently on that have not already </span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>                                                                                   <span class="co"># been included in our attempt to </span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>                                                                                   <span class="co"># find an augmenting path</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">length</span>(neighbours_unvisited_from_root) <span class="sc">==</span> <span class="dv">0</span>) { <span class="co"># if there are none of these, we can stop running our repeat loop</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>                                                         <span class="co"># and try our search again from the next unmatched vertex</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>      match_to_current_vert <span class="ot">&lt;-</span> match_vec[current_vert] </span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>      <span class="co"># if we are on a vertex that is part of the matching, and the vertex it is matched</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>      <span class="co"># to is not yet part of the augmenting path, we want to go to that vertex next </span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (match_to_current_vert <span class="sc">%in%</span> unvisited_from_root) { </span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>        next_vert <span class="ot">&lt;-</span> match_to_current_vert</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>        unvisited_from_root <span class="ot">&lt;-</span> unvisited_from_root[<span class="sc">!</span>unvisited_from_root<span class="sc">==</span>next_vert]</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>        aug_path <span class="ot">&lt;-</span> <span class="fu">rbind</span>(aug_path, <span class="fu">c</span>(current_vert,next_vert))</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>        current_vert <span class="ot">&lt;-</span> next_vert</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>        <span class="cf">next</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>      unmatched_neighbours_unvisited_from_root <span class="ot">&lt;-</span> <span class="fu">intersect</span>(unmatched_vertices, neighbours_unvisited_from_root) <span class="co"># we create a vector of unmatched vertices</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>                                                                                                                <span class="co"># adjacent to the vertex we are currently </span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>                                                                                                                <span class="co"># on that we haven't already included in our </span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>                                                                                                                <span class="co"># augmenting path attempt</span></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">length</span>(unmatched_neighbours_unvisited_from_root) <span class="sc">&gt;</span> <span class="dv">0</span>) { <span class="co"># if any of these exist, then we have found an augmenting path, and we can return it!</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>        aug_path <span class="ot">&lt;-</span> <span class="fu">rbind</span>(aug_path, <span class="fu">c</span>(current_vert,unmatched_neighbours_unvisited_from_root[<span class="dv">1</span>]))</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(aug_path)</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>      <span class="co"># If we didn't return an augmenting path in the if statement above, </span></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>      <span class="co"># all the vertices adjacent to the vertex we are currently on that</span></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>      <span class="co"># are not already included in our augmenting path attempt must be part </span></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>      <span class="co"># of the matching, so we will go to one of these next and continue searching:</span></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>      next_vert <span class="ot">&lt;-</span> neighbours_unvisited_from_root[<span class="dv">1</span>]</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>      unvisited_from_root <span class="ot">&lt;-</span> unvisited_from_root[<span class="sc">!</span>unvisited_from_root<span class="sc">==</span>next_vert]</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>      aug_path <span class="ot">&lt;-</span> <span class="fu">rbind</span>(aug_path, <span class="fu">c</span>(current_vert,next_vert))</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>      current_vert <span class="ot">&lt;-</span> next_vert</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If we haven't returned an augmenting path after searching from all unmatched vertices, we return an empty matrix:</span></span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>  aug_path <span class="ot">&lt;-</span> <span class="fu">matrix</span>(, <span class="at">nrow=</span><span class="dv">0</span>, <span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(aug_path) </span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </details>
 </div>
 <p>In 1957, mathematician Claude Berge formally proved that if an augmenting path cannot be found for a graph and a matching, then that matching is a maximum matching<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. This fact had previously been observed by Dénes König<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, a pioneer of discrete mathematics who published the first ever textbook on the subject of graph theory<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. König’s book inspired another mathematician, Harold Kuhn, to propose an algorithmic solution to the maximum matching problem<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>.</p>
@@ -395,65 +409,72 @@ C–D,</code></pre>
 <div class="cell">
 <details class="code-fold">
 <summary>Coding Kuhn’s algorithm in R</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's use our augmenting_path function to write an implementation of Kuhn's algorithm that takes as its input the adjacency matrix of a graph and a matching vector:</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>maximum_matching <span class="ot">&lt;-</span> <span class="cf">function</span>(adj_mat, match_vec) {</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  adj_list <span class="ot">&lt;-</span> <span class="fu">adj_mat_to_adj_list</span>(adj_mat) <span class="co"># we use the function we wrote earlian </span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  num_vertices <span class="ot">&lt;-</span> <span class="fu">length</span>(match_vec) <span class="co"># we find the number of vertices in the graph</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Let's create a matrix to store the current matching:</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  current_matching <span class="ot">&lt;-</span> <span class="fu">matrix</span>(, <span class="at">nrow=</span><span class="dv">0</span>, <span class="at">ncol=</span><span class="dv">2</span>)</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># We can populate it with the initial matching to start with:</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_vertices) {</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (match_vec[i] <span class="sc">==</span> <span class="dv">0</span>) {</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>      <span class="cf">next</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    current_matching <span class="ot">&lt;-</span> <span class="fu">rbind</span>(current_matching, <span class="fu">c</span>(i,match_vec[i]))</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">nrow</span>(current_matching) <span class="sc">!=</span> <span class="dv">0</span>) {</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    current_matching <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">t</span>(<span class="fu">apply</span>(current_matching, <span class="dv">1</span>, sort))) <span class="co"># we order the edges with the lower indexed vertex first, and remove duplicates</span></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Now we will run our augmenting path algorithm and and use it to increase our current matching until no more augmenting paths can be found:</span></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  current_match_vec <span class="ot">&lt;-</span> match_vec</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">repeat</span> {</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    aug_path <span class="ot">&lt;-</span> <span class="fu">augmenting_path</span>(adj_list, current_match_vec) <span class="co"># we find an augmenting path for the input graph and the current matching </span></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    aug_path_length <span class="ot">&lt;-</span> <span class="fu">nrow</span>(aug_path)</span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If the augmenting_path function has not found any augmenting paths, we break out of the repeat loop:</span></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (aug_path_length <span class="sc">==</span> <span class="dv">0</span>) {</span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span> </span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    aug_path <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">apply</span>(aug_path, <span class="dv">1</span>, sort)) <span class="co"># we order the edges in the augmenting path with the lowest indexed vertex first</span></span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If the augmenting path consists of only one edge, we add that edge to our matching and run another iteration of the augmenting_path function with the new matching:</span></span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (aug_path_length <span class="sc">==</span> <span class="dv">1</span>) { </span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>      current_matching <span class="ot">&lt;-</span> <span class="fu">rbind</span>(current_matching, aug_path) </span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Before running the augmenting_path function again we need to update the current_match_vec algorithm to reflect our new matching:</span></span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>      current_matching_length <span class="ot">&lt;-</span> <span class="fu">nrow</span>(current_matching)</span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>      current_match_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>,num_vertices)</span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>current_matching_length) {</span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>        current_match_vec[current_matching[i,<span class="dv">1</span>]] <span class="ot">&lt;-</span> current_matching[i,<span class="dv">2</span>]</span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>        current_match_vec[current_matching[i,<span class="dv">2</span>]] <span class="ot">&lt;-</span> current_matching[i,<span class="dv">1</span>]</span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>      <span class="cf">next</span></span>
-<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If the augmenting path has more than one edge, we add the edges that are not included in the current matching, and remove the ones that are </span></span>
-<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>    <span class="co"># (by the definition of an augmenting path, these alternate):</span></span>
-<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>aug_path_length) {</span>
-<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (i<span class="sc">%%</span><span class="dv">2</span> <span class="sc">==</span> <span class="dv">1</span>) { </span>
-<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>        current_matching <span class="ot">&lt;-</span> <span class="fu">rbind</span>(current_matching, aug_path[i,])</span>
-<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (i<span class="sc">%%</span><span class="dv">2</span> <span class="sc">==</span> <span class="dv">0</span>) {</span>
-<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>        current_matching <span class="ot">&lt;-</span> current_matching[<span class="sc">!</span>(current_matching[,<span class="dv">1</span>]<span class="sc">==</span>aug_path[i,<span class="dv">1</span>] <span class="sc">&amp;</span> current_matching[,<span class="dv">2</span>]<span class="sc">==</span>aug_path[i,<span class="dv">2</span>]),]</span>
-<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Before running the augmenting_path function again we need to update the current_match_vec algorithm to reflect our new matching:</span></span>
-<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>    current_matching_length <span class="ot">&lt;-</span> <span class="fu">nrow</span>(current_matching)</span>
-<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>    current_match_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>,num_vertices)</span>
-<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>current_matching_length) {</span>
-<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>      current_match_vec[current_matching[i,<span class="dv">1</span>]] <span class="ot">&lt;-</span> current_matching[i,<span class="dv">2</span>]</span>
-<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>      current_match_vec[current_matching[i,<span class="dv">2</span>]] <span class="ot">&lt;-</span> current_matching[i,<span class="dv">1</span>]</span>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's use our augmenting_path function to write an implementation of Kuhn's algorithm </span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># that takes as its input the adjacency matrix of a graph and a matching vector:</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>maximum_matching <span class="ot">&lt;-</span> <span class="cf">function</span>(adj_mat, match_vec) {</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  adj_list <span class="ot">&lt;-</span> <span class="fu">adj_mat_to_adj_list</span>(adj_mat) <span class="co"># we use the function we wrote earlier </span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  num_vertices <span class="ot">&lt;-</span> <span class="fu">length</span>(match_vec) <span class="co"># we find the number of vertices in the graph</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Let's create a matrix to store the current matching:</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  current_matching <span class="ot">&lt;-</span> <span class="fu">matrix</span>(, <span class="at">nrow=</span><span class="dv">0</span>, <span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># We can populate it with the initial matching to start with:</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_vertices) {</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (match_vec[i] <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>      <span class="cf">next</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    current_matching <span class="ot">&lt;-</span> <span class="fu">rbind</span>(current_matching, <span class="fu">c</span>(i,match_vec[i]))</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">nrow</span>(current_matching) <span class="sc">!=</span> <span class="dv">0</span>) {</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    current_matching <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">t</span>(<span class="fu">apply</span>(current_matching, <span class="dv">1</span>, sort))) <span class="co"># we order the edges with the lower indexed vertex first, </span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>                                                                    <span class="co"># and remove duplicates</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Now we will run our augmenting path algorithm and and use it to increase our current matching </span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># until no more augmenting paths can be found:</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  current_match_vec <span class="ot">&lt;-</span> match_vec</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="cf">repeat</span> {</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    aug_path <span class="ot">&lt;-</span> <span class="fu">augmenting_path</span>(adj_list, current_match_vec) <span class="co"># we find an augmenting path for the input graph and the current matching </span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    aug_path_length <span class="ot">&lt;-</span> <span class="fu">nrow</span>(aug_path)</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If the augmenting_path function has not found any augmenting paths, we break out of the repeat loop:</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (aug_path_length <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span> </span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>    aug_path <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">apply</span>(aug_path, <span class="dv">1</span>, sort)) <span class="co"># we order the edges in the augmenting path with the lowest indexed vertex first</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If the augmenting path consists of only one edge, </span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># we add that edge to our matching and run another iteration </span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># of the augmenting_path function with the new matching:</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (aug_path_length <span class="sc">==</span> <span class="dv">1</span>) { </span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>      current_matching <span class="ot">&lt;-</span> <span class="fu">rbind</span>(current_matching, aug_path) </span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Before running the augmenting_path function again </span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>      <span class="co"># we need to update the current_match_vec algorithm </span></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>      <span class="co"># to reflect our new matching:</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>      current_matching_length <span class="ot">&lt;-</span> <span class="fu">nrow</span>(current_matching)</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>      current_match_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>,num_vertices)</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>current_matching_length) {</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>        current_match_vec[current_matching[i,<span class="dv">1</span>]] <span class="ot">&lt;-</span> current_matching[i,<span class="dv">2</span>]</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>        current_match_vec[current_matching[i,<span class="dv">2</span>]] <span class="ot">&lt;-</span> current_matching[i,<span class="dv">1</span>]</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>      <span class="cf">next</span></span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If the augmenting path has more than one edge, we add the edges that are not included in the current matching, </span></span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>    <span class="co"># and remove the ones that are (by the definition of an augmenting path, these alternate):</span></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>aug_path_length) {</span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (i<span class="sc">%%</span><span class="dv">2</span> <span class="sc">==</span> <span class="dv">1</span>) { </span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>        current_matching <span class="ot">&lt;-</span> <span class="fu">rbind</span>(current_matching, aug_path[i,])</span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (i<span class="sc">%%</span><span class="dv">2</span> <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>        current_matching <span class="ot">&lt;-</span> current_matching[<span class="sc">!</span>(current_matching[,<span class="dv">1</span>]<span class="sc">==</span>aug_path[i,<span class="dv">1</span>] <span class="sc">&amp;</span> current_matching[,<span class="dv">2</span>]<span class="sc">==</span>aug_path[i,<span class="dv">2</span>]),]</span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>      }</span>
 <span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(current_matching[<span class="fu">order</span>(current_matching[,<span class="dv">1</span>]),]) <span class="co"># we return the first matching we arrived at for which no augmenting paths could be found,</span></span>
-<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>                                                         <span class="co"># with the edges ordered by their lowest indexed vertex</span></span>
-<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Before running the augmenting_path function again we need to update the current_match_vec algorithm to reflect our new matching:</span></span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>    current_matching_length <span class="ot">&lt;-</span> <span class="fu">nrow</span>(current_matching)</span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>    current_match_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>,num_vertices)</span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>current_matching_length) {</span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>      current_match_vec[current_matching[i,<span class="dv">1</span>]] <span class="ot">&lt;-</span> current_matching[i,<span class="dv">2</span>]</span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a>      current_match_vec[current_matching[i,<span class="dv">2</span>]] <span class="ot">&lt;-</span> current_matching[i,<span class="dv">1</span>]</span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(current_matching[<span class="fu">order</span>(current_matching[,<span class="dv">1</span>]),]) <span class="co"># we return the first matching we arrived at for which no augmenting paths</span></span>
+<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a>                                                         <span class="co"># could be found, with the edges ordered by their lowest indexed vertex</span></span>
+<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </details>
 </div>
 <p>What does this algorithm give us when applied to our example graph <span class="math inline">\(S\)</span>, and an empty matching?</p>
@@ -464,13 +485,13 @@ C–D,</code></pre>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>S_max_matching <span class="ot">&lt;-</span> <span class="fu">maximum_matching</span>(S_adj_mat, S_empty_matching)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>letters_matching <span class="ot">&lt;-</span> <span class="fu">apply</span>(S_max_matching, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="cf">function</span>(i) LETTERS[i])</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(letters_matching)) {</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(letters_matching[i,<span class="dv">1</span>], <span class="st">"–"</span>, letters_edge_list[i,<span class="dv">2</span>], <span class="st">",</span><span class="sc">\n</span><span class="st">"</span>, <span class="at">sep =</span> <span class="st">""</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(letters_matching[i,<span class="dv">1</span>], <span class="st">"–"</span>, letters_matching[i,<span class="dv">2</span>], <span class="st">",</span><span class="sc">\n</span><span class="st">"</span>, <span class="at">sep =</span> <span class="st">""</span>)</span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>A–D,
+<pre><code>A–F,
 B–E,
-C–F,</code></pre>
+C–D,</code></pre>
 </div>
 </div>
 <p>So students A and F, B and E, and C and D, can all sit in pairs.</p>

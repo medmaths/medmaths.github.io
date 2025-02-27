@@ -79,6 +79,7 @@ The answer, of course, is Bayes' Theorem. Discovered by Thomas Bayes in the 1740
 $$
 \mathbb{P}(A|B)=\frac{\mathbb{P}(B|A)\mathbb{P}(A)}{\mathbb{P}(B)},
 $$ 
+
 where $\mathbb{P}(A)$ and $\mathbb{P}(B)$ are the marginal (unconditional) probabilities of $A$ and $B$ respectively.
 
 In our example, $A$ corresponds to the event that the person who had their blood tested actually has Bayesitis, and $B$ corresponds to the event that they test positive for the disease. When we committed the base rate fallacy, we made the mistake of assuming that $\mathbb{P}(A|B)$ was equivalent to $\mathbb{P}(B|A)$, and we failed to consider the marginal probabilities $\mathbb{P}(A)$ and $\mathbb{P}(B)$. Let's try to work out the probability that their test result was a false positive again, this time using Bayes' theorem.
@@ -94,7 +95,7 @@ In our example, $A$ corresponds to the event that the person who had their blood
 We want to find
 
 $$
-\mathbb{P}(D^{-}|T^{+})=\frac{\mathbb{P}(T^{+}|D^{-})\mathbb{P}(D^{-})}{\mathbb{P}(T^{+})},
+\mathbb{P}(D^{-}|T^{+})=\frac{\mathbb{P}(T^{+}|D^{-})\mathbb{P}(D^{-})}{\mathbb{P}(T^{+})}.
 $$ 
 
 We know that $\mathbb{P}(D^{-})=0.95$, equivalent to 95%, since the prevalence of Bayesitis in the population is 95%. We also know $\mathbb{P}(T^{+}|D^{-})=0.15$, as we defined our imaginary test to be 85% accurate. So to find the probability of a positive test result being false we just need to find the denominator of the fraction above; $\mathbb{P}(T^{+})$, the overall probability of testing positive.
@@ -115,11 +116,13 @@ Now, to work out $\mathbb{P}(T^{+})$, we can use our knowledge of the sensitivit
 $$
 \mathbb{P}(T^{+})=0.99\times 0.05 + 0.15\times 0.95 = 0.192.
 $$
+
 Finally, we can calculate that 
 
 $$
 \mathbb{P}(D^{-}|T^{+})=\frac{0.15\times0.95}{0.192}=0.7421875,
 $$
+
 which is pretty close to the estimate we got from our thought experiment involving 20 people!
 
 To check our answer, we can use R to simulate repeatedly sampling 20 people from a population of 1 million people with a 5% prevalence of Bayesitis.
@@ -174,6 +177,7 @@ plot(cum_avg, ylim=c(0.5,1), xlab="Number of Simulations", ylab="Average False P
 abline(h=0.7421875, col="#009ed8", lty=1, lwd=4.2)
 legend("topright", legend="Calculated Probability", col="#009ed8", lty=1, lwd=4.2, cex=1.2)
 ```
+
 Reassuringly, as we do more simulations, the average proportion of positive test results that are false appears to converge to our calculated value of $\mathbb{P}(D^{-}|T^{+})$.
 
 ## Further Reading

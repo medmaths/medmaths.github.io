@@ -102,7 +102,8 @@ plot(stork_pairs, yearly_births, # plotting the data points
      pch=4, cex=1.8, col="#009ed8", lwd=4.8, cex.lab=1.5, cex.axis=1.5)
 abline(lm(yearly_births ~ stork_pairs), # adding the line of best fit
        col = "#ffc000", lty=2, lwd = 4.2)
-legend("topleft", legend=paste0("Line of Best Fit  (r=", round(correlation, 2), ")"), 
+legend("topleft", # adding a key
+       legend=paste0("Line of Best Fit  (r=", round(correlation, 2), ")"), 
        col="#ffc000", lty=2, lwd=4.2, cex=1.5)
 ```
 
@@ -161,29 +162,52 @@ In the most extreme cases, confounding can actually mean that the true effect of
 #| code-fold: true
 #| code-summary: "Simulating and Plotting Data to Illustrate Robert Heaton's Example of Simpson's Paradox in R"
 #| label: robert-heaton-example
-set.seed(31415) 
-group_1_dosages <- sample(1:20, 20, replace = TRUE)
-group_2_dosages <- sample(21:40, 20, replace = TRUE)
-group_3_dosages <- sample(41:60, 20, replace = TRUE)
-all_dosages <- c(group_1_dosages, group_2_dosages, group_3_dosages)
-group_1_recovery_speeds <- 1.2 * group_1_dosages + 100 + rnorm(20,0,5)
-group_2_recovery_speeds <- 1.2 * group_2_dosages + 50 + rnorm(20,0,5)
-group_3_recovery_speeds <- 1.2 * group_3_dosages + rnorm(20,0,5)
-all_recovery_speeds <- c(group_1_recovery_speeds, group_2_recovery_speeds, group_3_recovery_speeds)
-par(mar=c(bottom=2.4, left=3, top=2.4, right=0.9), family="Roboto Slab")
-plot(group_1_dosages, group_1_recovery_speeds, xlim=c(-3,72), ylim=c(36,120), bty="n", axes = FALSE, pch=16, cex=2.4,  col="#009ed8") 
-points(group_2_dosages, group_2_recovery_speeds, pch=17, cex=2.4,  col="#009ed8")
-points(group_3_dosages, group_3_recovery_speeds, pch=18, cex=2.4,  col="#009ed8")
-arrows(x0=0, y0=39, x1=72, y1=39, length=0.15, code=2, lwd=3, col="#808080") 
-arrows(x0=0, y0=39, x1=0, y1=120, length=0.15, code=2, lwd=3, col="#808080") 
-mtext("Drug Dosage", side=1, line=1, cex=1.8)
-mtext("Recovery Speed", side=2, line=0, cex=1.8)
-abline(lm(group_1_recovery_speeds ~ group_1_dosages), col="#006a90", lwd=4.8, lty=2) 
-abline(lm(group_2_recovery_speeds ~ group_2_dosages), col="#006a90", lwd=4.8, lty=2) 
-abline(lm(group_3_recovery_speeds ~ group_3_dosages), col="#006a90", lwd=4.8, lty=2) 
-abline(lm(all_recovery_speeds ~ all_dosages), col="#ffc000", lwd=4.8, lty=2)
-legend(x=54, y=120, legend=c("20–39 Year Olds ", "40–59 Year Olds ", "60–79 Year Olds "), pch=c(16, 17, 18), col="#009ed8", cex=1.5)
-legend(x=3, y=54, legend=c("Overall Line of Best Fit ", "Age Group Lines of Best Fit "), lty=2, col=c("#ffc000","#006a90"), lwd=4.2, cex=1.5)
+set.seed(31415) # setting a seed so the simulated data is reproducible
+group_1_dosages <- sample(1:20, 20, replace = TRUE) # simulating a range of dosages 
+                                                    # taken by 20-39 year olds
+group_2_dosages <- sample(21:40, 20, replace = TRUE) # 40–59 year old dosages
+group_3_dosages <- sample(41:60, 20, replace = TRUE) # 60–79 year old dosages 
+all_dosages <- c(group_1_dosages, # concatenating all the dosages
+                 group_2_dosages, 
+                 group_3_dosages) 
+group_1_recovery_speeds <- 1.2 * group_1_dosages + 100 + rnorm(20,0,5) # simulating the recovery speeds of                                                                        # 20–39 year olds according to a 
+                                                                       # linear relationship with dosage 
+                                                                       # with independent gaussian errors
+group_2_recovery_speeds <- 1.2 * group_2_dosages + 50 + rnorm(20,0,5) # 40–59 year old recovery speeds
+group_3_recovery_speeds <- 1.2 * group_3_dosages + rnorm(20,0,5) # 60–79 year old recovery speeds
+all_recovery_speeds <- c(group_1_recovery_speeds, # concatenating all the recovery speeds
+                         group_2_recovery_speeds, 
+                         group_3_recovery_speeds)  
+par(mar=c(bottom=2.4, left=3, top=2.4, right=0.9), family="Roboto Slab") # setting the plot options
+plot(group_1_dosages, group_1_recovery_speeds, # plotting the simulated data for 20-39 year olds
+     xlim=c(-3,72), ylim=c(36,120), 
+     pch=16, cex=2.4,  col="#009ed8",
+     bty="n",  axes = FALSE,) 
+points(group_2_dosages, group_2_recovery_speeds, # plotting the simulated data for 40-59 year olds
+       pch=17, cex=2.4,  col="#009ed8")
+points(group_3_dosages, group_3_recovery_speeds, # plotting the simulated data for 40-79 year olds 
+       pch=18, cex=2.4,  col="#009ed8")
+arrows(x0=0, y0=39, x1=72, y1=39, length=0.15, code=2, lwd=3, col="#808080") # x-axis
+arrows(x0=0, y0=39, x1=0, y1=120, length=0.15, code=2, lwd=3, col="#808080") # y-axis
+mtext("Drug Dosage", side=1, line=1, cex=1.8) # x-axis label
+mtext("Recovery Speed", side=2, line=0, cex=1.8) # y-axis label
+abline(lm(group_1_recovery_speeds ~ group_1_dosages), # plotting the line of best fit for 
+                                                      # only the data from 20–39 year olds
+       col="#006a90", lwd=4.8, lty=2) 
+abline(lm(group_2_recovery_speeds ~ group_2_dosages), # plotting the line of best fit for 
+                                                      # only the data from 40–59 year olds
+       col="#006a90", lwd=4.8, lty=2) 
+abline(lm(group_3_recovery_speeds ~ group_3_dosages), # plotting the line of best fit for 
+                                                      # only the data from 60–79 year olds
+       col="#006a90", lwd=4.8, lty=2) 
+abline(lm(all_recovery_speeds ~ all_dosages), # plotting the line of best fit for all the data
+       col="#ffc000", lwd=4.8, lty=2)
+legend(x=54, y=120, # adding a key for the data points
+       legend=c("20–39 Year Olds ", "40–59 Year Olds ", "60–79 Year Olds "), 
+       pch=c(16, 17, 18), col="#009ed8", cex=1.5)
+legend(x=3, y=54, # adding a key for the lines of best fit
+       legend=c("Overall Line of Best Fit ", "Age Group Lines of Best Fit "), lty=2,
+       col=c("#ffc000","#006a90"), lwd=4.2, cex=1.5)
 ```
 
 In the simulated data plotted above, a higher dosage of the treatment drug corresponds with a faster recovery speed within each age category. However, when we combine data from all the age categories we find a negative correlation between drug dosage and recovery speed. 
@@ -192,7 +216,7 @@ In the simulated data plotted above, a higher dosage of the treatment drug corre
 #| code-fold: true
 #| code-summary: "Finding the Correlation Coefficient in R"
 #| label: robert-heaton-example-correlation
-correlation <- cor(all_dosages, all_recovery_speeds)
+correlation <- cor(all_dosages, all_recovery_speeds) # calculating the pearson correlation coefficient
 cat("Pearson Correlation Coefficient:", correlation)
 ```
 
@@ -332,10 +356,10 @@ To understand how collider bias can cause unrelated variables to appear to have 
 #| label: colliditis-infected-sample
 set.seed(31415)
 n <- 1000 
-infected_sample <- matrix(0, nrow=n, ncol=2) # we initialise an empty matrix to store the data for each person
+infected_sample <- matrix(0, nrow=n, ncol=2) # initialising an empty matrix to store the data for each person
 for (i in 1:n) {
-  severity <- runif(1, min=0, max=20) # we assign each person in the sample a random severity score between 0 and 20
-  cigarettes <- runif(1,0,20) # we assign each person in the sample a random average number of cigarettes smoked per day between 0 and 20
+  severity <- runif(1, min=0, max=20) # assigning each person in the sample a random severity score between 0 and 20
+  cigarettes <- runif(1,0,20) # assigning each person in the sample a random average number of cigarettes smoked per day between 0 and 20
   infected_sample[i,1] <- severity
   infected_sample[i,2] <- cigarettes
 }
@@ -343,7 +367,7 @@ par(mar=c(bottom=4.2, left=5.1, top=1.8, right=0.9), family="Roboto Slab")
 plot(infected_sample[,1], infected_sample[,2], pch=4, cex=1.2, lwd=2.4, col="#808080",
      xlab="Colliditis Severity Score", ylab="Average Number of Cigarettes Smoked in a Day",
      cex.lab=1.5, cex.axis=1.5)
-abline(lm(infected_sample[,1] ~ infected_sample[,2]), lwd=4.8, col="#009ed8",) # we plot the line of best fit
+abline(lm(infected_sample[,1] ~ infected_sample[,2]), lwd=4.8, col="#009ed8",) # plotting the line of best fit
 ```
 
 Now suppose that out of this sample, 90% the people with a colliditis severity score ≥15 are in hospital, and of those with a colliditis severity score <15, those who smoke ≥10 cigarettes a day on average have a 60% chance of being in hospital, compared to a 10% chance for those who smoke <10 cigarettes a day on average. If we plot cigarettes vs colliditis severity of only those in our sample who are hospitalised, we see an interesting result.
@@ -355,7 +379,7 @@ Now suppose that out of this sample, 90% the people with a colliditis severity s
 set.seed(31415)
 hospital_infected_sample <- matrix(rep(NA, 2*n), nrow=n, ncol=2) 
 for (i in 1:n) {
-  dice_roll <- runif(1, min=0, max=1) # we generate random number between 0 and 1
+  dice_roll <- runif(1, min=0, max=1) # generating random number between 0 and 1
   person_i <- infected_sample[i,]
   if(person_i[1] >= 15 && dice_roll <= 0.9) { # these people have a 90% chance of being in hospital
     hospital_infected_sample[i,] <- person_i
@@ -372,7 +396,7 @@ par(mar=c(bottom=4.2, left=5.1, top=1.8, right=0.9), family="Roboto Slab")
 plot(hospital_infected_sample[,1], hospital_infected_sample[,2], pch=4, cex=1.2, lwd=2.4, col="#808080",
      xlab="Colliditis Severity Score", ylab="Average Number of Cigarettes Smoked in a Day",
      cex.lab=1.5, cex.axis=1.5)
-abline(lm(hospital_infected_sample[,1] ~ hospital_infected_sample[,2]), lwd=4.8, col="#009ed8",) # we plot the line of best fit
+abline(lm(hospital_infected_sample[,1] ~ hospital_infected_sample[,2]), lwd=4.8, col="#009ed8",) # plotting the line of best fit
 ```
 
 If we took the hospitalised population as representative of the general population we would find that there is a negative relationship between average number of cigarettes smoked in a day and severity of colliditis. But we would be failing to account for the fact that having a severe case of colliditis, and smoking a large number of cigarettes per day are both factors that make you more likely to be in hospital. So if you are in hospital with a low colliditis score, you are more likely to smoke a lot of cigarettes than if you are in hospital with a high colliditis score, since there must be some other reason for your hospitalisation than colliditis, and this reason may be smoking. 
