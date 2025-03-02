@@ -369,7 +369,7 @@ Two additional ways in which the algorithm used by NHS Blood and Transport diffe
 [^9]: Richard L. Apodaca, ["The Maximum Matching Problem,"](https://depth-first.com/articles/2019/04/02/the-maximum-matching-problem/) Depth-First, April 3, 2019.
 [^10]: David Manlove, [“How Operational Research Helps Kidney Patients in the UK,”](https://doi.org/10.1080/2058802X.2018.1435455) *Impact* 2018, no. 1 (2018): 16--19. 
 [^11]: ["UK Living Kidney Sharing Scheme,"](https://www.odt.nhs.uk/living-donation/uk-living-kidney-sharing-scheme/) NHS Blood and Transplant, accessed February 25, 2025.
-[^12]: Ian Stewart, [*What's the Use?: The Unreasonable Effectiveness of Mathematics*](https://openlibrary.org/books/OL36270828M/What's_the_Use) (Profile Books, 2021)
+[^12]: Ian Stewart, [*What's the Use?: The Unreasonable Effectiveness of Mathematics*](https://openlibrary.org/books/OL34698366M/What%27s_the_Use) (Profile Books, 2021), 89.
 [^13]: Hari Jagannathan Balasubramanian, ["The mathematics of matching kidneys,"](http://thirtylettersinmyname.blogspot.com/2009/03/mathematics-of-matching-kidneys.html) Thirty letters in my name, March 28, 2009.
 [^14]: Dorry Segev et al., ["Kidney Paired Donation and Optimizing the Use of Live Donor Organs,"](https://doi.org/10.1001/jama.293.15.1883) *JAMA* 293, no. 15 (April 2004): 1883–1890.
 [^15]: ["Matching and Compatibility,"](https://health.ucdavis.edu/transplant/livingkidneydonation/matching-and-compatibility.html) UC Davis Health, accessed February 16, 2025.
