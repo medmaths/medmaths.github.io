@@ -539,7 +539,7 @@ As a result of the atypical coffee consumption in the control group, the results
 [^2]: ["Study designs,"](https://www.cebm.ox.ac.uk/resources/ebm-tools/study-designs) Centre for Evidence-Based Medicine, accessed February 26, 2025.
 [^3]: Robert Matthews, ["Storks Deliver Babies (p=0.008),"](https://doi.org/10.1111/1467-9639.00013) *Teaching Statistics* 22, no. 2 (June 2000): 36--38.
 [^4]: Martin Bland, [*An Introduction to Medical Statistics,*](https://openlibrary.org/books/OL27200959M/An_introduction_to_medical_statistics) 4th ed. (Oxford University Press, 2015), 117.
-[^5]: Judea Pearl and Dana Mackenzie, [*The Book of Why: The New Science of Cause and Effects*](https://openlibrary.org/books/OL28703772M/Book_of_Why) (Penguin Books, 2019)
+[^5]: Judea Pearl and Dana Mackenzie, [*The Book of Why: The New Science of Cause and Effects*](https://openlibrary.org/books/OL28703772M/Book_of_Why) (Penguin Books, 2019), 1.
 [^6]: Sander Greenland, Judea Pearl, and James Robins, ["Causal Diagrams for Epidemiologic Research,"](https://doi.org/10.1097%2F00001648-199901000-00008) *Epidemiology* 10, no. 1 (January 1999): 37--48.
 [^7]: Judea Pearl, Madelyn Glymour, and Nicholas Jewell, [*Causal Inference in Statistics: A Primer*](https://openlibrary.org/books/OL27305974M/Causal_Inference_in_Statistics) (Wiley, 2016), 25.
 [^8]: Jeffrey Aronson, Clare Bankhead, and David Nunan, ["Confounding,"](https://catalogofbias.org/biases/confounding/) Catalogue of Bias, accessed February 26, 2025.
