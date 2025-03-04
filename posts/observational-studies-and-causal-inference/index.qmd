@@ -1,7 +1,7 @@
 ---
 title: "Observational Studies and Causal Inference"
 # date: "2025-02-15"
-date-modified: "2025-02-27"
+date-modified: "2025-03-04"
 image: thumbnail.png
 ---
 ::: {.callout-warning}
