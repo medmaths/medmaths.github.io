@@ -1,7 +1,7 @@
 ---
 title: "Evidence Synthesis and Forest Plots"
 # date: "2025-02-18"
-date-modified: "2025-03-02"
+date-modified: "2025-05-26"
 image: thumbnail.png
 ---
 ::: {.callout-warning}
@@ -181,7 +181,7 @@ num_trials <- nrow(steroid_trials)
 </div>
 ```
 
-Here, the years in parentheses after the authors' names are the years of publication of the first papers they disseminated relating to their trials. The table is organised chronoligically according to the order in which these papers were published. 
+Here, the years in parentheses after the authors' names are the years of publication of the first papers they disseminated relating to their trials. The table is organised chronologically according to the order in which these papers were published. 
 
 ## The Individual Trials’ Findings
 

@@ -2,11 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2025-02-10">
 
 <title>Censored Data and Kaplan-Meier Curves – Medical Maths</title>
 <style>
@@ -65,10 +64,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-a185852c63625fd9ffbdc57047c9a77e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-21f8d7a057418e3e5f3fec32e41db776.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -1035,15 +1034,16 @@ Participants
 <details class="code-fold">
 <summary>Plotting the Estimated Survival Function in R</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="at">bottom=</span><span class="fl">4.2</span>, <span class="at">left=</span><span class="fl">5.1</span>, <span class="at">top=</span><span class="fl">1.8</span>, <span class="at">right=</span><span class="fl">0.9</span>), <span class="at">family=</span><span class="st">"Roboto Slab"</span>) <span class="co"># setting the plot options</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>KM_curve_plot <span class="ot">&lt;-</span> <span class="cf">function</span> (surv_df, study_df) { <span class="co"># creating a function to plot a survival curve from the original data frame and our survival analysis data frame</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(surv_df<span class="sc">$</span>months, surv_df<span class="sc">$</span>survival, <span class="at">type=</span><span class="st">"s"</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), </span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">xlab=</span><span class="st">"Months"</span>, <span class="at">ylab=</span><span class="st">"Estimated Survival Function"</span>, <span class="at">col=</span><span class="st">"#009ed8"</span>, <span class="at">lwd=</span><span class="fl">4.8</span>, <span class="at">cex.lab=</span><span class="fl">1.8</span>, <span class="at">cex.axis=</span><span class="fl">1.8</span>)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  censoring_months <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(study_df[<span class="fu">which</span>((study_df<span class="sc">$</span>event <span class="sc">==</span> <span class="st">'Censored'</span>)),]<span class="sc">$</span>months))  <span class="co"># finding the months in which censoring occurred</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  surv_fuc_eval_at_censoring <span class="ot">&lt;-</span> surv_df[surv_df<span class="sc">$</span>months <span class="sc">%in%</span> censoring_months,]<span class="sc">$</span>survival <span class="co"># evaluating the estimated survival function</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                                                                                        <span class="co"># at those points</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">points</span>(censoring_months, surv_fuc_eval_at_censoring, <span class="at">pch=</span><span class="dv">4</span>, <span class="at">cex=</span><span class="fl">1.8</span>, <span class="at">col=</span><span class="st">"#006a90"</span>, <span class="at">lwd=</span><span class="fl">4.8</span>)</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">KM_curve_plot</span>(conception_survival_analysis, conception_study)</span></code></pre></div>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>KM_curve_plot <span class="ot">&lt;-</span> <span class="cf">function</span> (surv_df, study_df) { <span class="co"># creating a function to plot a survival curve from the </span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                                                <span class="co"># original data frame and our survival analysis data frame</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(surv_df<span class="sc">$</span>months, surv_df<span class="sc">$</span>survival, <span class="at">type=</span><span class="st">"s"</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">xlab=</span><span class="st">"Months"</span>, <span class="at">ylab=</span><span class="st">"Estimated Survival Function"</span>, <span class="at">col=</span><span class="st">"#009ed8"</span>, <span class="at">lwd=</span><span class="fl">4.8</span>, <span class="at">cex.lab=</span><span class="fl">1.8</span>, <span class="at">cex.axis=</span><span class="fl">1.8</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  censoring_months <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(study_df[<span class="fu">which</span>((study_df<span class="sc">$</span>event <span class="sc">==</span> <span class="st">'Censored'</span>)),]<span class="sc">$</span>months))  <span class="co"># finding the months in which censoring occurred</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  surv_fuc_eval_at_censoring <span class="ot">&lt;-</span> surv_df[surv_df<span class="sc">$</span>months <span class="sc">%in%</span> censoring_months,]<span class="sc">$</span>survival <span class="co"># evaluating the estimated survival function</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                                                                                        <span class="co"># at those points</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">points</span>(censoring_months, surv_fuc_eval_at_censoring, <span class="at">pch=</span><span class="dv">4</span>, <span class="at">cex=</span><span class="fl">1.8</span>, <span class="at">col=</span><span class="st">"#006a90"</span>, <span class="at">lwd=</span><span class="fl">4.8</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="fu">KM_curve_plot</span>(conception_survival_analysis, conception_study)</span></code></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -1229,7 +1229,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
