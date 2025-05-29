@@ -1,7 +1,7 @@
 ---
-title: "Censored Data and Kaplan--Meier Curves"
+title: "Censored Data and Kaplan-Meier Curves"
 # date: "2025-02-10"
-date-modified: "2025-05-29"
+date-modified: "2025-05-30"
 image: thumbnail.png
 ---
 
@@ -151,7 +151,7 @@ Censored data make estimating a survival function considerably more complicated.
 
 We could still approximate $S(1)$ to be seven tenths, since $$\mathbb{P}(T>1)=1-\mathbb{P}(T\leq1),$$ which, since three light bulbs fail on the first day, we can estimate to be $$1-\frac{3}{10}=\frac{7}{10},$$ as in the original case. But what about $S(2)$ onwards? We don't know on which days the smashed light bulbs would have failed, so we can't estimate $S(t)$ for these values of $t$ in the same way.
 
-## The Kaplan--Meier Method
+## The Kaplan-Meier Method
 
 In 1958, Edward Kaplan and Paul Meier proposed an ingenious solution to the censoring problem[^4]. Their paper has gone on to become the most cited publication in the history of statistics[^5], and is seen as a seminal contribution to the field of survival analysis. Kaplan and Meier's central insight was that while censoring may stop us from directly estimating $\mathbb{P}(T>t_i)$ for a particular value of time, $t_i$, it does not stop us from estimating $$\mathbb{P}(T>t_i\,|\,T>t_{i-1}),$$ This is the conditional probability of an event taking longer than $t_i$ days, months, or years to occur, given that it has not already happened in $t_{i-1}$ days, months, or years.
 
@@ -187,7 +187,7 @@ We know that $\mathbb{P}(T>t_0)$, the probability of the time to the event of in
 
 ## An Example With Real Data
 
-To get an idea of how the Kaplan--Meier method of estimating a survival function works, let's try it out on some data from a real observational study from the 1980s[^6]. Over two years, a group of obstetricians in London recorded the time it took for a group of 38 women who had been experiencing fertility issues to conceive after a surgical intervention. The times to conception or censoring for each woman can be obtained from a 1998 article on the Kaplan--Meier method in the BMJ[^7].
+To get an idea of how the Kaplan-Meier method of estimating a survival function works, let's try it out on some data from a real observational study from the 1980s[^6]. Over two years, a group of obstetricians in London recorded the time it took for a group of 38 women who had been experiencing fertility issues to conceive after a surgical intervention. The times to conception or censoring for each woman can be obtained from a 1998 article on the Kaplan-Meier method in the BMJ[^7].
 
 ```{r}
 #| code-fold: true
@@ -1929,7 +1929,7 @@ conception_survival_analysis$survival <- cumprod(conception_survival_analysis$co
 </div>
 ```
 
-We can now plot our estimate for $\mathbb{P}(T>t)$ as a stepwise function of $t$. As is conventional when plotting Kaplan--Meier curves we also mark the months in which censoring occurs.
+We can now plot our estimate for $\mathbb{P}(T>t)$ as a stepwise function of $t$. As is conventional when plotting Kaplan-Meier curves we also mark the months in which censoring occurs.
 
 ```{r fig.height=7.5, fig.width=12}
 #| code-fold: true
@@ -1948,7 +1948,7 @@ KM_curve_plot <- function (surv_df, study_df) { # creating a function to plot a 
 KM_curve_plot(conception_survival_analysis, conception_study)
 ```
 
-Our estimated survival function allows us to work out a principled estimate for the median time to conception after laparoscopy and hydrotubation. Since the median time it takes to conceive, $t_m$, is equal to the point where $\mathbb{P}(T>t_m)=0.5$, we can just draw a line across from 0.5 on the y-axis to our Kaplan--Meier curve. 
+Our estimated survival function allows us to work out a principled estimate for the median time to conception after laparoscopy and hydrotubation. Since the median time it takes to conceive, $t_m$, is equal to the point where $\mathbb{P}(T>t_m)=0.5$, we can just draw a line across from 0.5 on the y-axis to our Kaplan-Meier curve. 
 
 ```{r fig.height=7.5, fig.width=12}
 #| code-fold: true
@@ -1967,7 +1967,7 @@ We find that the median number of months that passed before women conceived afte
 
 ## Further Reading
 
--   [**What is the Kaplan Meier curve?** -- a blog post by Steve Simon](http://new.pmean.com/what-is-Kaplan--Meier-curve/)
+-   [**What is the Kaplan Meier curve?** -- a blog post by Steve Simon](http://new.pmean.com/what-is-Kaplan-Meier-curve/)
 -   [**What is survival analysis?** -- a blog post by Antoine Soetewey](https://statsandr.com/blog/what-is-survival-analysis/)
 
 [^1]: Emily Zabor, [“Survival Analysis in R,”](https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html) June 21, 2023.
@@ -1976,4 +1976,4 @@ We find that the median number of months that passed before women conceived afte
 [^4]: Edward Kaplan and Paul Meier, [“Nonparametric Estimation From Incomplete Observations,”](https://doi.org/10.2307/2281868) *Journal of the American Statistical Association* 53, no. 282 (June 1958): 457--481.
 [^5]: Richard Van Noorden, Brendan Maher, and Regina Nuzzo, [“The Top 100 Papers,”]( https://doi.org/10.1038/514550a) *Nature* 514, no. 7524 (October 2014): 550--553.
 [^6]: Paramjit Luthra, Martin Bland, and Stuart Stanton, [“Incidence of Pregnancy After Laparoscopy and Hydrotubation,”](https://doi.org/10.1136/bmj.284.6321.1013) *British Medical Journal (Clinical Research Edition)* 284, no. 6321 (April, 1982): 101.
-[^7]: Martin Bland and Douglas Altman, [“Survival probabilities (the Kaplan--Meier method),”]( https://doi.org/10.1136/bmj.317.7172.1572) *BMJ* 317, no. 7172 (December 1998): 1572.
+[^7]: Martin Bland and Douglas Altman, [“Survival probabilities (the Kaplan-Meier method),”]( https://doi.org/10.1136/bmj.317.7172.1572) *BMJ* 317, no. 7172 (December 1998): 1572.

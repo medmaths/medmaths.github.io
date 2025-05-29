@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Censored Data and Kaplan–Meier Curves – Medical Maths</title>
+<title>Censored Data and Kaplan-Meier Curves – Medical Maths</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -161,7 +161,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Censored Data and Kaplan–Meier Curves</h1>
+<h1 class="title">Censored Data and Kaplan-Meier Curves</h1>
 </div>
 
 
@@ -173,7 +173,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Last Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">May 29, 2025</p>
+      <p class="date-modified">May 30, 2025</p>
     </div>
   </div>
     
@@ -292,8 +292,8 @@ Notation
 <p><img src="light-bulbs-censored.png" class="img-fluid"></p>
 <p>We could still approximate <span class="math inline">\(S(1)\)</span> to be seven tenths, since <span class="math display">\[\mathbb{P}(T&gt;1)=1-\mathbb{P}(T\leq1),\]</span> which, since three light bulbs fail on the first day, we can estimate to be <span class="math display">\[1-\frac{3}{10}=\frac{7}{10},\]</span> as in the original case. But what about <span class="math inline">\(S(2)\)</span> onwards? We don’t know on which days the smashed light bulbs would have failed, so we can’t estimate <span class="math inline">\(S(t)\)</span> for these values of <span class="math inline">\(t\)</span> in the same way.</p>
 </section>
-<section id="the-kaplanmeier-method" class="level2">
-<h2 class="anchored" data-anchor-id="the-kaplanmeier-method">The Kaplan–Meier Method</h2>
+<section id="the-kaplan-meier-method" class="level2">
+<h2 class="anchored" data-anchor-id="the-kaplan-meier-method">The Kaplan-Meier Method</h2>
 <p>In 1958, Edward Kaplan and Paul Meier proposed an ingenious solution to the censoring problem<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. Their paper has gone on to become the most cited publication in the history of statistics<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, and is seen as a seminal contribution to the field of survival analysis. Kaplan and Meier’s central insight was that while censoring may stop us from directly estimating <span class="math inline">\(\mathbb{P}(T&gt;t_i)\)</span> for a particular value of time, <span class="math inline">\(t_i\)</span>, it does not stop us from estimating <span class="math display">\[\mathbb{P}(T&gt;t_i\,|\,T&gt;t_{i-1}),\]</span> This is the conditional probability of an event taking longer than <span class="math inline">\(t_i\)</span> days, months, or years to occur, given that it has not already happened in <span class="math inline">\(t_{i-1}\)</span> days, months, or years.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -331,7 +331,7 @@ Notation
 </section>
 <section id="an-example-with-real-data" class="level2">
 <h2 class="anchored" data-anchor-id="an-example-with-real-data">An Example With Real Data</h2>
-<p>To get an idea of how the Kaplan–Meier method of estimating a survival function works, let’s try it out on some data from a real observational study from the 1980s<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. Over two years, a group of obstetricians in London recorded the time it took for a group of 38 women who had been experiencing fertility issues to conceive after a surgical intervention. The times to conception or censoring for each woman can be obtained from a 1998 article on the Kaplan–Meier method in the BMJ<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>.</p>
+<p>To get an idea of how the Kaplan-Meier method of estimating a survival function works, let’s try it out on some data from a real observational study from the 1980s<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. Over two years, a group of obstetricians in London recorded the time it took for a group of 38 women who had been experiencing fertility issues to conceive after a surgical intervention. The times to conception or censoring for each woman can be obtained from a 1998 article on the Kaplan-Meier method in the BMJ<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Inputting the Results of the Study into a Data Frame in R</summary>
@@ -1029,7 +1029,7 @@ Participants
 </table>
 
 </div>
-<p>We can now plot our estimate for <span class="math inline">\(\mathbb{P}(T&gt;t)\)</span> as a stepwise function of <span class="math inline">\(t\)</span>. As is conventional when plotting Kaplan–Meier curves we also mark the months in which censoring occurs.</p>
+<p>We can now plot our estimate for <span class="math inline">\(\mathbb{P}(T&gt;t)\)</span> as a stepwise function of <span class="math inline">\(t\)</span>. As is conventional when plotting Kaplan-Meier curves we also mark the months in which censoring occurs.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Plotting the Estimated Survival Function in R</summary>
@@ -1053,7 +1053,7 @@ Participants
 </div>
 </div>
 </div>
-<p>Our estimated survival function allows us to work out a principled estimate for the median time to conception after laparoscopy and hydrotubation. Since the median time it takes to conceive, <span class="math inline">\(t_m\)</span>, is equal to the point where <span class="math inline">\(\mathbb{P}(T&gt;t_m)=0.5\)</span>, we can just draw a line across from 0.5 on the y-axis to our Kaplan–Meier curve.</p>
+<p>Our estimated survival function allows us to work out a principled estimate for the median time to conception after laparoscopy and hydrotubation. Since the median time it takes to conceive, <span class="math inline">\(t_m\)</span>, is equal to the point where <span class="math inline">\(\mathbb{P}(T&gt;t_m)=0.5\)</span>, we can just draw a line across from 0.5 on the y-axis to our Kaplan-Meier curve.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Finding the Median Time to Conception in R</summary>
@@ -1078,7 +1078,7 @@ Participants
 <section id="further-reading" class="level2">
 <h2 class="anchored" data-anchor-id="further-reading">Further Reading</h2>
 <ul>
-<li><a href="http://new.pmean.com/what-is-Kaplan--Meier-curve/"><strong>What is the Kaplan Meier curve?</strong> – a blog post by Steve Simon</a></li>
+<li><a href="http://new.pmean.com/what-is-Kaplan-Meier-curve/"><strong>What is the Kaplan Meier curve?</strong> – a blog post by Steve Simon</a></li>
 <li><a href="https://statsandr.com/blog/what-is-survival-analysis/"><strong>What is survival analysis?</strong> – a blog post by Antoine Soetewey</a></li>
 </ul>
 
@@ -1095,7 +1095,7 @@ Participants
 <li id="fn4"><p>Edward Kaplan and Paul Meier, <a href="https://doi.org/10.2307/2281868">“Nonparametric Estimation From Incomplete Observations,”</a> <em>Journal of the American Statistical Association</em> 53, no. 282 (June 1958): 457–481.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p>Richard Van Noorden, Brendan Maher, and Regina Nuzzo, <a href="https://doi.org/10.1038/514550a">“The Top 100 Papers,”</a> <em>Nature</em> 514, no. 7524 (October 2014): 550–553.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn6"><p>Paramjit Luthra, Martin Bland, and Stuart Stanton, <a href="https://doi.org/10.1136/bmj.284.6321.1013">“Incidence of Pregnancy After Laparoscopy and Hydrotubation,”</a> <em>British Medical Journal (Clinical Research Edition)</em> 284, no. 6321 (April, 1982): 101.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"><p>Martin Bland and Douglas Altman, <a href="https://doi.org/10.1136/bmj.317.7172.1572">“Survival probabilities (the Kaplan–Meier method),”</a> <em>BMJ</em> 317, no. 7172 (December 1998): 1572.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Martin Bland and Douglas Altman, <a href="https://doi.org/10.1136/bmj.317.7172.1572">“Survival probabilities (the Kaplan-Meier method),”</a> <em>BMJ</em> 317, no. 7172 (December 1998): 1572.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
