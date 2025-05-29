@@ -6,7 +6,7 @@ image: thumbnail.png
 ---
 ::: {.callout-warning}
 ## Disclaimer
-This blog post was written solely for informational and educational purposes, and does not constitute medical advice. If you have any health concerns, please consult a qualified medical professional.
+This article was written solely for informational and educational purposes, and does not constitute medical advice. If you have any health concerns, please consult a qualified medical professional.
 :::
 
 Randomised controlled trials (RCTs) are widely recognised as the gold standard of study designs, but they are not always possible to perform. For example, it would have been neither ethical nor feasible for Richard Doll and Austin Bradford Hill to randomly assign a group of volunteers to a smoking and non-smoking group in order to show that cigarettes cause lung cancer. However, they were still able to establish a link between smoking and the disease, using first a case-control study and then a prospective cohort study[^1].

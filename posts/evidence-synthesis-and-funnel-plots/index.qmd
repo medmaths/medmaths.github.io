@@ -6,7 +6,7 @@ image: thumbnail.png
 ---
 ::: {.callout-warning}
 ## Disclaimer
-This blog post was written solely for informational and educational purposes, and does not constitute medical advice. If you have any health concerns, please consult a qualified medical professional.
+This article was written solely for informational and educational purposes, and does not constitute medical advice. If you have any health concerns, please consult a qualified medical professional.
 :::
 
 Imagine you are experiencing a medical problem, and your doctor suggests you try a new drug treatment. You’re curious about how much evidence there is to suggest that this treatment will work for you, so you do some research and find out that it has been tested in eight clinical trials. Two of them found that the drug was more effective than a placebo, but six of them did not show a significant benefit – meaning the results could reasonably have occurred even if the treatment had no effect. You feel somewhat concerned that three quarters of the papers published on this new treatment regime failed to prove its worth. On the other hand, you notice that the two positive results came from the studies with the largest sample sizes, which you are inclined to think makes them more reliable. Taking all the evidence into account, what conclusions should you draw?
