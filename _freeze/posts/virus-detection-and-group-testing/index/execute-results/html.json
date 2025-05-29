@@ -1,0 +1,17 @@
+{
+  "hash": "a166e227f099a8abbcc4da5ab9dd972f",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Virus Detection and Group Testing\"\ndate: \"2025-06-02\"\nimage: thumbnail.png\n---\n\n\n\n\n::: {.callout-warning}\n## Disclaimer\nThis article was written solely for informational and educational purposes, and does not constitute medical advice. If you have any health concerns, please consult a qualified medical professional.\n:::\n\nIn September 1940, as war raged in Europe, the then president of the United States of America, Franklin Delano Roosevelt, signed into law an act which required all American men between the ages of 21 and 30 to register for military service. This bill, the first of its kind in peacetime, was the start of a mass mobilisation campaign which would result in over 10 million young men being inducted into the US army within seven years[^1]. \n\nRobert Dorfman, a statistician and operational researcher who worked for the federal government and the army during the war[^2], was concerned with a logistical challenge presented by all these new recruits; screening them for the sexually transmitted infection syphilis. Although a blood test for syphilis existed, it was time and resource intensive to screen just one sample using this method[^3], let alone 10 million. In a 1943 paper, Dorfman proposed a scheme which could, in theory, dramatically reduce the number of tests that needed to be performed in order to screen all new enlistees for syphilis[^4]. Though his technique was not widely applied during the war[^5], his paper established 'group testing' as a new field of mathematical study, one which has gone on to have many biological and medical applications[^6].\n\n## Pooling Samples\n\n## How Many Tests?\n\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code  code-fold=\"true\" code-summary=\"Plotting the Number of Subsets of Edges Against the Number of Edges in R\"}\npar(mar=c(bottom=4.2, left=5.1, top=1.8, right=0.9), family=\"Roboto Slab\") # setting the plot options\nnum_edges <- 1:12 \nplot(num_edges, 2^num_edges, pch=4, cex=1.8, lwd=4.8, col=\"#009ed8\",\n     xlab=\"Number of Edges of Graph\", ylab=\"Number of Subsets to Check\",\n     cex.lab=1.5, cex.axis=1.5)\n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/exponential-growth-1.png){width=1152}\n:::\n:::\n\n\n\n\n\n## Group Testing Today\n\n## Further Reading\n\n[^1]: glass_fdr-signs-draft-act-sept-16-1940 (article)\n[^2]: green-jorgenson-rogers-and-stavins_robert-dorfman (article)\n[^3]: duso_the-origin-of-group-testing (blog post)\n[^4]: dorfman_the-detection-of-defective-members-of-large-populations\n[^5]: johnson_numbercrunch (book)\n[^6]: aldridge-et-al_group-testing (paper)",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

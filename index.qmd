@@ -2,8 +2,9 @@
 title: "Articles"
 listing:
   type: grid
+  grid-columns: 1
   contents: posts
-  fields: [image, title]
+  fields: [title, image]
   sort: "title asc"
   categories: false
   sort-ui: false

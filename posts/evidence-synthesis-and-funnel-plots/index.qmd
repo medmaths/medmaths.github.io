@@ -1,7 +1,7 @@
 ---
 title: "Evidence Synthesis and Forest Plots"
 # date: "2025-02-18"
-date-modified: "2025-05-26"
+date-modified: "2025-05-30"
 image: thumbnail.png
 ---
 ::: {.callout-warning}
@@ -428,7 +428,7 @@ A meta-analysis of these eight trials, and several more completed in the interve
 [^5]: Jeehyoung Kim, Jay Kaufman, and Heejung Bang, ["Graphing Ratio Measures on Forest Plot,"](https://doi.org/10.1016/j.jacc.2017.10.098) *Journal of the America College of Cardiology* 71, no. 5 (February 2018): 585--586.
 [^6]: Allan Hackshaw, [*A Concise Guide to Clinical Trials*](https://openlibrary.org/books/OL25009377M/A_concise_guide_to_clinical_trials) (John Wiley & Sons, 2009), 206.
 [^7]: Julian Higgins and Sally Green, eds., [*Cochrane Handbook for Systematic Reviews of Interventions*](https://openlibrary.org/books/OL10278782M/Cochrane_Handbook_for_Systematic_Reviews_of_Interventions) (John Wiley & Sons, 2008), 266.
-[^8]: Mathias Harrer et al., [*Doing Meta-Analysis with R: A Hands-On Guide*](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R) (2021), [chap. 3, sec. 3.](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/effects.html#effect-sizes-in-control-group-designs)
+[^8]: Mathias Harrer et al., [*Doing Meta-Analysis with R: A Hands-On Guide*](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R) (2021), [chap. 4, sec. 2.](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/pooling-es.html#pooling-es-r)
 [^9]: Jonathan Deeks, Douglas Altman, and Michael Bradburn, "Statistical methods for Examining Heterogeneity and Combining Results from Several Studies in Meta-Analysis," in  [*Systematic Reviews in Health Care: Meta-Analysis in Context,*](https://openlibrary.org/books/OL7868396M/Systematic_Reviews_in_Healthcare) ed. Matthias Egger, George Davey Smith and Douglas Altman, 2nd ed. (BMJ Publishing Group, 2001) 294.
 [^10]: Martin Bland, [*An Introduction to Medical Statistics,*](https://openlibrary.org/books/OL27200959M/An_introduction_to_medical_statistics) 4th ed. (Oxford University Press, 2015), 266.
 [^11]: ["Reducing the play of chance using meta-analysis,"](https://www.jameslindlibrary.org/essays-essay/3-3-reducing-the-play-of-chance-using-meta-analysis/) The James Lind Library, May 8, 2014.
