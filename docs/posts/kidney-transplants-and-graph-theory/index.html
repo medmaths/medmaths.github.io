@@ -173,7 +173,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Last Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">March 4, 2025</p>
+      <p class="date-modified">June 10, 2025</p>
     </div>
   </div>
     
@@ -516,7 +516,7 @@ C–D,</code></pre>
 <p><img src="modified-graph.png" class="img-fluid"></p>
 <p>This graph has no <strong>perfect matching</strong> – one in which all vertices are matched – but it does have two different <em>maximum matchings</em>; the matching <code>A–D, B–C</code> and the matching <code>A–F, C–D</code>.</p>
 <p>Which kidney transplants should be performed? Should Recipients E and F or Recipients B and E have to remain on dialysis longer as they wait for the next run of the matching algorithm to be performed, or for a suitable deceased donor to match with them? Should the amount of time the recipients have spent on the waiting list for a kidney factor into this decision? What about their ages or levels of frailty? These are difficult questions that no computer can answer for us.</p>
-<p>We should also note that compatibility between donors and recipients is not actually as binary as ‘a match’ or ‘not a match’. There are six antigens which are particularly important in organ transplantation<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a> and it is rare that donors and recipients will have the same type of each of them, but more antigens in common are still better than fewer<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a>. The difference between a donor and recipients age, and whether or the recipient has been sensitised to certain antigens by pregnancy or a previous transplant or blood transfusion, can also influence the chances of success.</p>
+<p>We should also note that compatibility between donors and recipients is not actually as binary as ‘a match’ or ‘not a match’. There are six antigens which are particularly important in organ transplantation<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a> and it is rare that donors and recipients will have the same type of each of them, but more antigens in common are still better than fewer<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a>. The difference between a donor’s and recipient’s age, as well as whether the recipient has been sensitised to certain antigens by pregnancy or a previous transplant, or a blood transfusion, can also influence the chances of success.</p>
 <p>Despite these important concerns, Edmonds’ blossom algorithm is an integral part of the process that NHS Blood and Transplant uses to find possible kidney paired exchanges in the UK. However, it is not the only method used, but is instead embedded as a step within a larger algorithm, developed in conjunction with computer scientists at the University of Glasgow<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a>. As well as finding the largest possible matching, their procedure seeks to maximise the total ‘weight’ of a matching, where the weights given to edges of the graph are calculated by a scoring system used by NHSBT<a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a> that takes into account:</p>
 <ul>
 <li>The number of previous matching runs the recipients have participated in (matching runs take place every three months).</li>
